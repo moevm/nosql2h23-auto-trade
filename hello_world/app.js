@@ -20,6 +20,23 @@ async function writeToDatabase() {
     }
 }
 
+async function readFromDatabase() {
+    const mongoClient = new MongoClient(url);
+    try {
+        await mongoClient.connect();
+        const db = mongoClient.db(name_db);
+        const collection = db.collection(name_collection);
+
+        const data = await collection.findOne();
+        console.log('Data from the database:', data.message);
+    } catch (error) {
+        console.error('An error has occurred:', error);
+    } finally {
+        await mongoClient.close();
+    }
+}
+
+
 writeToDatabase().then(() => {
     readFromDatabase().then(() => {
         process.exit(0);
