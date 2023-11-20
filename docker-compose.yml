@@ -3,10 +3,23 @@ services:
   mongo:
     container_name: mongo
     image: mongo:7.0.3
-    # build:
-    #   context: .
-    #   dockerfile: Dockerfile
     ports:
       - "27017:27017"
     volumes:
       - ./data:/data/db
+  mongo-express:
+    image: mongo-express:1.0.0-20
+    ports:
+      - '8081:8081'
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_BASICAUTH_USERNAME=dev
+      - ME_CONFIG_BASICAUTH_PASSWORD=dev
+  node:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    depends_on:
+      - mongo
