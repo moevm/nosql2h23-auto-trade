@@ -1,0 +1,12 @@
+version: '3'
+services:
+  mongo:
+    container_name: mongo
+    image: mongo:7.0.3
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data:/data/db
