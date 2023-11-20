@@ -10,3 +10,12 @@ services:
       - "27017:27017"
     volumes:
       - ./data:/data/db
+  mongo-express:
+    image: mongo-express:1.0.0-20
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    ports:
+      - '8081:8081'
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo
