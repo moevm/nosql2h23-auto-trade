@@ -1,0 +1,70 @@
+doctype html
+html
+    head
+        meta(charset="utf-8")
+        title= title
+        link(href='/w3.css' rel='stylesheet')
+        link(href='/font-awesome-4.7.0/css/font-awesome.css' rel='stylesheet')
+    body
+        script(src="/ajax_filter.js")
+
+        div(class="w3-container w3-blue w3-center")
+            h1= title
+            div(class="w3-col s3 w3-right")
+                p   Фильтр
+                p
+                    button(class="w3-btn w3-teal w3-white w3-center" onclick='filter_all(this)' id="filter_all") Все
+                    button(class="w3-btn w3-teal w3-white w3-center" onclick='filter_in(this)' id="filter_in") В наличии
+                    button(class="w3-btn w3-teal w3-white w3-center" onclick='filter_taken(this)' id="filter_taken") Просрочены
+
+        div(class="w3-container")
+            table(class="w3-table w3-centered w3-bordered")
+                tr(class="w3-blue")
+                    th Идентификатор
+                    th Книга
+                    th(class="w3-green") Наличие
+                    th Дата возврата
+                    th Удаление
+                for book in bookshelves
+                    tr(id=book.id)
+                        th
+                            a(href="book/" + book.id) #{book.id}
+                        th #{book.name}
+                            p #{book.author}
+                            p #{book.date_of_publication}
+                        th #{book.status}
+                        th #{book.date_of_return}
+                        form(action="book/" + book.id method ="POST")
+                            th
+                                button(class ="fa fa-trash" onclick="return confirm('Вы уверены, что хотите убрать книгу?');")
+
+        div(class="w3-container w3-center")
+            button(class ="fa fa-plus-square-o fa-2x w3-btn" onclick="document.getElementById('id01').style.display='block'")
+            div(id= "id01" class="w3-modal")
+                div(class="w3-modal-content")
+                    header(class="w3-container w3-blue")
+                        span(class="fa fa-times w3-btn w3-right" onclick="document.getElementById('id01').style.display='none'")
+                        form(action="add" method="POST")
+                            table(class="w3-table")
+                                tr(class="w3-blue")
+                                    th Идентификатор
+                                    th Название
+                                    th Автор
+                                    th Дата издания
+                                tr(class="w3-blue w3-small")
+                                    th
+                                        input(required name ="id")
+                                    th
+                                        input(required name="name")
+                                    th
+                                        input(required name="author")
+                                    th
+                                        input(required type="date" name="date_of_publication")
+                            button(class="w3-btn w3-blue w3-center" type="submit") Добавить
+
+        if (id_is_there)
+            div(id= "id02" class="w3-modal" style="display:block")
+                div(class="w3-modal-content w3-blue")
+                    div(class="w3-container")
+                        span(class="fa fa-times w3-btn w3-right" onclick="document.getElementById('id02').style.display='none'")
+                        p Такой идентификатор не может быть использован! Он уже есть.

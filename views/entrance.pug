@@ -1,0 +1,12 @@
+doctype html
+html
+    head
+        meta(charset="utf-8")
+        title= title
+        link(href='/w3.css' rel='stylesheet')
+    body
+        div(class="w3-container w3-center w3-blue")
+            h1= title
+            form(action="/library" method="GET")
+                button(class="w3-btn w3-center w3-sand" type="submit") Посетить библиотеку
+            img(src="li.jpg" alt="li" style="width:948px")
