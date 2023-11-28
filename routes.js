@@ -8,6 +8,11 @@ router.get('/', (req, res, next) => {
     res.render('authorization', {title: 'Библиотека'});
 });
 
+router.post('/auth', (req, res) => {
+    if(!req.body) return res.sendStatus(400);
+    console.log(req.body);
+    res.send(`${req.body.login} - ${req.body.password}`);
+})
 
 
 

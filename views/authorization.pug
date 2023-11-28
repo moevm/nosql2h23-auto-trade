@@ -15,15 +15,15 @@ html
             h1 AUTO TRADE
 
         .w3-container.auth-form
-            form(action=act method="POST" style="margin: 10px")
+            form(action="/auth" method="POST" style="margin: 10px")
                 .auth-input.w3-round-large
                     label Логин:
                     =" "
-                    input.w3-round-large(type='text', placeholder='Логин', name='name')
+                    input.w3-round-large(type='text', placeholder='Логин', name='login')
                 .auth-input.w3-round-large
                     label Пароль:
                     =" "
-                    input.w3-round-large(type='text', placeholder='Пароль', name='name')
+                    input.w3-round-large(type='text', placeholder='Пароль', name='password')
                 button.w3-button.w3-round-large(style="background-color: #01ACC6; font-size : 25px;"
                     type="submit") Войти
 
