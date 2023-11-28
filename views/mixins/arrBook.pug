@@ -1,0 +1,10 @@
+mixin arrBook(item)
+    .infoBook.briefly(class='w3-border-red')
+        include message
+        +msg(item.id)
+
+        a(href = "book/" + item.id, id=item.id)
+            img.book(src='/public/img/bookdefault.jpg')
+            h4 Book name: #{item.name}
+            h5 Author: #{item.author}
+            h5 Year: #{item.year}

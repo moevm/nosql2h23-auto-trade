@@ -1,85 +1,44 @@
-doctype html
-html
-    head
-        meta(charset="utf-8")
-        title= title
-        link(href='/w3.css' rel='stylesheet')
-        link(href='/font-awesome-4.7.0/css/font-awesome.css' rel='stylesheet')
-    body
-        div(class="w3-container w3-center w3-blue")
-            h1= title
+extends index
 
-        div(class="w3-container")
-            table(class="w3-table w3-blue w3-centered w3-bordered")
-                tr(class="w3-blue")
-                    th Идентификатор
-                    th #{id}
-                tr(class="w3-blue")
-                    th Название
-                    th #{name}
-                tr(class="w3-blue")
-                    th Автор
-                    th #{author}
-                tr(class="w3-blue")
-                    th Дата издания
-                    th #{date_of_publication}
-                tr(class="w3-blue")
-                    th Наличие
-                    th #{status}
-                tr(class="w3-blue")
-                    th(onclick="window.dialog.show()") Читатель &#9205;
-                    dialog(class="w3-blue" id="dialog")= "Читатель " + reader + " взял(а) книгу " + name + " и должен(на) вернуть " + date_of_return
-                        p
-                        button(class="w3-btn w3-small w3-blue w3-right" onclick="window.dialog.close()") Закрыть
-                    th #{reader}
-                tr(class="w3-blue")
-                    th Дата возврата
-                    th #{date_of_return}
-                -var num = id
+block content
+    .infoBook(class='w3-border-red' style='min-height: 300px;')
+        .imgbook
+            img(src='/public/img/bookdefault.jpg' style='width: 100%')
+        .textBox
+            h3 Book name: #{name}
+            h4 Author: #{author}
+            h4 Year: #{year}
+            h6 Briefly: #{briefly}
+            h6 In library: #{inLibrary}
+            if (reader)
+                h6 Reader: #{reader}
+                h6 Return Date: #{returnDate}
+    p
+    div(class="w3-container w3-center")
+        if inLibrary === "yes"
+            button(class ="w3-button w3-white w3-border w3-border-purple w3-hover-purple"
+                onclick="document.getElementById('id01').style.display='block'" style="margin-left: 10px") Order book
 
-        div(class="w3-container w3-center")
-            button(class="w3-btn w3-blue w3-center" onclick="document.getElementById('id01').style.display='block'") Редактировать
-            div(id="id01" class="w3-modal")
-                div(class="w3-modal-content")
-                    header(class="w3-container w3-blue")
-                        span(class="fa fa-times w3-btn w3-right" onclick="document.getElementById('id01').style.display='none'")
-                        form(action="edit/" + num method="POST")
-                            table(class="w3-table")
-                                tr(class="w3-blue")
-                                    th Название
-                                    th Автор
-                                    th Дата издания
-                                tr(class="w3-blue")
-                                    th
-                                        input(name="name")
-                                    th
-                                        input(name="author")
-                                    th
-                                        input(type="date" name="date_of_publication")
-                            button(class="fa fa-floppy-o" type="submit")
+            #id01(class="w3-modal w3-animate-opacity")
+                div(class="w3-modal-content w3-card-4")
+                    header(class="w3-container w3-teal")
+                        span(onclick="document.getElementById('id01').style.display='none'"
+                            class="w3-button w3-large w3-display-topright fa fa-times-circle" aria-hidden="true")
+                        h2 Order book
+                    div(class="w3-container")
+                        form(action="reader/" + id method="POST" style="margin: 10px")
+                            p Reader:
+                            input(required name="name")
+                            p Return date:
+                            input(required type="date" name="year")
+                            p
+                            button(class="w3-button w3-white w3-border w3-border-purple w3-hover-purple"
+                                type="submit") Order book
 
-        div(class="w3-container w3-center")
-            if status === "Нет"
-                button(class="w3-btn w3-blue w3-center" disabled) Взять книгу
-            else
-                button(class="w3-btn w3-blue w3-center" onclick="document.getElementById('id02').style.display='block'") Взять книгу
-            div(id="id02" class="w3-modal")
-                div(class='modal-content')
-                    header(class="w3-container w3-blue")
-                        span(class="fa fa-times w3-btn w3-right" onclick="document.getElementById('id02').style.display='none'")
-                        div(class="w3-container")
-                            form(action="reader/" + num method="POST")
-                                p Читатель (Фамилия Имя Отчество)
-                                input(required name="name")
-                                p Дата возврата
-                                input(required type="date" name="date_of_return")
-                                p
-                                button(class="w3-btn w3-blue w3-center" type="submit") Взять
+        else
+            form(action="backBook/" + id method="POST" style="margin: 10px")
+                button(class="w3-button w3-white w3-border w3-border-purple w3-hover-purple"
+                    type="submit") Return book
 
-        p
-        div(class="w3-container w3-center")
-            if status === "Нет"
-                form(action="return/" + num method="POST")
-                    button(class="w3-btn w3-blue w3-center" type="submit") Вернуть книгу
-            else
-                button(class="w3-btn w3-blue w3-center" type="submit" disabled) Вернуть книгу
+        include mixins/modal
+        +dialMod('edit', 'Edit book', 'edit/' + id, name, author, year, briefly)

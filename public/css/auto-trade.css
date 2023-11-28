@@ -1,0 +1,46 @@
+@font-face {
+    font-family: kekfont;
+    src: url(font/JuliusSansOne-Regular.ttf) format('ttf');
+    font-size: 20px;
+}
+.auth-header{
+    font-family: kekfont;
+    background-color: #0B0C10;
+    color: #01ACC6;
+    /*font-family: 'Julius Sans One', sans-serif;*/
+    font-size: 64px;
+    min-height: 114px;
+    padding: 26px;
+}
+
+.auth-form{
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.auth-input{
+    background-color: #01ACC6;
+    font-size: 25px;
+    padding: 10px;
+    margin: 24px;
+}
+.auth-input input{
+    background-color: #1F2833;
+    color: white;
+}
+::placeholder{
+    color: white;
+ }
+input:focus::placeholder{
+    color: grey;
+}
+

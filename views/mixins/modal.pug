@@ -1,0 +1,30 @@
+-
+    function isRender(act){
+        if (act === 'addBook')
+            return true
+        return false
+    }
+
+mixin dialMod(str, title, act, name, author, year, briefly)
+    button(class ="w3-button w3-white w3-border w3-border-purple w3-hover-purple"
+        onclick="document.getElementById('"+ str +"').style.display='block'" style="margin: 10px")=title
+
+    div(id=str class="w3-modal w3-animate-opacity" style="text-align: center")
+        div(class="w3-modal-content w3-card-4")
+            header(class="w3-container w3-teal")
+                span(onclick="document.getElementById('"+ str +"').style.display='none'"
+                    class="w3-button w3-large w3-display-topright fa fa-times-circle" aria-hidden="true")
+                h2= title
+            div(class="w3-container")
+                form(action=act method="POST" style="margin: 10px")
+                    p Book name:
+                    input(required=isRender(act) name="name" value=name)
+                    p Author:
+                    input(required=isRender(act) name="author" value=author)
+                    p Year:
+                    input(required=isRender(act) name="year" value=year)
+                    p Briefly:
+                    textarea(maxlength="256" rows="4" cols="70" name="briefly" ) #{briefly}
+                    p
+                    button(class="w3-button w3-white w3-border w3-border-purple w3-hover-purple"
+                        type="submit")=title
