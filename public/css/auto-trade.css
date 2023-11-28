@@ -46,11 +46,48 @@ input:focus::placeholder{
 
 .watch-advt-info,
 .watch-advt-info input {
-    font-size: 25px;
+    font-family: "JetBrains";
+    font-size: 20px;
     color: #66FCF1;
     background-color: #1F2833;
 }
 
+.navbar,
+.navbar a {
+    text-decoration: none;
+    display: flex;
+    font-family: "JetBrains";
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+    font-size: 20px;
+    background-color: #0B0C10;
+}
+
+.navbar-right {
+    font-family: "JetBrains";
+    background-color: #0B0C10;
+    margin-left: 20px;
+    color: #01ACC6;
+    font-size: 20px;
+    margin-right: 50%;
+}
+
+.navbar-left{
+    font-family: "JetBrains";
+    background-color: #0B0C10;
+    margin-left: 25px;
+    font-size: 20px;
+    color: #01ACC6;
+    margin-right: 1px;
+}
+
+@font-face {
+font-family: "JetBrains";
+src: url("/public/css/font/JetBrainsMonoNL-Light.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
 
 
 
