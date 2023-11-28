@@ -1,68 +1,63 @@
-doctype html
-html
-    head
-        meta(charset='utf-8')
-        title= title
+include navbar
 
-        link(rel="stylesheet", href="/public/css/w3.css")
-        link(rel="stylesheet", href="/public/css/auto-trade.css")
-        link(rel="stylesheet", href="https://fonts.cdnfonts.com/css/julius-sans-one")
-        script(src="https://kit.fontawesome.com/861c1ff1d9.js" crossorigin="anonymous")
+block content
+    body(style='background-color: #1F2833').w3-centered
 
-    body(style='background-color: #1F2833').w3-center
-        .w3-container.w3-left-align
-            form(action="/create_advt" method="POST" style="margin: 10px")
-                .watch-advt-info
-                    label Фотография:
-                    =" "
-                    input.create-advt(type='text', name='photo')
-                .watch-advt-info
-                    label Марка:
-                    =" "
-                    input.w3-round-large(type='text', name='brand')
-                .watch-advt-info
-                    label Модель:
-                    =" "
-                    input.w3-round-large(type='text', name='model')
-                .watch-advt-info
-                    label Год:
-                    =" "
-                    input.w3-round-large(type='text', name='year')
-                .watch-advt-info
-                    label Цвет:
-                    =" "
-                    input.w3-round-large(type='text', name='color')
-                .watch-advt-info
-                    label Кузов:
-                    =" "
-                    input.w3-round-large(type='text', name='body')
-                .watch-advt-info
-                    label Пробег:
-                    =" "
-                    input.w3-round-large(type='text', name='mileage')
-                .watch-advt-info
-                    label Двигатель:
-                    =" "
-                    input.w3-round-large(type='text', name='engine')
-                .watch-advt-info
-                    label Коробка:
-                    =" "
-                    input.w3-round-large(type='text', name='transmission')
-                .watch-advt-info
-                    label Привод:
-                    =" "
-                    input.w3-round-large(type='text', name='drive')
-                .watch-advt-info
-                    label Руль:
-                    =" "
-                    input.w3-round-large(type='text', name='helm')
-                .watch-advt-info
+        .create-advt-all-info
+            .create-advt-photo-price
+                .create-advt-photo
+                    img(src="/public/1.jpg", sizes="max-width= 400px")
+                .create-advt-btn
+                    button() Загрузить фото
+                .watch-advt-info.w3-margin-top
                     label Стоимость:
                     =" "
                     input.w3-round-large(type='number', name='price', min=0)
+            .w3-container.w3-left-align
+                form(action="/create_advt" method="POST" style="margin: 10px")
+                    .watch-advt-info
+                        label Марка:
+                        =" "
+                        input.w3-round-large(type='text', name='brand')
+                    .watch-advt-info
+                        label Модель:
+                        =" "
+                        input.w3-round-large(type='text', name='model')
+                    .watch-advt-info
+                        label Год:
+                        =" "
+                        input.w3-round-large(type='text', name='year')
+                    .watch-advt-info
+                        label Цвет:
+                        =" "
+                        input.w3-round-large(type='text', name='color')
+                    .watch-advt-info
+                        label Кузов:
+                        =" "
+                        input.w3-round-large(type='text', name='body')
+                    .watch-advt-info
+                        label Пробег:
+                        =" "
+                        input.w3-round-large(type='text', name='mileage')
+                    .watch-advt-info
+                        label Двигатель:
+                        =" "
+                        input.w3-round-large(type='text', name='engine')
+                    .watch-advt-info
+                        label Коробка:
+                        =" "
+                        input.w3-round-large(type='text', name='transmission')
+                    .watch-advt-info
+                        label Привод:
+                        =" "
+                        input.w3-round-large(type='text', name='drive')
+                    .watch-advt-info
+                        label Руль:
+                        =" "
+                        input.w3-round-large(type='text', name='helm')
 
 
-                button.w3-button(style="background-color: #45A29E; font-size : 25px;"
-                    type="submit") Создать объявление
+                button.w3-button.w3-margin-16(style="background-color: #45A29E; font-size : 20px; font-family: JetBrains; margin-top:10px"
+                        type="submit") Создать объявление
 
 
