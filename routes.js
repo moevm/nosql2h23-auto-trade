@@ -3,38 +3,42 @@ const fs = require('fs')
 const router = express()
 const url = require('url')
 
-const db = JSON.parse(fs.readFileSync('./public/db/lib.json'))
-let idInd = db.length
 
 router.use('/public', express.static('public'))
 
 // router.post('/' (req, res) => )
 
 router.get('/', (req, res)=>{
-    let obj = url.parse(req.url, true).query
-
-    if (obj.id === 'stock') {
-        if (obj.state === 'true') {
-            res.end(JSON.stringify(db.filter(book => book.inLibrary === 'yes')))
-            return;
-        }
-        res.end(JSON.stringify(db))
-        return;
-    }
-
-    if (obj.id === 'returnDate') {
-        if (obj.state === 'true') {
-            res.end(JSON.stringify(db.filter(book => book.inLibrary === 'no' &&
-                new Date(book.returnDate + 'T23:59:59.999Z') <= new Date())))
-            return;
-        }
-        res.end(JSON.stringify(db))
-        return;
-    }
-
-    res.render('authorization', {title: 'Library', books: db})
+    res.render('authorization', {title: 'Library'})
 })
 
+
+
+// router.get('/', (req, res)=>{
+//     let obj = url.parse(req.url, true).query
+//
+//     if (obj.id === 'stock') {
+//         if (obj.state === 'true') {
+//             res.end(JSON.stringify(db.filter(book => book.inLibrary === 'yes')))
+//             return;
+//         }
+//         res.end(JSON.stringify(db))
+//         return;
+//     }
+//
+//     if (obj.id === 'returnDate') {
+//         if (obj.state === 'true') {
+//             res.end(JSON.stringify(db.filter(book => book.inLibrary === 'no' &&
+//                 new Date(book.returnDate + 'T23:59:59.999Z') <= new Date())))
+//             return;
+//         }
+//         res.end(JSON.stringify(db))
+//         return;
+//     }
+//
+//     res.render('authorization', {title: 'Library', books: db})
+// })
+//
 // router.post('/book/:num([0-9]{1,})', (req, res)=>{
 //     let id = req.params.num
 //     db.forEach((v, i) => {
