@@ -44,3 +44,13 @@ input:focus::placeholder{
     color: grey;
 }
 
+.watch-advt-info,
+.watch-advt-info input {
+    font-size: 25px;
+    color: #66FCF1;
+    background-color: #1F2833;
+}
+
+
+
+
