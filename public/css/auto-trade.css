@@ -50,6 +50,36 @@ input:focus::placeholder{
     font-size: 20px;
     color: #66FCF1;
     background-color: #1F2833;
+
+}
+
+.create-advt-all-info{
+    justify-content: center;
+    display: flex;
+    padding-top: 30px;
+}
+
+.create-advt-photo-price{
+    font-family: JetBrains;
+    color: #66FCF1;
+}
+
+.create-advt-photo img{
+    margin-top: 50px;
+    max-width: 400px;
+    max-height: 400px;
+}
+
+.create-advt-btn button{
+    background-color: #45A29E;
+    color: #0B0C10;
+    justify-content: center;
+}
+
+.create-advt-btn{
+    justify-content: center;
+    padding-top: 10px;
+    display: flex;
 }
 
 .navbar,

@@ -12,8 +12,6 @@ router.get("/create_advertisment", (req, res) => {
     res.render("create_advt")
 })
 
-
-
 router.post('/auth', (req, res) => {
     if(!req.body) return res.sendStatus(400);
     console.log(req.body);
@@ -24,5 +22,6 @@ router.get("*", (req, res) => {
     res.status(404)
     res.end("Page not found")
 })
+
 
 module.exports = router
