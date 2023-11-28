@@ -1,0 +1,29 @@
+[
+  {
+    "id": 0,
+    "name": "Маленькие женщины",
+    "author": "Луи́за Мей Олкотт",
+    "date_of_publication": "2022-05-25",
+    "status": "Да",
+    "reader": "-",
+    "date_of_return": "-"
+  },
+  {
+    "id": 1,
+    "name": "Малахитовая шкатулка",
+    "author": "Бажов Павел Петрович",
+    "date_of_publication": "2019-02-05",
+    "status": "Да",
+    "reader": "-",
+    "date_of_return": "-"
+  },
+  {
+    "id": 2,
+    "name": "Алые паруса",
+    "author": "Грин Александр Степанович",
+    "date_of_publication": "2018-11-01",
+    "status": "Да",
+    "reader": "-",
+    "date_of_return": "-"
+  }
+]
