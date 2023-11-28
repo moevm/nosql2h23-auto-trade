@@ -1,132 +1,118 @@
-const express = require('express')
-const fs = require('fs')
-const router = express()
-const url = require('url')
+var express = require('express');
+var router = express.Router();
+// var bookshelves = require('./public/initialstate.json')
+let id_is_there = false;
 
+router.get('/', (req, res, next) => {
+    res.render('authorization', {title: 'Библиотека'});
+});
 
-router.use('/public', express.static('public'))
-
-// router.post('/' (req, res) => )
-
-router.get('/', (req, res)=>{
-    res.render('authorization', {title: 'Library'})
-})
-
-
-
-// router.get('/', (req, res)=>{
-//     let obj = url.parse(req.url, true).query
+// router.get('/library', (req, res, next) => {
+//     res.render('library', {title: 'Книжные полки', bookshelves: bookshelves, id_is_there: id_is_there});
+//     id_is_there = false;
+// });
 //
-//     if (obj.id === 'stock') {
-//         if (obj.state === 'true') {
-//             res.end(JSON.stringify(db.filter(book => book.inLibrary === 'yes')))
-//             return;
-//         }
-//         res.end(JSON.stringify(db))
+// router.get('/book/:num', (req, res, next) => {
+//     const id = req.params.num;
+//     if (id === 'filter_all') {
+//         let books_all = [];
+//         for (let book of bookshelves) books_all.push(book.id);
+//         res.end(JSON.stringify(books_all));
 //         return;
 //     }
 //
-//     if (obj.id === 'returnDate') {
-//         if (obj.state === 'true') {
-//             res.end(JSON.stringify(db.filter(book => book.inLibrary === 'no' &&
-//                 new Date(book.returnDate + 'T23:59:59.999Z') <= new Date())))
-//             return;
-//         }
-//         res.end(JSON.stringify(db))
+//     if (id === 'filter_in') {
+//         let books_taken = [];
+//         for (let book of bookshelves)
+//             if (book.status === "Нет") books_taken.push(book.id);
+//         res.end(JSON.stringify(books_taken));
 //         return;
 //     }
 //
-//     res.render('authorization', {title: 'Library', books: db})
-// })
-//
-// router.post('/book/:num([0-9]{1,})', (req, res)=>{
-//     let id = req.params.num
-//     db.forEach((v, i) => {
-//         if (v.id == id) {
-//             db.splice(i, 1)
-//             res.redirect('/')
+//     if (id === 'filter_taken') {
+//         let books_in = [];
+//         let today_date = new Date();
+//         for (let book of bookshelves) {
+//             let date_return_book = new Date(book.date_of_return);
+//             date_return_book.setDate(date_return_book.getDate() + 1);
+//             if (today_date < date_return_book || book.status === "Да")
+//                 books_in.push(book.id);
 //         }
-//     });
-// })
-//
-// router.get('/book/:num([0-9]{1,})', (req, res)=>{
-//     let id = req.params.num
-//     for (let item of db){
-//         if (item.id == id) {
-//             res.render('book', {
-//                 title: 'Library',
-//                 id: `${item.id}`,
-//                 name: `${item.name}`,
-//                 author: `${item.author}`,
-//                 year: `${item.year}`,
-//                 inLibrary: `${item.inLibrary}`,
-//                 briefly: `${item.briefly}`,
-//                 reader: `${item.reader}`,
-//                 returnDate: `${item.returnDate}`
-//             });
+//         res.end(JSON.stringify(books_in));
+//         return;
+//     }
+//     for (let book of bookshelves) {
+//         if (book.id == id) {
+//             res.render('book', {title: 'Книга', id: `${book.id}`, name: `${book.name}`, author: `${book.author}`,
+//                 date_of_publication: `${book.date_of_publication}`, status: `${book.status}`, reader: `${book.reader}`,
+//                 date_of_return: `${book.date_of_return}`});
 //             return;
 //         }
 //     }
-// })
+// });
 //
-// router.post('/book/reader/:num([0-9]{1,})', (req, res) => {
-//     let id = req.params.num
-//     for (let item of db) {
-//         if (item.id == id) {
-//             item.reader = req.body.name
-//             item.returnDate = req.body.year
-//             item.inLibrary = "no"
+// router.post('/add', (req, res, next) => {
+//     for (let book of bookshelves) {
+//         if (book.id == req.body.id) {
+//             id_is_there = true;
+//             res.redirect('/library');
+//             return;
 //         }
 //     }
-//     res.redirect('/')
+//     bookshelves.push({"id": req.body.id, "name": req.body.name, "author": req.body.author, "date_of_publication": req.body.date_of_publication,
+//         "status": "Да", "reader": "-", "date_of_return": "-"});
+//     //console.log(bookshelves);
+//     res.redirect('/library');
 // });
 //
-// router.post('/book/backBook/:num([0-9]{1,})', (req, res, next) => {
-//     let id = req.params.num
-//     for (let item of db)
-//         if (item.id == id) {
-//             item.reader = ""
-//             item.returnDate = ""
-//             item.inLibrary = "yes"
+// router.post('/book/:num', (req, res, next) => {
+//     let id = req.params.num;
+//     for (let i = 0; i < bookshelves.length; i++) {
+//         if (bookshelves[i].id == id) {
+//             bookshelves.splice(i, 1);
+//             res.redirect('/library');
 //         }
-//     res.redirect('/')
+//     }
 // });
 //
-// router.post('/book/edit/:num([0-9]{1,})', (req, res) => {
-//     let id = req.params.num
-//     for (let item of db)
-//         if (item.id == id) {
-//             if (req.body.name)
-//                 item.name = req.body.name
-//             if (req.body.author)
-//                 item.author = req.body.author
-//             if (req.body.year)
-//                 item.year = req.body.year
-//             if (req.body.briefly)
-//                 item.briefly = req.body.briefly
+// router.post('/book/edit/:num', (req, res, next) => {
+//     let id = req.params.num;
+//     for (let book of bookshelves) {
+//         if (book.id == id) {
+//             if (req.body.name) book.name = req.body.name;
+//             if (req.body.author) book.author = req.body.author;
+//             if (req.body.date_of_publication) book.date_of_publication = req.body.date_of_publication;
 //         }
-//     res.redirect('/')
-// })
+//     }
+//     res.redirect('/library');
+// });
 //
-// router.post("/addBook", (req, res) => {
-//     db.push({
-//         "id": idInd,
-//         "name": req.body.name,
-//         "author": req.body.author,
-//         "year": req.body.year,
-//         "briefly": req.body.briefly,
-//         "inLibrary": "yes",
-//         "reader": "",
-//         "returnDate": ""
+// router.post('/book/reader/:num', (req, res, next) => {
+//     let id = req.params.num;
+//     for (let book of bookshelves) {
+//         if (book.id == id) {
+//             book.status = "Нет";
+//             book.reader = req.body.name;
+//             book.date_of_return = req.body.date_of_return;
+//         }
+//     }
+//     res.redirect('/library');
+// });
 //
-//     });
-//     idInd += 1
-//     res.redirect('/');
-// })
+// router.post('/book/return/:num', (req, res, next) => {
+//     let id = req.params.num;
+//     for (let book of bookshelves) {
+//         if (book.id == id) {
+//             book.status = "Да";
+//             book.reader = "-";
+//             book.date_of_return = "-";
+//         }
+//     }
+//     res.redirect('/library');
+// });
 
 router.get("*", (req, res) => {
-    res.status(404)
-    res.end("Page not found")
+    res.status(404);
+    res.end("Page not found");
 })
-
-module.exports = router
+module.exports = router;
