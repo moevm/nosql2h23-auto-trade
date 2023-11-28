@@ -19,7 +19,6 @@ module.exports = server;
 
 const MongoClient = require("mongodb").MongoClient;
 const url = "mongodb://localhost:27017/";
-console.log("Im here!")
 const name_db = 'hellodatabase';
 const name_collection = 'hellocollection';
 
