@@ -10,25 +10,13 @@ html
 
         script(src="https://kit.fontawesome.com/861c1ff1d9.js" crossorigin="anonymous")
     body(style='background-color: #1F2833')
-        .header
-            a(href='/')
-                div Главная
-            a(href='/', style="position: absolute; right: 16px;")
-                div Мои объявления
-            a(href='/', style="position: relative")
-                div Мой аккаунт
-
-            //h1 Мои объявления
-            //h1 Мой аккаунт
-
+    include navbar.pug
+    block content
         .w3-container
             .w3-container.add-container(style="display: inline-block;")
                 include mixins/arrAdds
                 for item in adds
                     +arrAdds(item)
-
-
-
 
             .w3-container(style="display: inline-block;")
                 h1 kek2
