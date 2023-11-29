@@ -42,7 +42,7 @@ router.post('/mainauth', (req, res) => {
 
                    data1 = await collection.find({}).project({ _id : 0, ads : 1 }).toArray();
                    console.log("Data1");
-                   console.log(data1[0].ads.length);
+                   console.log(data1[0].ads[0].brand);
                    // res.redirect('/create_advertisment')
                    res.render('main-menu', {title: 'Главная', adds: data1});
                    break;
