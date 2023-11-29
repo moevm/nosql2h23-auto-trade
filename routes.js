@@ -13,7 +13,7 @@ router.get("/create_advertisment", (req, res) => {
     res.render("create_advt")
 })
 
-router.post('/auth', (req, res) => {
+router.post('/mainauth', (req, res) => {
     if(!req.body) return res.sendStatus(400);
     const MongoClient = require("mongodb").MongoClient;
     const url = "mongodb://localhost:27017/";
@@ -43,6 +43,7 @@ router.post('/auth', (req, res) => {
                    data1 = await collection.find({}).project({ _id : 0, ads : 1 }).toArray();
                    console.log("Data1");
                    console.log(data1[0].ads.length);
+                   // res.redirect('/create_advertisment')
                    res.render('main-menu', {title: 'Главная', adds: data1});
                    break;
                }
