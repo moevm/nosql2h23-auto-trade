@@ -9,12 +9,8 @@ block content
                     img(src="/public/1.jpg", sizes="max-width= 400px")
                 .create-advt-btn
                     button() Загрузить фото
-                .watch-advt-info.w3-margin-top
-                    label Стоимость:
-                    =" "
-                    input.w3-round-large(type='number', name='price', min=0)
             .w3-container.w3-left-align
-                form(action="/create_advt" method="POST" style="margin: 10px")
+                form(action="/main" method="POST" style="margin: 10px")
                     .watch-advt-info
                         label Марка:
                         =" "
@@ -55,9 +51,12 @@ block content
                         label Руль:
                         =" "
                         input.w3-round-large(type='text', name='helm')
+                    .watch-advt-info.w3-margin-top
+                        label Стоимость:
+                        =" "
+                        input.w3-round-large(type='number', name='price', min=0)
 
-
-                button.w3-button.w3-margin-16(style="background-color: #45A29E; font-size : 20px; font-family: JetBrains; margin-top:10px"
+                    button.w3-button.w3-margin-16(style="background-color: #45A29E; font-size : 20px; font-family: JetBrains; margin-top:10px"
                         type="submit") Создать объявление
 
 
