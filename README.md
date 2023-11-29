@@ -58,7 +58,7 @@
         "helm": "левый",
         "price": 10000000,
         "create_date": "08-08-2019",
-        "edit_date": "NULL",
+        "edit_date": null,
         "view": 808,
         "status": "Проверка"
       }
