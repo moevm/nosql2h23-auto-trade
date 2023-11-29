@@ -27,13 +27,20 @@ router.post('/auth', (req, res) => {
            const db = mongoClient.db(name_db);
            const collection = db.collection(name_collection);
 
-           data = await collection.find({}).toArray();;
+           data = await collection.find({}).toArray();
            console.log(data)
            count = 0;
            for (let i=0; i<data.length;i++){
                if (req.body.login == data[i].login && req.body.password == data[i].password){
                    console.log(data[i].login, data[i].password);
-                   res.render('create_advt', {title: 'Главная'});
+                   console.log('login and password ok')
+                   // res.redirect('/main');
+                   console.log('-------------------------------------------');
+                   console.log(data[0].name);
+                   console.log('-------------------------------------------');
+
+                   data = (await collection.find({}, {ads :1})).toArray();
+                   res.render('main-menu', {title: 'Главная', adds: data});
                    break;
                }
                else {
@@ -53,7 +60,7 @@ router.post('/auth', (req, res) => {
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
 
-router.post('/create_advt', (req, res) => {
+router.post('/main', (req, res) => {
     if(!req.body) return res.sendStatus(400);
     const MongoClient = require("mongodb").MongoClient;
     const url = "mongodb://localhost:27017/";
@@ -71,7 +78,7 @@ router.post('/create_advt', (req, res) => {
            console.log(data)
            const { ObjectId } = require('mongodb');
            const newData = {
-            ad_id: new ObjectId('6563956f2bf7f94d97aeddd9'),
+            ad_id: new ObjectId(),
             photo: './cars_photos/sellBestCarEver',
             brand: 'Mercedes',
             model: 'AMG-GT',
@@ -101,9 +108,10 @@ router.post('/create_advt', (req, res) => {
        } finally {
            await mongoClient.close();
        }
-   }
-   writeUserToDatabase();
+    }
+    writeUserToDatabase();
     console.log(req.body);
+    res.render('main-menu', {title: 'Главная', adds: data});
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
 
