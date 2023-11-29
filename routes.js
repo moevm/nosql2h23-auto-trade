@@ -107,6 +107,9 @@ router.post('/main', (req, res) => {
             console.log(`Документ с id ${newData.ad_id} обновлен`);
             client.close();
            });
+
+           data2 = await collection.find({}).project({ _id : 0, ads : 1 }).toArray();
+           res.render('main-menu', {title: 'Главная', adds: data2});
        } catch (error) {
            console.error('An error has occurred:', error);
        } finally {
@@ -115,7 +118,7 @@ router.post('/main', (req, res) => {
     }
     writeUserToDatabase();
     console.log(req.body);
-    res.render('main-menu', {title: 'Главная', adds: data});
+    // res.render('main-menu', {title: 'Главная', adds: data});
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
 
