@@ -1,5 +1,6 @@
 var express = require('express');
 const path = require("path");
+const {ObjectId} = require("mongodb");
 var router = express.Router();
 
 router.use("/public", express.static(path.join(__dirname + '/public')));
@@ -78,23 +79,23 @@ router.post('/main', (req, res) => {
            console.log(data)
            const { ObjectId } = require('mongodb');
            const newData = {
-            ad_id: new ObjectId(),
-            photo: './cars_photos/sellBestCarEver',
-            brand: 'Mercedes',
-            model: 'AMG-GT',
-            year: 2018,
-            color: 'черный',
-            body: 'седан',
-            mileage: '10000',
-            engine: '462',
-            transmission: 'автомат',
-            drive: 'задний',
-            helm: 'левый',
-            price: 10000000,
-            create_date: '08-08-2019',
-            edit_date: 'NULL',
-            view: 808,
-            status: 'Проверка'
+               ad_id: new ObjectId(),
+               photo: './cars_photos/sellBestCarEver',
+               brand: req.body.brand,
+               model: req.body.model,
+               year: req.body.year,
+               color: req.body.color,
+               body: req.body.body,
+               mileage: req.body.mileage,
+               engine: req.body.engine,
+               transmission: req.body.transmission,
+               drive: req.body.drive,
+               helm: req.body.helm,
+               price: req.body.price,
+               create_date: '08-08-2019',
+               edit_date: 'NULL',
+               view: 0,
+               status: 'Проверка'
            };
 
            const data1 = await collection.updateOne({ _id: new ObjectId('65638b2bcf00e81ecfa8d832')}, {$push: { ads: newData }},
