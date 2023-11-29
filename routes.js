@@ -6,11 +6,11 @@ var router = express.Router();
 router.use("/public", express.static(path.join(__dirname + '/public')));
 
 router.get('/', (req, res, next) => {
-    res.render('authorization', {title: 'Библиотека'});
+    res.render('authorization', {title: 'Авторизация'});
 });
 
 router.get("/create_advertisment", (req, res) => {
-    res.render("create_advt")
+    res.render("create_advt", {title: 'Добавление'})
 })
 
 router.post('/mainauth', (req, res) => {
@@ -43,8 +43,8 @@ router.post('/mainauth', (req, res) => {
                    data1 = await collection.find({}).project({ _id : 0, ads : 1 }).toArray();
                    console.log("Data1");
                    console.log(data1[0].ads.length);
-                   res.redirect('/create_advertisment')
-                   // res.render('main-menu', {title: 'Главная', adds: data1});
+                   // res.redirect('/create_advertisment')
+                   res.render('main-menu', {title: 'Главная', adds: data1});
                    break;
                }
                else {
