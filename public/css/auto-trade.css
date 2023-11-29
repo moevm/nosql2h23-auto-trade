@@ -3,7 +3,7 @@
     src: url(font/JuliusSansOne-Regular.ttf) format('ttf');
     font-size: 20px;
 }
-.auth-header{
+.header{
     font-family: kekfont;
     background-color: #0B0C10;
     color: #01ACC6;
@@ -112,9 +112,16 @@ input:focus::placeholder{
     margin-right: 1px;
 }
 
+.auto-cards{
+    display: grid;
+    grid-template-columns: repeat(3, 2fr);
+    justify-content: space-between;
+}
+
 .auto-card{
     text-align: center;
     display: block;
+    margin: 20px;
 }
 
 @font-face {

@@ -14,10 +14,11 @@ html
     block content
         .w3-container
             .w3-container.add-container(style="display: inline-block;color:#66FCF1;")
-                include mixins/arrAdds
-                for item in adds
-                    if item.ads.length > 0
-                        +arrAdds(item.ads)
+                .auto-cards
+                    include mixins/arrAdds
+                    for item in adds
+                        if item.ads.length > 0
+                            +arrAdds(item.ads)
 
 
         //.w3-container.auth-form
