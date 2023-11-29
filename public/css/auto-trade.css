@@ -112,6 +112,11 @@ input:focus::placeholder{
     margin-right: 1px;
 }
 
+.auto-card{
+    text-align: center;
+    display: block;
+}
+
 @font-face {
 font-family: "JetBrains";
 src: url("/public/css/font/JetBrainsMonoNL-Light.ttf") format("truetype");
