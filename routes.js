@@ -42,8 +42,8 @@ router.post('/auth', (req, res) => {
 
                    data1 = await collection.find({}).project({ _id : 0, ads : 1 }).toArray();
                    console.log("Data1");
-                   console.log(data1);
-                   res.render('main-menu', {title: 'Главная', adds: data});
+                   console.log(data1[0].ads.length);
+                   res.render('main-menu', {title: 'Главная', adds: data1});
                    break;
                }
                else {
