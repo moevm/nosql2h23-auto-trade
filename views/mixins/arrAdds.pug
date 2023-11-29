@@ -1,2 +1,3 @@
-mixin arrAdds(item1)
-    h5 #{item1[1].brand}
+mixin arrAdds(item)
+    - for(let i = 0; i < item.length; i++)
+        h5 #{item[i].brand}
