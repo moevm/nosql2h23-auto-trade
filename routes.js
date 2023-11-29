@@ -40,7 +40,9 @@ router.post('/auth', (req, res) => {
                    console.log(data[0].name);
                    console.log('-------------------------------------------');
 
-                   data = (await collection.find({}, {ads :1})).toArray();
+                   data1 = await collection.find({}).project({ _id : 0, ads : 1 }).toArray();
+                   console.log("Data1");
+                   console.log(data1);
                    res.render('main-menu', {title: 'Главная', adds: data});
                    break;
                }
@@ -101,7 +103,7 @@ router.post('/main', (req, res) => {
            const data1 = await collection.updateOne({ _id: new ObjectId('65638b2bcf00e81ecfa8d832')}, {$push: { ads: newData }},
             (updateErr, result) => {
             if (updateErr) throw updateErr;
-            console.log(`Документ с id ${documentId} обновлен`);
+            console.log(`Документ с id ${newData.ad_id} обновлен`);
             client.close();
            });
        } catch (error) {
