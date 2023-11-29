@@ -43,8 +43,8 @@ router.post('/mainauth', (req, res) => {
                    data1 = await collection.find({}).project({ _id : 0, ads : 1 }).toArray();
                    console.log("Data1");
                    console.log(data1[0].ads.length);
-                   // res.redirect('/create_advertisment')
-                   res.render('main-menu', {title: 'Главная', adds: data1});
+                   res.redirect('/create_advertisment')
+                   // res.render('main-menu', {title: 'Главная', adds: data1});
                    break;
                }
                else {
@@ -68,17 +68,17 @@ router.post('/main', (req, res) => {
     if(!req.body) return res.sendStatus(400);
     const MongoClient = require("mongodb").MongoClient;
     const url = "mongodb://localhost:27017/";
-    console.log("Im here!")
+    console.log("Im here1!")
     const name_db = 'autotrade';
     const name_collection = 'users';
     async function writeUserToDatabase() {
        const mongoClient = new MongoClient(url);
        try {
-           console.log("Imhere");
+           console.log("Imhere1");
            await mongoClient.connect();
            const db = mongoClient.db(name_db);
            const collection = db.collection(name_collection);
-           data = await collection.find({}).toArray();;
+           data = await collection.find({}).toArray();
            console.log(data)
            const { ObjectId } = require('mongodb');
            const newData = {
@@ -96,7 +96,7 @@ router.post('/main', (req, res) => {
                helm: req.body.helm,
                price: req.body.price,
                create_date: '08-08-2019',
-               edit_date: 'NULL',
+               edit_date: null,
                view: 0,
                status: 'Проверка'
            };
