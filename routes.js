@@ -35,6 +35,7 @@ router.post('/mainauth', (req, res) => {
                if (req.body.login == data[i].login && req.body.password == data[i].password){
                    console.log(data[i].login, data[i].password);
                    console.log('login and password ok')
+                   req.session._id = data[i]._id
                    // res.redirect('/main');
                    console.log('-------------------------------------------');
                    console.log(data[0].name);
@@ -101,7 +102,7 @@ router.post('/main', (req, res) => {
                status: 'Проверка'
            };
 
-           const data1 = await collection.updateOne({ _id: new ObjectId('65638b2bcf00e81ecfa8d832')}, {$push: { ads: newData }},
+           const data1 = await collection.updateOne({ _id: new ObjectId(req.session._id)}, {$push: { ads: newData }},
             (updateErr, result) => {
             if (updateErr) throw updateErr;
             console.log(`Документ с id ${newData.ad_id} обновлен`);
