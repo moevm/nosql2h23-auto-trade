@@ -54,7 +54,7 @@
         "helm": "левый",
         "price": 10000000,
         "create_date": "08-08-2019",
-        "edit_date": "NULL",
+        "edit_date": null,
         "view": 808,
         "status": "Проверка"
       }
@@ -94,7 +94,7 @@
   },
   {
     "_id": {
-      "$oid": "656393c68c47f9cf167bc8c6"
+      "$oid": "656bb2149eabf1422a8fd3cc"
     },
     "login": "admin",
     "password": "admin",
