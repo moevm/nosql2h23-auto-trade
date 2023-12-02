@@ -2,6 +2,9 @@ var express = require('express');
 const path = require("path");
 const {ObjectId} = require("mongodb");
 var router = express.Router();
+var url = "mongodb://localhost:27017/";
+const docker_status = false;
+if (docker_status) url = "mongodb://mongo:27017/";
 
 router.use("/public", express.static(path.join(__dirname + '/public')));
 
@@ -16,7 +19,7 @@ router.get("/create_advertisment", (req, res) => {
 router.post('/mainauth', (req, res) => {
     if(!req.body) return res.sendStatus(400);
     const MongoClient = require("mongodb").MongoClient;
-    const url = "mongodb://localhost:27017/";
+//     const url = "mongodb://localhost:27017/";
     console.log("Im here!")
     const name_db = 'autotrade';
     const name_collection = 'users';
@@ -68,7 +71,7 @@ router.post('/mainauth', (req, res) => {
 router.post('/main', (req, res) => {
     if(!req.body) return res.sendStatus(400);
     const MongoClient = require("mongodb").MongoClient;
-    const url = "mongodb://localhost:27017/";
+//     const url = "mongodb://localhost:27017/";
     console.log("Im here1!")
     const name_db = 'autotrade';
     const name_collection = 'users';
