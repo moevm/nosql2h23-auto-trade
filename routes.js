@@ -39,6 +39,7 @@ router.post('/mainauth', (req, res) => {
                    console.log(data[i].login, data[i].password);
                    console.log('login and password ok')
                    req.session._id = data[i]._id
+                   req.session.status = data[i].status
                    // res.redirect('/main');
                    console.log('-------------------------------------------');
                    console.log(data[0].name);
