@@ -4,6 +4,7 @@ var routes = require('./routes');
 var cookieParser = require('cookie-parser');
 var session = require('express-session')
 var path = require('path');
+const {ObjectId} = require("mongodb");
 
 server.use(cookieParser());
 server.use(express.json());
@@ -33,13 +34,14 @@ async function writeUserToDatabase() {
         const collection = db.collection('users');
 
         const { ObjectId } = require('mongodb');
+        await collection.deleteMany({});
         const data1 = await collection.insertOne({ _id: new ObjectId('65638b2bcf00e81ecfa8d832'), login: 'masterpiece', password: 'nosqlisbetterthansql', user_status: 'Пользователь', name: 'Анастасия', rating: 4.5, create_date: '2022-03-29', reviews: [{name:'Рудольф', mark: 5, text: 'Девушка супер. Машина тоже ничего!', date: '2022-03-29'}], dialogs: [{dialog_id: new ObjectId('6563956f2bf7f94d97aeddd4'), ad_id: new ObjectId('6563956f2bf7f94d97aeddd5'), messages: [{user_id: new ObjectId('65638b2bcf00e81ecfa8d832'), text: 'Обмен на стаю собак интересен?', timestamp: '2022-03-29Т12:04:16Z'}]}], ads: [{ad_id: new ObjectId('6563956f2bf7f94d97aeddd5'), photo: './cars_photos/sellBestCarEver', brand: 'Mercedes', model: 'AMG-GT', year: 2018, color: 'черный', body: 'седан', mileage: '10000', engine: '462', transmission: 'автомат', drive: 'задний', helm: 'левый', price: 10000000, create_date: '2022-03-29', edit_date: null, view: 808, status: 'Проверка'}]});
         console.log('Data was successfully written to the database:', data1.acknowledged, data1.insertedId);
 
         const data2 = await collection.insertOne({ _id: new ObjectId('65638f51a70b034fa69d9752'), login: 'buyer', password: 'nosql', user_status: 'Пользователь', name: 'Рудольф', rating: 4.5, create_date: '2022-03-29', reviews: [], dialogs: [{dialog_id: new ObjectId('6563956f2bf7f94d97aeddd4'), ad_id: new ObjectId('6563956f2bf7f94d97aeddd5'), messages: [{user_id: new ObjectId('65638f51a70b034fa69d9752'), text: 'Да, интересен! Беру!', timestamp: '2022-03-29Т12:04:17Z'}]}], ads: []});
         console.log('Data was successfully written to the database:', data2.acknowledged, data2.insertedId);
 
-        const data3 = await collection.insertOne({ login: 'admin', password: 'admin', user_status: 'Администратор', name: 'Виктор', rating: [], create_date: '2022-03-29', reviews: [], dialogs: [], ads: []});
+        const data3 = await collection.insertOne({ _id: new ObjectId('656393c68c47f9cf167bc8c6'), login: 'admin', password: 'admin', user_status: 'Администратор', name: 'Виктор', rating: [], create_date: '2022-03-29', reviews: [], dialogs: [], ads: []});
         console.log('Data was successfully written to the database:', data3.acknowledged, data3.insertedId);
 
         const id1 = new ObjectId();
