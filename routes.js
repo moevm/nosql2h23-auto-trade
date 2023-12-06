@@ -54,7 +54,7 @@ router.post('/mainauth', (req, res) => {
                    console.log("Data1");
                    console.log(data1[0].ads[0].brand);
                    // res.redirect('/create_advertisment')
-                   res.render('main-menu', {title: 'Главная', adds: data1});
+                   res.render('main-menu', {title: 'Главная', adds: data1, status: req.session.status});
                    break;
                }
                else {
