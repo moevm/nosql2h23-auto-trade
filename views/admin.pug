@@ -1,0 +1,24 @@
+doctype html
+html
+    head
+        meta(charset='utf-8')
+        title= title
+        //adds= adds
+        link(rel="stylesheet", href="/public/css/w3.css")
+        link(rel="stylesheet", href="/public/css/admin.css")
+        link(rel="stylesheet", href="/public/css/auto-trade.css")
+        link(rel="stylesheet", href="https://fonts.cdnfonts.com/css/julius-sans-one")
+        link(rel="stylesheet" href='/font-awesome-4.7.0/css/font-awesome.min.css')
+
+    body(style='background-color: #1F2833')
+    include navbar-admin.pug
+    .imex-blocks
+        .imex-block
+            a(href = 'ufuf')
+                i.fa.fa-upload.fa-3x(style="color:#45A29E;")
+                p Импорт
+
+        .imex-block
+            a(href = 'ufuf')
+                i.fa.fa-download.fa-3x(style="color:#45A29E;")
+                p Экспорт

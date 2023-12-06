@@ -139,6 +139,10 @@ router.post('/main', (req, res) => {
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
 
+router.get("/admin", (req, res) => {
+    res.render('admin');
+})
+
 router.get("*", (req, res) => {
     res.status(404)
     res.end("Page not found")

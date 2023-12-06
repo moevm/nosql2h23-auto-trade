@@ -1,0 +1,33 @@
+body {
+    font-family: JetBrains;
+    color: #FFFFFF;
+    font-size: 20px;
+}
+
+.imex-blocks {
+
+}
+
+.imex-block {
+    display: inline-block;
+    margin-right: 5%;
+    flex-direction: column;
+    text-align: center;
+}
+
+.imex-block a{
+    text-decoration: none;
+}
+
+.imex-block p {
+    margin-top: 3px;
+}
+
+
+
+@font-face {
+    font-family: "JetBrains";
+    src: url("/public/css/font/JetBrainsMonoNL-Light.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
