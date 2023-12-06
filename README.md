@@ -57,7 +57,7 @@
         "drive": "задний",
         "helm": "левый",
         "price": 10000000,
-        "create_date": "08-08-2019",
+        "create_date": "2022-03-29",
         "edit_date": null,
         "view": 808,
         "status": "Проверка"

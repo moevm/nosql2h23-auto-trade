@@ -61,11 +61,10 @@ async function importDatabase() {
         const db = mongoClient.db(name_db);
         const collection = db.collection(name_collection);
 
-        await collection.deleteMany({});
-
         const fileData = fs.readFileSync('backup.json');
         console.log('Данные успешно прочитаны из backup.json');
         const jsonData = JSON.parse(fileData);
+        await collection.deleteMany({});
         const result = await collection.insertMany(jsonData);
         console.log(`Импорт прошел успешно. ${result.insertedCount} элементов было добавлено в коллекцию users.`);
     } catch (error) {
