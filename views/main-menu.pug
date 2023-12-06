@@ -10,7 +10,10 @@ html
 
         script(src="https://kit.fontawesome.com/861c1ff1d9.js" crossorigin="anonymous")
     body(style='background-color: #1F2833')
-    include navbar.pug
+    if status == "Пользователь"
+        include navbar.pug
+    else
+        include navbar-admin
     block content
         .w3-container
             .w3-container.add-container(style="display: inline-block;color:#66FCF1;")
