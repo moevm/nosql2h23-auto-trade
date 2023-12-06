@@ -1,6 +1,6 @@
 var express = require('express');
 const path = require("path");
-const {ObjectId} = require("mongodb");
+const {ObjectId, MongoClient} = require("mongodb");
 var router = express.Router();
 var url = "mongodb://localhost:27017/";
 const docker_status = false;
@@ -132,6 +132,69 @@ router.post('/main', (req, res) => {
        } finally {
            await mongoClient.close();
        }
+    }
+    writeUserToDatabase();
+    console.log(req.body);
+    // res.render('main-menu', {title: 'Главная', adds: data});
+//     res.send(`${req.body.login} - ${req.body.password}`);
+})
+
+router.post('/mainfilter', (req, res) => {
+    if(!req.body) return res.sendStatus(400);
+    const MongoClient = require("mongodb").MongoClient;
+//     const url = "mongodb://localhost:27017/";
+    console.log("Im here2!")
+    const name_db = 'autotrade';
+    const name_collection = 'users';
+    async function writeUserToDatabase() {
+        const mongoClient = new MongoClient(url);
+        try {
+            console.log("Imhere2");
+            await mongoClient.connect();
+            const db = mongoClient.db(name_db);
+            const collection = db.collection(name_collection);
+
+            const query = {};
+            if (req.body.filter_brand !== "Не выбрано") {
+                query['ads.brand'] = req.body.filter_brand;
+            }
+            if (req.body.filter_model !== "Не выбрано") {
+                query['ads.model'] = req.body.filter_model;
+            }
+            if (req.body.filter_year !== "Не выбрано") {
+                query['ads.year'] = req.body.filter_year;
+            }
+            if (req.body.filter_color !== "Не выбрано") {
+                query['ads.color'] = req.body.filter_color;
+            }
+            if (req.body.filter_body !== "Не выбрано") {
+                query['ads.body'] = req.body.filter_body;
+            }
+            if (req.body.filter_mileage !== "Не выбрано") {
+                query['ads.mileage'] = req.body.filter_mileage;
+            }
+            if (req.body.filter_engine !== "Не выбрано") {
+                query['ads.engine'] = req.body.filter_engine;
+            }
+            if (req.body.filter_transmission !== "Не выбрано") {
+                query['ads.transmission'] = req.body.filter_transmission;
+            }
+            if (req.body.filter_drive !== "Не выбрано") {
+                query['ads.drive'] = req.body.filter_drive;
+            }
+            if (req.body.filter_helm !== "Не выбрано") {
+                query['ads.helm'] = req.body.filter_helm;
+            }
+
+            data = await collection.find(query).project({ _id : 0, ads : 1 }).toArray();
+            // console.log(data)
+
+            res.render('main-menu', {title: 'Главная', adds: data});
+        } catch (error) {
+            console.error('An error has occurred:', error);
+        } finally {
+            await mongoClient.close();
+        }
     }
     writeUserToDatabase();
     console.log(req.body);
