@@ -1,11 +1,15 @@
 var express = require('express');
 const path = require("path");
-const {ObjectId, MongoClient, BSON} = require("mongodb");
+const {ObjectId, BSON} = require("mongodb");
 const fs = require("fs");
 var router = express.Router();
 var url = "mongodb://localhost:27017/";
 const docker_status = false;
 if (docker_status) url = "mongodb://mongo:27017/";
+
+const MongoClient = require("mongodb").MongoClient;
+const name_db = 'autotrade';
+const name_collection = 'users';
 
 router.use("/public", express.static(path.join(__dirname + '/public')));
 
