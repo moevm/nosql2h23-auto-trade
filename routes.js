@@ -224,7 +224,7 @@ router.get("/adminexport", (req, res) => {
             const wrappedData = { arrayData: data };
             const BSONData = BSON.serialize(wrappedData);
 
-            fs.writeFileSync('/data/db/backup.bson', BSONData);
+            fs.writeFileSync('backup.bson', BSONData);
             console.log('Данные успешно записаны в backup.bson');
         } catch (error) {
             console.error('An error has occurred:', error);
@@ -245,7 +245,7 @@ router.get("/adminimport", (req, res) => {
             const db = mongoClient.db(name_db);
             const collection = db.collection(name_collection);
 
-            const fileData = fs.readFileSync('/data/db/backup.bson');
+            const fileData = fs.readFileSync('backup.bson');
             console.log('Данные успешно прочитаны из backup.bson');
             const bsonData = BSON.deserialize(fileData);
             await collection.deleteMany({});
