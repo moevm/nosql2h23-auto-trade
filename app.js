@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session')
 var path = require('path');
 const fs = require('fs');
+const {BSON} = require("mongodb");
 
 server.use(cookieParser());
 server.use(express.json());
@@ -33,18 +34,11 @@ async function exportDatabase() {
         const collection = db.collection(name_collection);
 
         data = await collection.find({}).toArray();
-        const jsonData = JSON.stringify(data);
-        // console.log(jsonData);
-        fs.writeFileSync('backup.json', jsonData);
-        console.log('Данные успешно записаны в backup.json');
-        // fs.writeFile('backup.json', jsonData, (err) => {
-        //     if (err) {
-        //         console.error('Ошибка записи в файл:', err);
-        //         return;
-        //     }
-        //
-        //     console.log('Данные успешно записаны в backup.json');
-        // });
+        const wrappedData = { arrayData: data };
+        const BSONData = BSON.serialize(wrappedData);
+
+        fs.writeFileSync('backup.bson', BSONData);
+        console.log('Данные успешно записаны в backup.bson');
     } catch (error) {
         console.error('An error has occurred:', error);
     } finally {
@@ -61,11 +55,11 @@ async function importDatabase() {
         const db = mongoClient.db(name_db);
         const collection = db.collection(name_collection);
 
-        const fileData = fs.readFileSync('backup.json');
-        console.log('Данные успешно прочитаны из backup.json');
-        const jsonData = JSON.parse(fileData);
+        const fileData = fs.readFileSync('backup.bson');
+        console.log('Данные успешно прочитаны из backup.bson');
+        const bsonData = BSON.deserialize(fileData);
         await collection.deleteMany({});
-        const result = await collection.insertMany(jsonData);
+        const result = await collection.insertMany(bsonData.arrayData);
         console.log(`Импорт прошел успешно. ${result.insertedCount} элементов было добавлено в коллекцию users.`);
     } catch (error) {
         console.error('An error has occurred:', error);
