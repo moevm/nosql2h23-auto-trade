@@ -233,7 +233,7 @@ router.get("/adminexport", (req, res) => {
         }
     }
     exportDatabase().then(r => {});
-    res.render('admin');
+    res.redirect('/admin');
 })
 
 router.get("/adminimport", (req, res) => {
@@ -258,7 +258,7 @@ router.get("/adminimport", (req, res) => {
         }
     }
     importDatabase().then(r => {});
-    res.render('admin');
+    res.redirect('/admin');
 })
 
 router.get("*", (req, res) => {
