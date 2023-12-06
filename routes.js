@@ -84,8 +84,19 @@ router.post('/main', (req, res) => {
            const db = mongoClient.db(name_db);
            const collection = db.collection(name_collection);
            data = await collection.find({}).toArray();
-           console.log(data)
+           // console.log(data)
            const { ObjectId } = require('mongodb');
+           let today_date = new Date();
+           let date = ("0" + today_date.getDate()).slice(-2);
+           let month = ("0" + (today_date.getMonth() + 1)).slice(-2);
+           let year = today_date.getFullYear();
+           let hours = today_date.getHours();
+           let minutes = today_date.getMinutes();
+           let seconds = today_date.getSeconds();
+           let create_date = year + "-" + month + "-" + date;
+           let create_date_message = year + "-" + month + "-" + date + "T" + hours + ":" + minutes + ":" + seconds + "Z";
+           console.log(create_date);
+           console.log(create_date_message);
            const newData = {
                ad_id: new ObjectId(),
                photo: './cars_photos/sellBestCarEver',
@@ -100,19 +111,20 @@ router.post('/main', (req, res) => {
                drive: req.body.drive,
                helm: req.body.helm,
                price: req.body.price,
-               create_date: '08-08-2019',
+               create_date: create_date,
                edit_date: null,
                view: 0,
                status: 'Проверка'
            };
-
+           console.log(newData)
+           console.log(req.session._id)
            const data1 = await collection.updateOne({ _id: new ObjectId(req.session._id)}, {$push: { ads: newData }},
             (updateErr, result) => {
             if (updateErr) throw updateErr;
             console.log(`Документ с id ${newData.ad_id} обновлен`);
             client.close();
            });
-
+           console.log(data1)
            data2 = await collection.find({}).project({ _id : 0, ads : 1 }).toArray();
            res.render('main-menu', {title: 'Главная', adds: data2});
        } catch (error) {
