@@ -1,6 +1,7 @@
 var express = require('express');
 const path = require("path");
-const {ObjectId, MongoClient} = require("mongodb");
+const {ObjectId, MongoClient, BSON} = require("mongodb");
+const fs = require("fs");
 var router = express.Router();
 var url = "mongodb://localhost:27017/";
 const docker_status = false;
@@ -203,6 +204,56 @@ router.post('/mainfilter', (req, res) => {
 })
 
 router.get("/admin", (req, res) => {
+    res.render('admin');
+})
+
+router.get("/adminexport", (req, res) => {
+    async function exportDatabase() {
+        const mongoClient = new MongoClient(url);
+        try {
+            console.log("Imhereexport");
+            await mongoClient.connect();
+            const db = mongoClient.db(name_db);
+            const collection = db.collection(name_collection);
+
+            data = await collection.find({}).toArray();
+            const wrappedData = { arrayData: data };
+            const BSONData = BSON.serialize(wrappedData);
+
+            fs.writeFileSync('/data/db/backup.bson', BSONData);
+            console.log('Данные успешно записаны в backup.bson');
+        } catch (error) {
+            console.error('An error has occurred:', error);
+        } finally {
+            await mongoClient.close();
+        }
+    }
+    exportDatabase().then(r => {});
+    res.render('admin');
+})
+
+router.get("/adminimport", (req, res) => {
+    async function importDatabase() {
+        const mongoClient = new MongoClient(url);
+        try {
+            console.log("Imhereimport");
+            await mongoClient.connect();
+            const db = mongoClient.db(name_db);
+            const collection = db.collection(name_collection);
+
+            const fileData = fs.readFileSync('/data/db/backup.bson');
+            console.log('Данные успешно прочитаны из backup.bson');
+            const bsonData = BSON.deserialize(fileData);
+            await collection.deleteMany({});
+            const result = await collection.insertMany(bsonData.arrayData);
+            console.log(`Импорт прошел успешно. ${result.insertedCount} элементов было добавлено в коллекцию users.`);
+        } catch (error) {
+            console.error('An error has occurred:', error);
+        } finally {
+            await mongoClient.close();
+        }
+    }
+    importDatabase().then(r => {});
     res.render('admin');
 })
 
