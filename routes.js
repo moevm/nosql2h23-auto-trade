@@ -44,7 +44,7 @@ router.post('/mainauth', (req, res) => {
                    console.log(data[i].login, data[i].password);
                    console.log('login and password ok')
                    req.session._id = data[i]._id
-                   req.session.status = data[i].status
+                   req.session.status = data[i].user_status
                    // res.redirect('/main');
                    console.log('-------------------------------------------');
                    console.log(data[0].name);
@@ -54,6 +54,7 @@ router.post('/mainauth', (req, res) => {
                    console.log("Data1");
                    console.log(data1[0].ads[0].brand);
                    // res.redirect('/create_advertisment')
+                   console.log(req.session.status)
                    res.render('main-menu', {title: 'Главная', adds: data1, status: req.session.status});
                    break;
                }
