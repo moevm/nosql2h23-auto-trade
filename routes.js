@@ -75,7 +75,35 @@ router.post('/mainauth', (req, res) => {
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
 
-router.post('/main', (req, res) => {
+router.get('/main', (req, res) => {
+    const MongoClient = require("mongodb").MongoClient;
+//     const url = "mongodb://localhost:27017/";
+    console.log("Im here!")
+    const name_db = 'autotrade';
+    const name_collection = 'users';
+    async function writeUserToDatabase() {
+        const mongoClient = new MongoClient(url);
+        try {
+            console.log("Imhere");
+            await mongoClient.connect();
+            const db = mongoClient.db(name_db);
+            const collection = db.collection(name_collection);
+
+            data1 = await collection.find({}).project({ _id : 0, ads : 1 }).toArray();
+            // res.redirect('/create_advertisment')
+            res.render('main-menu', {title: 'Главная', adds: data1, status: req.session.status});
+        } catch (error) {
+            console.error('An error has occurred:', error);
+        } finally {
+            await mongoClient.close();
+        }
+    }
+    writeUserToDatabase();
+    console.log(req.body);
+//     res.send(`${req.body.login} - ${req.body.password}`);
+})
+
+router.post('/maincreate', (req, res) => {
     if(!req.body) return res.sendStatus(400);
     const MongoClient = require("mongodb").MongoClient;
 //     const url = "mongodb://localhost:27017/";
@@ -132,7 +160,7 @@ router.post('/main', (req, res) => {
            });
            console.log(data1)
            data2 = await collection.find({}).project({ _id : 0, ads : 1 }).toArray();
-           res.render('main-menu', {title: 'Главная', adds: data2});
+           res.redirect('/main')
        } catch (error) {
            console.error('An error has occurred:', error);
        } finally {
