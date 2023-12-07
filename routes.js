@@ -104,7 +104,9 @@ router.get('/main', (req, res) => {
                             input: "$ads",
                             as: "ad",
                             cond: {
-                                $eq: [ '$$ad.status', 'Опубликовано' ]
+                                "$and" : [
+                                    {$eq: [ '$$ad.status', 'Опубликовано' ]}
+                                ]
                             }
                         }
                     }
