@@ -4,8 +4,12 @@ const {ObjectId, BSON} = require("mongodb");
 const fs = require("fs");
 var router = express.Router();
 var url = "mongodb://localhost:27017/";
+var backup_path = "backup.bson"
 const docker_status = false;
-if (docker_status) url = "mongodb://mongo:27017/";
+if (docker_status) {
+    url = "mongodb://mongo:27017/";
+    backup_path = "data/db/backup.bson"
+}
 
 const MongoClient = require("mongodb").MongoClient;
 const name_db = 'autotrade';
@@ -23,38 +27,40 @@ router.get("/create_advertisment", (req, res) => {
 
 router.post('/mainauth', (req, res) => {
     if(!req.body) return res.sendStatus(400);
-    const MongoClient = require("mongodb").MongoClient;
+    // const MongoClient = require("mongodb").MongoClient;
 //     const url = "mongodb://localhost:27017/";
-    console.log("Im here!")
-    const name_db = 'autotrade';
-    const name_collection = 'users';
-    async function writeUserToDatabase() {
+    console.log("Main auth!")
+    // const name_db = 'autotrade';
+    // const name_collection = 'users';
+    async function authCheck() {
        const mongoClient = new MongoClient(url);
        try {
-           console.log("Imhere");
+           console.log("auth check");
            await mongoClient.connect();
            const db = mongoClient.db(name_db);
            const collection = db.collection(name_collection);
 
            data = await collection.find({}).toArray();
-           console.log(data)
+           // console.log(data)
            count = 0;
            for (let i=0; i<data.length;i++){
                if (req.body.login == data[i].login && req.body.password == data[i].password){
                    console.log(data[i].login, data[i].password);
                    console.log('login and password ok')
                    req.session._id = data[i]._id
-                   req.session.status = data[i].status
+                   req.session.status = data[i].user_status
                    // res.redirect('/main');
-                   console.log('-------------------------------------------');
-                   console.log(data[0].name);
-                   console.log('-------------------------------------------');
+                   // console.log('-------------------------------------------');
+                   // console.log(data[0].name);
+                   // console.log('-------------------------------------------');
 
-                   data1 = await collection.find({}).project({ _id : 0, ads : 1 }).toArray();
-                   console.log("Data1");
-                   console.log(data1[0].ads[0].brand);
+                   // data1 = await collection.find({}).project({ _id : 0, ads : 1 }).toArray();
+                   // console.log("Data1");
+                   // console.log(data1[0].ads[0].brand);
                    // res.redirect('/create_advertisment')
-                   res.render('main-menu', {title: 'Главная', adds: data1});
+                   console.log(req.session.status)
+                   // res.render('main-menu', {title: 'Главная', adds: data1, status: req.session.status});
+                   res.redirect('/main');
                    break;
                }
                else {
@@ -69,28 +75,74 @@ router.post('/mainauth', (req, res) => {
            await mongoClient.close();
        }
    }
-   writeUserToDatabase();
-    console.log(req.body);
+   authCheck();
+    // console.log(req.body);
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
 
-router.post('/main', (req, res) => {
-    if(!req.body) return res.sendStatus(400);
-    const MongoClient = require("mongodb").MongoClient;
+router.get('/main', (req, res) => {
+    // const MongoClient = require("mongodb").MongoClient;
 //     const url = "mongodb://localhost:27017/";
-    console.log("Im here1!")
-    const name_db = 'autotrade';
-    const name_collection = 'users';
-    async function writeUserToDatabase() {
+    console.log("Main!")
+    // const name_db = 'autotrade';
+    // const name_collection = 'users';
+    async function mainRender() {
+        const mongoClient = new MongoClient(url);
+        try {
+            console.log("main render");
+            await mongoClient.connect();
+            const db = mongoClient.db(name_db);
+            const collection = db.collection(name_collection);
+
+            const query = {};
+            query['ads.status'] = "Опубликовано";
+            // data1 = await collection.find({ ads : { status: "Опубликовано" } }).project({ _id : 0, ads : 1 }).toArray();
+            data1 = await collection.aggregate([{
+                $project: {
+                    "ads": {
+                        $filter: {
+                            input: "$ads",
+                            as: "ad",
+                            cond: {
+                                "$and" : [
+                                    {$eq: [ '$$ad.status', 'Опубликовано' ]}
+                                ]
+                            }
+                        }
+                    }
+                }
+            }]).project({ _id : 0, ads : 1 }).toArray();
+            console.log(data1)
+            // res.redirect('/create_advertisment')
+            res.render('main-menu', {title: 'Главная', adds: data1, status: req.session.status});
+        } catch (error) {
+            console.error('An error has occurred:', error);
+        } finally {
+            await mongoClient.close();
+        }
+    }
+    mainRender();
+    // console.log(req.body);
+//     res.send(`${req.body.login} - ${req.body.password}`);
+})
+
+router.post('/maincreate', (req, res) => {
+    if(!req.body) return res.sendStatus(400);
+    // const MongoClient = require("mongodb").MongoClient;
+//     const url = "mongodb://localhost:27017/";
+    console.log("Main create!")
+    // const name_db = 'autotrade';
+    // const name_collection = 'users';
+    async function adCreate() {
        const mongoClient = new MongoClient(url);
        try {
-           console.log("Imhere1");
+           console.log("ad create");
            await mongoClient.connect();
            const db = mongoClient.db(name_db);
            const collection = db.collection(name_collection);
            data = await collection.find({}).toArray();
            // console.log(data)
-           const { ObjectId } = require('mongodb');
+           // const { ObjectId } = require('mongodb');
            let today_date = new Date();
            let date = ("0" + today_date.getDate()).slice(-2);
            let month = ("0" + (today_date.getMonth() + 1)).slice(-2);
@@ -104,7 +156,7 @@ router.post('/main', (req, res) => {
            console.log(create_date_message);
            const newData = {
                ad_id: new ObjectId(),
-               photo: './cars_photos/sellBestCarEver',
+               photo: './cars_photos/sellBestCarEver.jpg',
                brand: req.body.brand,
                model: req.body.model,
                year: req.body.year,
@@ -121,40 +173,40 @@ router.post('/main', (req, res) => {
                view: 0,
                status: 'Проверка'
            };
-           console.log(newData)
-           console.log(req.session._id)
+           // console.log(newData)
+           // console.log(req.session._id)
            const data1 = await collection.updateOne({ _id: new ObjectId(req.session._id)}, {$push: { ads: newData }},
             (updateErr, result) => {
             if (updateErr) throw updateErr;
             console.log(`Документ с id ${newData.ad_id} обновлен`);
             client.close();
            });
-           console.log(data1)
+           // console.log(data1)
            data2 = await collection.find({}).project({ _id : 0, ads : 1 }).toArray();
-           res.render('main-menu', {title: 'Главная', adds: data2});
+           res.redirect('/main')
        } catch (error) {
            console.error('An error has occurred:', error);
        } finally {
            await mongoClient.close();
        }
     }
-    writeUserToDatabase();
-    console.log(req.body);
+    adCreate();
+    // console.log(req.body);
     // res.render('main-menu', {title: 'Главная', adds: data});
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
 
 router.post('/mainfilter', (req, res) => {
     if(!req.body) return res.sendStatus(400);
-    const MongoClient = require("mongodb").MongoClient;
+    // const MongoClient = require("mongodb").MongoClient;
 //     const url = "mongodb://localhost:27017/";
-    console.log("Im here2!")
-    const name_db = 'autotrade';
-    const name_collection = 'users';
-    async function writeUserToDatabase() {
+    console.log("Main filter!")
+    // const name_db = 'autotrade';
+    // const name_collection = 'users';
+    async function mainFilter() {
         const mongoClient = new MongoClient(url);
         try {
-            console.log("Imhere2");
+            console.log("main filter");
             await mongoClient.connect();
             const db = mongoClient.db(name_db);
             const collection = db.collection(name_collection);
@@ -201,8 +253,8 @@ router.post('/mainfilter', (req, res) => {
             await mongoClient.close();
         }
     }
-    writeUserToDatabase();
-    console.log(req.body);
+    mainFilter();
+    // console.log(req.body);
     // res.render('main-menu', {title: 'Главная', adds: data});
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
@@ -224,7 +276,7 @@ router.get("/adminexport", (req, res) => {
             const wrappedData = { arrayData: data };
             const BSONData = BSON.serialize(wrappedData);
 
-            fs.writeFileSync('/data/db/backup.bson', BSONData);
+            fs.writeFileSync(backup_path, BSONData);
             console.log('Данные успешно записаны в backup.bson');
         } catch (error) {
             console.error('An error has occurred:', error);
@@ -233,7 +285,7 @@ router.get("/adminexport", (req, res) => {
         }
     }
     exportDatabase().then(r => {});
-    res.render('admin');
+    res.redirect('/admin');
 })
 
 router.get("/adminimport", (req, res) => {
@@ -245,7 +297,7 @@ router.get("/adminimport", (req, res) => {
             const db = mongoClient.db(name_db);
             const collection = db.collection(name_collection);
 
-            const fileData = fs.readFileSync('/data/db/backup.bson');
+            const fileData = fs.readFileSync(backup_path);
             console.log('Данные успешно прочитаны из backup.bson');
             const bsonData = BSON.deserialize(fileData);
             await collection.deleteMany({});
@@ -258,7 +310,7 @@ router.get("/adminimport", (req, res) => {
         }
     }
     importDatabase().then(r => {});
-    res.render('admin');
+    res.redirect('/admin');
 })
 
 router.get("*", (req, res) => {
