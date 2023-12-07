@@ -96,7 +96,21 @@ router.get('/main', (req, res) => {
 
             const query = {};
             query['ads.status'] = "Опубликовано";
-            data1 = await collection.find(query).project({ _id : 0, ads : 1 }).toArray();
+            // data1 = await collection.find({ ads : { status: "Опубликовано" } }).project({ _id : 0, ads : 1 }).toArray();
+            data1 = await collection.aggregate([{
+                $project: {
+                    "ads": {
+                        $filter: {
+                            input: "$ads",
+                            as: "ad",
+                            cond: {
+                                $eq: [ '$$ad.status', 'Опубликовано' ]
+
+                            }
+                        }
+                    }
+                }
+            }]).project({ _id : 0, ads : 1 }).toArray();
             console.log(data1)
             // res.redirect('/create_advertisment')
             res.render('main-menu', {title: 'Главная', adds: data1, status: req.session.status});
