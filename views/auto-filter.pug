@@ -1,0 +1,103 @@
+ul.menus-filter
+    li(style='--delay: 1;', tabindex='0')
+        button.drop
+            span Марка
+            span.arrow
+        ul.dropdown
+            li
+                a(href='#') Mercedes
+            li
+                a(href='#') BMW
+            li
+                a(href='#') Toyota
+    li(style='--delay: 2;', tabindex='0')
+        button.drop
+            span Модель
+            span.arrow
+        ul.dropdown
+            li
+                a(onclick="filter(this)") AMG
+            li
+                a(href='#') GLS
+            li
+                a(href='#') GLC
+    li(style='--delay: 3;', tabindex='0')
+        button.drop
+            span Год
+            span.arrow
+        ul.dropdown
+            input.w3-round-large(type='number', name='mileage', min=0)
+
+
+    li(style='--delay: 3;', tabindex='0')
+        button.drop
+            span Цвет
+            span.arrow
+        ul.dropdown
+            li
+                a(href='#') Красный
+            li
+                a(href='#') Синий
+            li
+                a(href='#') Голубой
+
+    li(style='--delay: 3;', tabindex='0')
+        button.drop
+            span Кузов
+            span.arrow
+        ul.dropdown
+            li
+                a(href='#') Седан
+            li
+                a(href='#') Купе
+            li
+                a(href='#') Внедорожник
+
+    li(style='--delay: 3;', tabindex='0')
+        button.drop
+            span Пробег
+            span.arrow
+        ul.dropdown
+            input.w3-round-large(type='number', name='mileage', min=0)
+
+    li(style='--delay: 3;', tabindex='0')
+        button.drop
+            span Двигатель
+            span.arrow
+        ul.dropdown
+            li
+                a(href='#') Бензин
+            li
+                a(href='#') Дизель
+
+    li(style='--delay: 3;', tabindex='0')
+        button.drop
+            span Коробка
+            span.arrow
+        ul.dropdown
+            li
+                a(href='#') Автомат
+            li
+                a(href='#') Механика
+
+    li(style='--delay: 3;', tabindex='0')
+        button.drop
+            span Привод
+            span.arrow
+        ul.dropdown
+            li
+                a(href='#') Передний
+            li
+                a(href='#') Задний
+            li
+                a(href='#') Полный
+
+    li(style='--delay: 3;', tabindex='0')
+        button.drop
+            span Руль
+            span.arrow
+        ul.dropdown
+            li
+                a(href='#') Правый
+            li
+                a(href='#') Левый
