@@ -133,3 +133,79 @@ src: url("/public/css/font/JetBrainsMonoNL-Light.ttf") format("truetype");
 
 
 
+ul {
+    list-style: none;
+    left: 0;
+}
+
+ul li {
+    font-size: 18px;
+}
+
+ul li a {
+    display: block;
+    text-decoration: none;
+}
+
+ul li a, ul li button {
+    padding: 0.7rem 1rem;
+    text-align: left;
+    color: inherit;
+}
+
+.menus-filter {
+    background-color: #45A29E;
+    margin: 0;
+    padding: 10px;
+}
+
+.dropdown {
+    background-color: #1F2833;
+    color: #66FCF1;
+    padding: 2px 1.5rem;
+    height: 0;
+    overflow: hidden;
+    transition: height ease 0.2s;
+}
+
+button.drop {
+    font-size: inherit;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+
+.arrow {
+    color: black;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #fff;
+    transition: transform ease-in-out 0.3s;
+}
+
+li:focus-within .dropdown {
+    height: 135px;
+    left: 0;
+}
+
+li:focus-within .arrow {
+    transform: rotate(180deg);
+}
+
+
+.left-panel{
+    float: left;
+    width: 80%;
+    height: 100%;
+}
+
+.right-panel{
+    float: right;
+    width: 20%;
+    height: 100%;
+    padding: 20px;
+}

@@ -15,14 +15,17 @@ html
     else
         include navbar-admin
     block content
-        .w3-container
-            .w3-container.add-container(style="display: inline-block;color:#66FCF1;")
-                .auto-cards
-                    include mixins/arrAdds
-                    for item in adds
-                        if item.ads.length > 0
-                            +arrAdds(item.ads)
+        .left-panel
+            .w3-container
+                .w3-container.add-container(style="display: inline-block;color:#66FCF1;")
+                    .auto-cards
+                        include mixins/arrAdds
+                        for item in adds
+                            if item.ads.length > 0
+                                +arrAdds(item.ads)
 
+        .right-panel
+            include auto-filter
 
         //.w3-container.auth-form
         //    form(action="/auth" method="POST" style="margin: 10px")
