@@ -29,19 +29,19 @@ router.post('/mainauth', (req, res) => {
     if(!req.body) return res.sendStatus(400);
     // const MongoClient = require("mongodb").MongoClient;
 //     const url = "mongodb://localhost:27017/";
-    console.log("Im here!")
+    console.log("Main auth!")
     // const name_db = 'autotrade';
     // const name_collection = 'users';
     async function authCheck() {
        const mongoClient = new MongoClient(url);
        try {
-           console.log("Imhere");
+           console.log("auth check");
            await mongoClient.connect();
            const db = mongoClient.db(name_db);
            const collection = db.collection(name_collection);
 
            data = await collection.find({}).toArray();
-           console.log(data)
+           // console.log(data)
            count = 0;
            for (let i=0; i<data.length;i++){
                if (req.body.login == data[i].login && req.body.password == data[i].password){
@@ -50,13 +50,13 @@ router.post('/mainauth', (req, res) => {
                    req.session._id = data[i]._id
                    req.session.status = data[i].user_status
                    // res.redirect('/main');
-                   console.log('-------------------------------------------');
-                   console.log(data[0].name);
-                   console.log('-------------------------------------------');
+                   // console.log('-------------------------------------------');
+                   // console.log(data[0].name);
+                   // console.log('-------------------------------------------');
 
                    data1 = await collection.find({}).project({ _id : 0, ads : 1 }).toArray();
-                   console.log("Data1");
-                   console.log(data1[0].ads[0].brand);
+                   // console.log("Data1");
+                   // console.log(data1[0].ads[0].brand);
                    // res.redirect('/create_advertisment')
                    console.log(req.session.status)
                    res.render('main-menu', {title: 'Главная', adds: data1, status: req.session.status});
@@ -75,20 +75,20 @@ router.post('/mainauth', (req, res) => {
        }
    }
    authCheck();
-    console.log(req.body);
+    // console.log(req.body);
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
 
 router.get('/main', (req, res) => {
     // const MongoClient = require("mongodb").MongoClient;
 //     const url = "mongodb://localhost:27017/";
-    console.log("Im here!")
+    console.log("Main!")
     // const name_db = 'autotrade';
     // const name_collection = 'users';
     async function mainRender() {
         const mongoClient = new MongoClient(url);
         try {
-            console.log("Imhere");
+            console.log("mainRender");
             await mongoClient.connect();
             const db = mongoClient.db(name_db);
             const collection = db.collection(name_collection);
@@ -111,19 +111,19 @@ router.post('/maincreate', (req, res) => {
     if(!req.body) return res.sendStatus(400);
     // const MongoClient = require("mongodb").MongoClient;
 //     const url = "mongodb://localhost:27017/";
-    console.log("Im here1!")
+    console.log("Main create!")
     // const name_db = 'autotrade';
     // const name_collection = 'users';
     async function adCreate() {
        const mongoClient = new MongoClient(url);
        try {
-           console.log("Imhere1");
+           console.log("ad create");
            await mongoClient.connect();
            const db = mongoClient.db(name_db);
            const collection = db.collection(name_collection);
            data = await collection.find({}).toArray();
            // console.log(data)
-           const { ObjectId } = require('mongodb');
+           // const { ObjectId } = require('mongodb');
            let today_date = new Date();
            let date = ("0" + today_date.getDate()).slice(-2);
            let month = ("0" + (today_date.getMonth() + 1)).slice(-2);
@@ -154,15 +154,15 @@ router.post('/maincreate', (req, res) => {
                view: 0,
                status: 'Проверка'
            };
-           console.log(newData)
-           console.log(req.session._id)
+           // console.log(newData)
+           // console.log(req.session._id)
            const data1 = await collection.updateOne({ _id: new ObjectId(req.session._id)}, {$push: { ads: newData }},
             (updateErr, result) => {
             if (updateErr) throw updateErr;
             console.log(`Документ с id ${newData.ad_id} обновлен`);
             client.close();
            });
-           console.log(data1)
+           // console.log(data1)
            data2 = await collection.find({}).project({ _id : 0, ads : 1 }).toArray();
            res.redirect('/main')
        } catch (error) {
@@ -172,7 +172,7 @@ router.post('/maincreate', (req, res) => {
        }
     }
     adCreate();
-    console.log(req.body);
+    // console.log(req.body);
     // res.render('main-menu', {title: 'Главная', adds: data});
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
@@ -181,13 +181,13 @@ router.post('/mainfilter', (req, res) => {
     if(!req.body) return res.sendStatus(400);
     // const MongoClient = require("mongodb").MongoClient;
 //     const url = "mongodb://localhost:27017/";
-    console.log("Im here2!")
+    console.log("Main filter!")
     // const name_db = 'autotrade';
     // const name_collection = 'users';
     async function mainFilter() {
         const mongoClient = new MongoClient(url);
         try {
-            console.log("Imhere2");
+            console.log("main filter");
             await mongoClient.connect();
             const db = mongoClient.db(name_db);
             const collection = db.collection(name_collection);
@@ -235,7 +235,7 @@ router.post('/mainfilter', (req, res) => {
         }
     }
     mainFilter();
-    console.log(req.body);
+    // console.log(req.body);
     // res.render('main-menu', {title: 'Главная', adds: data});
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
