@@ -54,12 +54,13 @@ router.post('/mainauth', (req, res) => {
                    // console.log(data[0].name);
                    // console.log('-------------------------------------------');
 
-                   data1 = await collection.find({}).project({ _id : 0, ads : 1 }).toArray();
+                   // data1 = await collection.find({}).project({ _id : 0, ads : 1 }).toArray();
                    // console.log("Data1");
                    // console.log(data1[0].ads[0].brand);
                    // res.redirect('/create_advertisment')
                    console.log(req.session.status)
-                   res.render('main-menu', {title: 'Главная', adds: data1, status: req.session.status});
+                   // res.render('main-menu', {title: 'Главная', adds: data1, status: req.session.status});
+                   res.redirect('/main');
                    break;
                }
                else {
@@ -88,7 +89,7 @@ router.get('/main', (req, res) => {
     async function mainRender() {
         const mongoClient = new MongoClient(url);
         try {
-            console.log("mainRender");
+            console.log("main render");
             await mongoClient.connect();
             const db = mongoClient.db(name_db);
             const collection = db.collection(name_collection);
