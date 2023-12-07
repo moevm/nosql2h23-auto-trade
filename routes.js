@@ -105,7 +105,6 @@ router.get('/main', (req, res) => {
                             as: "ad",
                             cond: {
                                 $eq: [ '$$ad.status', 'Опубликовано' ]
-
                             }
                         }
                     }
@@ -155,7 +154,7 @@ router.post('/maincreate', (req, res) => {
            console.log(create_date_message);
            const newData = {
                ad_id: new ObjectId(),
-               photo: './cars_photos/sellBestCarEver',
+               photo: './cars_photos/sellBestCarEver.jpg',
                brand: req.body.brand,
                model: req.body.model,
                year: req.body.year,
