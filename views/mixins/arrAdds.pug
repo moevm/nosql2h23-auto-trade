@@ -1,7 +1,8 @@
 mixin arrAdds(item)
     - for(let i = 0; i < item.length; i++)
-        .auto-card
-            .create-advt-photo
-                img(src="1.jpg")
-            h5 #{item[i].brand} #{item[i].model} #{item[i].year}
-            h5 #{item[i].price}₽
+        if (item[i].status == "Опубликовано")
+            .auto-card
+                .create-advt-photo
+                    img(src=item[i].photo)
+                h5 #{item[i].brand} #{item[i].model} #{item[i].year}
+                h5 #{item[i].price}₽
