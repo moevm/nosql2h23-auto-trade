@@ -94,8 +94,8 @@ router.get('/main', (req, res) => {
             const db = mongoClient.db(name_db);
             const collection = db.collection(name_collection);
 
-            const query = {};
-            query['ads.status'] = "Опубликовано";
+            let query = [];
+            query.push({$eq: [ '$$ad.status', 'Опубликовано' ]})
             // data1 = await collection.find({ ads : { status: "Опубликовано" } }).project({ _id : 0, ads : 1 }).toArray();
             data1 = await collection.aggregate([{
                 $project: {
@@ -104,9 +104,7 @@ router.get('/main', (req, res) => {
                             input: "$ads",
                             as: "ad",
                             cond: {
-                                "$and" : [
-                                    {$eq: [ '$$ad.status', 'Опубликовано' ]}
-                                ]
+                                "$and" : query
                             }
                         }
                     }
@@ -211,39 +209,51 @@ router.post('/mainfilter', (req, res) => {
             const db = mongoClient.db(name_db);
             const collection = db.collection(name_collection);
 
-            const query = {};
+            let query = [];
             if (req.body.filter_brand !== "Не выбрано") {
-                query['ads.brand'] = req.body.filter_brand;
+                query.push({$eq: [ '$$ad.brand', req.body.filter_brand ]})
             }
             if (req.body.filter_model !== "Не выбрано") {
-                query['ads.model'] = req.body.filter_model;
+                query.push({$eq: [ '$$ad.model', req.body.filter_model ]})
             }
             if (req.body.filter_year !== "Не выбрано") {
-                query['ads.year'] = req.body.filter_year;
+                query.push({$eq: [ '$$ad.year', req.body.filter_year ]})
             }
             if (req.body.filter_color !== "Не выбрано") {
-                query['ads.color'] = req.body.filter_color;
+                query.push({$eq: [ '$$ad.color', req.body.filter_color ]})
             }
             if (req.body.filter_body !== "Не выбрано") {
-                query['ads.body'] = req.body.filter_body;
+                query.push({$eq: [ '$$ad.body', req.body.filter_body ]})
             }
             if (req.body.filter_mileage !== "Не выбрано") {
-                query['ads.mileage'] = req.body.filter_mileage;
+                query.push({$eq: [ '$$ad.mileage', req.body.filter_mileage ]})
             }
             if (req.body.filter_engine !== "Не выбрано") {
-                query['ads.engine'] = req.body.filter_engine;
+                query.push({$eq: [ '$$ad.engine', req.body.filter_engine ]})
             }
             if (req.body.filter_transmission !== "Не выбрано") {
-                query['ads.transmission'] = req.body.filter_transmission;
+                query.push({$eq: [ '$$ad.transmission', req.body.filter_transmission ]})
             }
             if (req.body.filter_drive !== "Не выбрано") {
-                query['ads.drive'] = req.body.filter_drive;
+                query.push({$eq: [ '$$ad.drive', req.body.filter_drive ]})
             }
             if (req.body.filter_helm !== "Не выбрано") {
-                query['ads.helm'] = req.body.filter_helm;
+                query.push({$eq: [ '$$ad.helm', req.body.filter_helm ]})
             }
 
-            data = await collection.find(query).project({ _id : 0, ads : 1 }).toArray();
+            data = await collection.aggregate([{
+                $project: {
+                    "ads": {
+                        $filter: {
+                            input: "$ads",
+                            as: "ad",
+                            cond: {
+                                "$and" : query
+                            }
+                        }
+                    }
+                }
+            }]).project({ _id : 0, ads : 1 }).toArray();
             // console.log(data)
 
             res.render('main-menu', {title: 'Главная', adds: data});
