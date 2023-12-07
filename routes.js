@@ -94,7 +94,10 @@ router.get('/main', (req, res) => {
             const db = mongoClient.db(name_db);
             const collection = db.collection(name_collection);
 
-            data1 = await collection.find({}).project({ _id : 0, ads : 1 }).toArray();
+            const query = {};
+            query['ads.status'] = "Опубликовано";
+            data1 = await collection.find(query).project({ _id : 0, ads : 1 }).toArray();
+            console.log(data1)
             // res.redirect('/create_advertisment')
             res.render('main-menu', {title: 'Главная', adds: data1, status: req.session.status});
         } catch (error) {
