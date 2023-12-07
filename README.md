@@ -45,7 +45,7 @@
         "ad_id": {
           "$oid": "6563956f2bf7f94d97aeddd5"
         },
-        "photo": "./cars_photos/sellBestCarEver",
+        "photo": "./cars_photos/sellBestCarEver.jpg",
         "brand": "Mercedes",
         "model": "AMG-GT",
         "year": 2018,
@@ -57,6 +57,27 @@
         "drive": "задний",
         "helm": "левый",
         "price": 10000000,
+        "create_date": "2022-03-29",
+        "edit_date": null,
+        "view": 808,
+        "status": "Опубликовано"
+      },
+      {
+        "ad_id": {
+          "$oid": "6563956f2bf7f94d97aeddd6"
+        },
+        "photo": "./cars_photos/sellBestCarEver.jpg",
+        "brand": "Mercedes",
+        "model": "AMG-GT R",
+        "year": 2018,
+        "color": "черный",
+        "body": "седан",
+        "mileage": "10000",
+        "engine": "462",
+        "transmission": "автомат",
+        "drive": "задний",
+        "helm": "левый",
+        "price": 14000000,
         "create_date": "2022-03-29",
         "edit_date": null,
         "view": 808,
@@ -102,7 +123,7 @@
 ```
 ## Данные администратора:
 ```shell
-{
+ {
     "_id": {
       "$oid": "656393c68c47f9cf167bc8c6"
     },
