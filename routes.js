@@ -4,8 +4,12 @@ const {ObjectId, BSON} = require("mongodb");
 const fs = require("fs");
 var router = express.Router();
 var url = "mongodb://localhost:27017/";
+var backup_path = "backup.bson"
 const docker_status = false;
-if (docker_status) url = "mongodb://mongo:27017/";
+if (docker_status) {
+    url = "mongodb://mongo:27017/";
+    backup_path = "data/db/backup.bson"
+}
 
 const MongoClient = require("mongodb").MongoClient;
 const name_db = 'autotrade';
@@ -253,7 +257,7 @@ router.get("/adminexport", (req, res) => {
             const wrappedData = { arrayData: data };
             const BSONData = BSON.serialize(wrappedData);
 
-            fs.writeFileSync('backup.bson', BSONData);
+            fs.writeFileSync(backup_path, BSONData);
             console.log('Данные успешно записаны в backup.bson');
         } catch (error) {
             console.error('An error has occurred:', error);
@@ -274,7 +278,7 @@ router.get("/adminimport", (req, res) => {
             const db = mongoClient.db(name_db);
             const collection = db.collection(name_collection);
 
-            const fileData = fs.readFileSync('backup.bson');
+            const fileData = fs.readFileSync(backup_path);
             console.log('Данные успешно прочитаны из backup.bson');
             const bsonData = BSON.deserialize(fileData);
             await collection.deleteMany({});
