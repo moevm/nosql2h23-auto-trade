@@ -27,12 +27,12 @@ router.get("/create_advertisment", (req, res) => {
 
 router.post('/mainauth', (req, res) => {
     if(!req.body) return res.sendStatus(400);
-    const MongoClient = require("mongodb").MongoClient;
+    // const MongoClient = require("mongodb").MongoClient;
 //     const url = "mongodb://localhost:27017/";
     console.log("Im here!")
-    const name_db = 'autotrade';
-    const name_collection = 'users';
-    async function writeUserToDatabase() {
+    // const name_db = 'autotrade';
+    // const name_collection = 'users';
+    async function authCheck() {
        const mongoClient = new MongoClient(url);
        try {
            console.log("Imhere");
@@ -74,18 +74,18 @@ router.post('/mainauth', (req, res) => {
            await mongoClient.close();
        }
    }
-   writeUserToDatabase();
+   authCheck();
     console.log(req.body);
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
 
 router.get('/main', (req, res) => {
-    const MongoClient = require("mongodb").MongoClient;
+    // const MongoClient = require("mongodb").MongoClient;
 //     const url = "mongodb://localhost:27017/";
     console.log("Im here!")
-    const name_db = 'autotrade';
-    const name_collection = 'users';
-    async function writeUserToDatabase() {
+    // const name_db = 'autotrade';
+    // const name_collection = 'users';
+    async function mainRender() {
         const mongoClient = new MongoClient(url);
         try {
             console.log("Imhere");
@@ -102,19 +102,19 @@ router.get('/main', (req, res) => {
             await mongoClient.close();
         }
     }
-    writeUserToDatabase();
-    console.log(req.body);
+    mainRender();
+    // console.log(req.body);
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
 
 router.post('/maincreate', (req, res) => {
     if(!req.body) return res.sendStatus(400);
-    const MongoClient = require("mongodb").MongoClient;
+    // const MongoClient = require("mongodb").MongoClient;
 //     const url = "mongodb://localhost:27017/";
     console.log("Im here1!")
-    const name_db = 'autotrade';
-    const name_collection = 'users';
-    async function writeUserToDatabase() {
+    // const name_db = 'autotrade';
+    // const name_collection = 'users';
+    async function adCreate() {
        const mongoClient = new MongoClient(url);
        try {
            console.log("Imhere1");
@@ -171,7 +171,7 @@ router.post('/maincreate', (req, res) => {
            await mongoClient.close();
        }
     }
-    writeUserToDatabase();
+    adCreate();
     console.log(req.body);
     // res.render('main-menu', {title: 'Главная', adds: data});
 //     res.send(`${req.body.login} - ${req.body.password}`);
@@ -179,12 +179,12 @@ router.post('/maincreate', (req, res) => {
 
 router.post('/mainfilter', (req, res) => {
     if(!req.body) return res.sendStatus(400);
-    const MongoClient = require("mongodb").MongoClient;
+    // const MongoClient = require("mongodb").MongoClient;
 //     const url = "mongodb://localhost:27017/";
     console.log("Im here2!")
-    const name_db = 'autotrade';
-    const name_collection = 'users';
-    async function writeUserToDatabase() {
+    // const name_db = 'autotrade';
+    // const name_collection = 'users';
+    async function mainFilter() {
         const mongoClient = new MongoClient(url);
         try {
             console.log("Imhere2");
@@ -234,7 +234,7 @@ router.post('/mainfilter', (req, res) => {
             await mongoClient.close();
         }
     }
-    writeUserToDatabase();
+    mainFilter();
     console.log(req.body);
     // res.render('main-menu', {title: 'Главная', adds: data});
 //     res.send(`${req.body.login} - ${req.body.password}`);
