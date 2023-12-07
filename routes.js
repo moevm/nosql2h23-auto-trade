@@ -110,7 +110,7 @@ router.get('/main', (req, res) => {
                     }
                 }
             }]).project({ _id : 0, ads : 1 }).toArray();
-            console.log(data1)
+            // console.log(data1)
             // res.redirect('/create_advertisment')
             res.render('main-menu', {title: 'Главная', adds: data1, status: req.session.status});
         } catch (error) {
