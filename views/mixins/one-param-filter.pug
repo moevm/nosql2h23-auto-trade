@@ -1,0 +1,11 @@
+mixin one-param-filter(key, arr)
+    -console.log(arr)
+    li(style='--delay: 1;', tabindex='0').dropdown-el
+        button.drop
+            span(title=key)=key
+            span.arrow
+        ul.dropdown
+            include field-filter
+            for item in arr
+                +field-filter(item)
+
