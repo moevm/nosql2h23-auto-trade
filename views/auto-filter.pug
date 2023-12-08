@@ -1,29 +1,35 @@
 ul.menus-filter
+    -console.log('kek',db_dataset)
+    // for item in db_dataset
+
+
     li(style='--delay: 1;', tabindex='0').dropdown-el
         button.drop
-            span Марка
+            span(title='Марка') Марка
             span.arrow
         ul.dropdown
             li
-                a(onclick="filter(this)") Любая
+                a(onclick="filter(this)") Очистить
             li
                 a(onclick="filter(this)") Mercedes
             li
-                a(href='#') BMW
+                a(onclick="filter(this)") BMW
             li
-                a(href='#') Toyota
+                a(onclick="filter(this)") Toyota
 
-    li(style='--delay: 2;', tabindex='0')
+    li(style='--delay: 2;', tabindex='0').dropdown-el
         button.drop
-            span Модель
+            span(title='Модель') Модель
             span.arrow
         ul.dropdown
             li
+                a(onclick="filter(this)") Очистить
+            li
                 a(onclick="filter(this)") AMG
             li
-                a(href='#') GLS
+                a(onclick="filter(this)") GLS
             li
-                a(href='#') GLC
+                a(onclick="filter(this)") GLC
     li(style='--delay: 3;', tabindex='0')
         button.drop
             span Год

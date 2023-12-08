@@ -11,6 +11,20 @@ if (docker_status) {
     backup_path = "data/db/backup.bson"
 }
 
+
+let db_dataset = {
+    'Марка': ['Mercedes', 'BMW', 'Toyota'],
+    'Модель': ['AMG', 'CLS', 'M5', 'GTR', 'Supra'],
+    'Год': [1998, 2002, 2023],
+    'Цвет': ['Красный', 'Синий', 'Голубой'],
+    'Кузов': ['Купе', 'Внедорожник', 'Седан'],
+    'Пробег': [],
+    'Двигатель': ['Бензин', 'Дизель'],
+    'Коробка': ['Автомат', 'Механика'],
+    'Привод': ['Передний', 'Задний', 'Полный'],
+    'Руль': ['Левый', 'Правый']
+}
+
 const MongoClient = require("mongodb").MongoClient;
 const name_db = 'autotrade';
 const name_collection = 'users';
@@ -112,7 +126,7 @@ router.get('/main', (req, res) => {
             }]).project({ _id : 0, ads : 1 }).toArray();
             // console.log(data1)
             // res.redirect('/create_advertisment')
-            res.render('main-menu', {title: 'Главная', adds: data1, status: req.session.status});
+            res.render('main-menu', {title: 'Главная', adds: data1, status: req.session.status, db_dataset: db_dataset});
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {

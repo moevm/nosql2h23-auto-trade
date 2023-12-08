@@ -4,8 +4,8 @@ function filter(input) {
     let par = input.closest(".dropdown-el").getElementsByTagName('span')[0]
     let name = par.innerHTML
 
-    if (input.innerHTML === "Любая"){
-        par.innerHTML = 'Марка'
+    if (input.innerHTML === "Очистить"){
+        par.innerHTML = par.title
     }
     else{
         par.innerHTML = input.innerHTML
