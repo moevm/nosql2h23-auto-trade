@@ -1,15 +1,18 @@
 ul.menus-filter
-    li(style='--delay: 1;', tabindex='0')
+    li(style='--delay: 1;', tabindex='0').dropdown-el
         button.drop
             span Марка
             span.arrow
         ul.dropdown
             li
-                a(href='#') Mercedes
+                a(onclick="filter(this)") Любая
+            li
+                a(onclick="filter(this)") Mercedes
             li
                 a(href='#') BMW
             li
                 a(href='#') Toyota
+
     li(style='--delay: 2;', tabindex='0')
         button.drop
             span Модель

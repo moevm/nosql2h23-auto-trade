@@ -1,9 +1,17 @@
 function filter(input) {
-    console.log(input.value)
-    // let elem = {
-    //     id: input.id,
-    //     state: input.checked
-    // }
+    console.log(input.innerHTML)
+
+    let par = input.closest(".dropdown-el").getElementsByTagName('span')[0]
+    let name = par.innerHTML
+
+    if (input.innerHTML === "Любая"){
+        par.innerHTML = 'Марка'
+    }
+    else{
+        par.innerHTML = input.innerHTML
+    }
+
+
     // callAjaxGet(elem, (response) => {
     //     let array_id = JSON.parse(response);
     //     console.log('----------')
