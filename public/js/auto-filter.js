@@ -35,9 +35,22 @@ function sendForm(input){
     let data = filter.getElementsByClassName('name-filter')
     let year = document.getElementById('year')
     let mileage = document.getElementById('mileage')
-
+    console.log(data[0].innerHTML)
     db_dataset['Год'] = year.value
     db_dataset['Пробег'] = mileage.value
 
-    console.log(db_dataset)
+    // console.log(data)
+
+    var xhr = new XMLHttpRequest();
+
+    // настройка запроса
+    xhr.open("POST", "/mainfilter", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    // преобразование результатов в JSON-строку
+    data = JSON.stringify(data);
+    console.log("Send")
+    console.log(data)
+    // отправка запроса
+    xhr.send(data);
 }

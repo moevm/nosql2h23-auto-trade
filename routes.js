@@ -223,7 +223,7 @@ router.post('/mainfilter', (req, res) => {
             await mongoClient.connect();
             const db = mongoClient.db(name_db);
             const collection = db.collection(name_collection);
-
+            console.log(req.body)
             let query = [];
             if (req.body.filter_brand !== "Не выбрано") {
                 query.push({$eq: [ '$$ad.brand', req.body.filter_brand ]})
