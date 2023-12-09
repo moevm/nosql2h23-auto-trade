@@ -3,7 +3,7 @@ ul.menus-filter
         button.drop
             span.name-filter(title='Марка') Марка
             span.arrow
-        ul.dropdown
+        ul.dropdown()
             li
                 a(onclick="filter(this)") Очистить
             li
@@ -29,15 +29,15 @@ ul.menus-filter
 
     li(style='--delay: 3;', tabindex='0').dropdown-el
         button.drop
-            span.name-filter Год
+            span Год
             span.arrow
         ul.dropdown
-            input.w3-round-large(type='number', name='mileage', min=0)
+            input.w3-round-large(type='number', id='year', min=0)
 
 
     li(style='--delay: 3;', tabindex='0').dropdown-el
         button.drop
-            span.name-filter Цвет
+            span.name-filter(title='Цвет') Цвет
             span.arrow
         ul.dropdown
             li
@@ -51,7 +51,7 @@ ul.menus-filter
 
     li(style='--delay: 3;', tabindex='0').dropdown-el
         button.drop
-            span.name-filter Кузов
+            span.name-filter(title='Кузов') Кузов
             span.arrow
         ul.dropdown
             li
@@ -65,14 +65,14 @@ ul.menus-filter
 
     li(style='--delay: 3;', tabindex='0').dropdown-el
         button.drop
-            span.name-filter Пробег
+            span Пробег
             span.arrow
         ul.dropdown
-            input.w3-round-large(type='number', name='mileage', min=0)
+            input.w3-round-large(type='number', id='mileage', min=0)
 
     li(style='--delay: 3;', tabindex='0').dropdown-el
         button.drop
-            span.name-filter Двигатель
+            span.name-filter(title='Двигатель') Двигатель
             span.arrow
         ul.dropdown
             li
@@ -84,7 +84,7 @@ ul.menus-filter
 
     li(style='--delay: 3;', tabindex='0').dropdown-el
         button.drop
-            span.name-filter Коробка
+            span.name-filter(title='Коробка') Коробка
             span.arrow
         ul.dropdown
             li
@@ -96,7 +96,7 @@ ul.menus-filter
 
     li(style='--delay: 3;', tabindex='0').dropdown-el
         button.drop
-            span.name-filter Привод
+            span.name-filter(title='Привод') Привод
             span.arrow
         ul.dropdown
             li
@@ -110,7 +110,7 @@ ul.menus-filter
 
     li(style='--delay: 3;', tabindex='0').dropdown-el
         button.drop
-            span.name-filter Руль
+            span.name-filter(title='Руль') Руль
             span.arrow
         ul.dropdown
             li
@@ -120,8 +120,7 @@ ul.menus-filter
             li
                 a(onclick="filter(this)") Левый
 
-    button(onclick="sendForm(this)") Отправить форму
-
+    button.w3-button.w3-center.w3-hover-aqua.send-filter(onclick="sendForm(this)") Отправить форму
 //     -
 //         for item in db_dataset
 //             console.log(item)

@@ -154,6 +154,7 @@ ul li a, ul li button {
 }
 
 .menus-filter {
+    font-family: "JetBrains";
     background-color: #45A29E;
     margin: 0;
     padding: 10px;
@@ -188,7 +189,9 @@ button.drop {
 }
 
 li:focus-within .dropdown {
-    height: 135px;
+    /*height: 145px;*/
+    height: auto;
+    padding: 10px;
     left: 0;
 }
 
@@ -208,4 +211,11 @@ li:focus-within .arrow {
     width: 20%;
     height: 100%;
     padding: 20px;
+}
+
+.send-filter{
+    margin: 10px;
+    padding: 20px;
+    background-color: #0B0C10;
+    color: #01ACC6;
 }
