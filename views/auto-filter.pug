@@ -1,6 +1,6 @@
 ul.menus-filter
     li(style='--delay: 1;', tabindex='0').dropdown-el
-        button.drop
+        button(type="button").drop
             span.name-filter(title='Марка') Марка
             span.arrow
         ul.dropdown()
@@ -119,8 +119,7 @@ ul.menus-filter
                 a(onclick="filter(this)") Правый
             li
                 a(onclick="filter(this)") Левый
-
-    button.w3-button.w3-center.w3-hover-aqua.send-filter(onclick="sendForm(this)") Отправить форму
+    button.w3-button.w3-center.w3-hover-aqua.send-filter(onclick="sendForm(this)" type="submit") Отправить форму
 //     -
 //         for item in db_dataset
 //             console.log(item)
