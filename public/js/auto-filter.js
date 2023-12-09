@@ -23,7 +23,8 @@ function filter(input) {
         if (par.innerHTML === par.title)
             par.innerHTML = input.innerHTML
         else {
-            par.innerHTML += ' ' + input.innerHTML
+            par.innerHTML = input.innerHTML
+            // par.innerHTML += ' ' + input.innerHTML
         }
 
     }
