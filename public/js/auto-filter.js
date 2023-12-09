@@ -35,10 +35,22 @@ function sendForm(input){
     let data = filter.getElementsByClassName('name-filter')
     let year = document.getElementById('year')
     let mileage = document.getElementById('mileage')
-    console.log(data[0].innerHTML)
+    console.log(data)
     db_dataset['Год'] = year.value
     db_dataset['Пробег'] = mileage.value
 
+    data = {
+        brand: data[0].innerHTML,
+        model: data[1].innerHTML,
+        year: year.value,
+        color: data[2].innerHTML,
+        body: data[3].innerHTML,
+        mileage: mileage.value,
+        engine: data[4].innerHTML,
+        transmission: data[5].innerHTML,
+        drive: data[6].innerHTML,
+        helm: data[7].innerHTML
+    }
     // console.log(data)
 
     var xhr = new XMLHttpRequest();
