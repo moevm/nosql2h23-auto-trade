@@ -109,7 +109,9 @@ router.get('/main', (req, res) => {
             const collection = db.collection(name_collection);
 
             let query = [];
-            query.push({$eq: [ '$$ad.status', 'Опубликовано' ]})
+            query.push({$eq: [ '$$ad.status', 'Проверка' ]})
+            query.push({$eq: [ '$$ad.brand', 'Mercedes' ]})
+            // query.push({$eq: [ '$$ad.status', 'Опубликовано' ]})
             // data1 = await collection.find({ ads : { status: "Опубликовано" } }).project({ _id : 0, ads : 1 }).toArray();
             data1 = await collection.aggregate([{
                 $project: {
@@ -126,8 +128,21 @@ router.get('/main', (req, res) => {
             }]).project({ _id : 0, ads : 1 }).toArray();
             // console.log(data1)
             // res.redirect('/create_advertisment')
-
-            res.render('main-menu', {title: 'Главная', adds: data1, status: req.session.status});
+            data = [
+                "Марка",
+                "Модель",
+                "Год",
+                "Цвет",
+                "Кузов",
+                "Пробег",
+                "Двигатель",
+                "Коробка",
+                "Привод",
+                "Руль"
+            ]
+            console.log("1")
+            console.log(data)
+            res.render('main-menu', {title: 'Главная', adds: data1, status: req.session.status, filter_data: data});
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {
@@ -210,7 +225,7 @@ router.post('/maincreate', (req, res) => {
 })
 
 router.post('/mainfilter', (req, res) => {
-    if(!req.body) return res.sendStatus(400);
+    // if(!req.body) return res.sendStatus(400);
     // const MongoClient = require("mongodb").MongoClient;
 //     const url = "mongodb://localhost:27017/";
     console.log("Main filter!")
@@ -225,37 +240,51 @@ router.post('/mainfilter', (req, res) => {
             const collection = db.collection(name_collection);
             console.log(req.body)
             let query = [];
-            if (req.body.filter_brand !== "Не выбрано") {
+            if (req.body.filter_brand !== "Марка") {
                 query.push({$eq: [ '$$ad.brand', req.body.filter_brand ]})
             }
-            if (req.body.filter_model !== "Не выбрано") {
+            if (req.body.filter_model !== "Модель") {
                 query.push({$eq: [ '$$ad.model', req.body.filter_model ]})
             }
-            if (req.body.filter_year !== "Не выбрано") {
+            if (req.body.filter_year !== "") {
                 query.push({$eq: [ '$$ad.year', req.body.filter_year ]})
             }
-            if (req.body.filter_color !== "Не выбрано") {
+            if (req.body.filter_color !== "Цвет") {
                 query.push({$eq: [ '$$ad.color', req.body.filter_color ]})
             }
-            if (req.body.filter_body !== "Не выбрано") {
+            if (req.body.filter_body !== "Кузов") {
                 query.push({$eq: [ '$$ad.body', req.body.filter_body ]})
             }
-            if (req.body.filter_mileage !== "Не выбрано") {
+            if (req.body.filter_mileage !== "") {
                 query.push({$eq: [ '$$ad.mileage', req.body.filter_mileage ]})
             }
-            if (req.body.filter_engine !== "Не выбрано") {
+            if (req.body.filter_engine !== "Двигатель") {
                 query.push({$eq: [ '$$ad.engine', req.body.filter_engine ]})
             }
-            if (req.body.filter_transmission !== "Не выбрано") {
+            if (req.body.filter_transmission !== "Коробка") {
                 query.push({$eq: [ '$$ad.transmission', req.body.filter_transmission ]})
             }
-            if (req.body.filter_drive !== "Не выбрано") {
+            if (req.body.filter_drive !== "Привод") {
                 query.push({$eq: [ '$$ad.drive', req.body.filter_drive ]})
             }
-            if (req.body.filter_helm !== "Не выбрано") {
+            if (req.body.filter_helm !== "Руль") {
                 query.push({$eq: [ '$$ad.helm', req.body.filter_helm ]})
             }
 
+            data1 = [
+                req.body.filter_brand,
+                req.body.filter_model,
+                req.body.filter_year,
+                req.body.filter_color,
+                req.body.filter_body,
+                req.body.filter_mileage,
+                req.body.filter_engine,
+                req.body.filter_transmission,
+                req.body.filter_drive,
+                req.body.filter_helm
+            ]
+            console.log("2")
+            console.log(data1)
             data = await collection.aggregate([{
                 $project: {
                     "ads": {
@@ -269,9 +298,10 @@ router.post('/mainfilter', (req, res) => {
                     }
                 }
             }]).project({ _id : 0, ads : 1 }).toArray();
-            // console.log(data)
-
-            res.render('main-menu', {title: 'Главная', adds: data});
+            console.log(query)
+            console.log(data)
+            console.log("Работает по нажатию дважды")
+            res.render('create_advt', {title: 'Главная', adds: data, filter_data: data1});
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {

@@ -1,25 +1,25 @@
-let db_dataset = {
-    'Марка': [],
-    'Модель': [],
-    'Год': [],
-    'Цвет': [],
-    'Кузов': [],
-    'Пробег': [],
-    'Двигатель': [],
-    'Коробка': [],
-    'Привод': [],
-    'Руль': []
-}
+// let db_dataset = {
+//     'Марка': [],
+//     'Модель': [],
+//     'Год': [],
+//     'Цвет': [],
+//     'Кузов': [],
+//     'Пробег': [],
+//     'Двигатель': [],
+//     'Коробка': [],
+//     'Привод': [],
+//     'Руль': []
+// }
 
 function filter(input) {
     let par = input.closest(".dropdown-el").getElementsByTagName('span')[0]
 
     if (input.innerHTML === "Очистить"){
         par.innerHTML = par.title
-        db_dataset[par.title] = []
+        // db_dataset[par.title] = []
     }
     else{
-        db_dataset[par.title].push(input.innerHTML)
+        // db_dataset[par.title].push(input.innerHTML)
         if (par.innerHTML === par.title)
             par.innerHTML = input.innerHTML
         else {
@@ -36,8 +36,8 @@ function sendForm(input){
     let year = document.getElementById('year')
     let mileage = document.getElementById('mileage')
     console.log(data)
-    db_dataset['Год'] = year.value
-    db_dataset['Пробег'] = mileage.value
+    // db_dataset['Год'] = year.value
+    // db_dataset['Пробег'] = mileage.value
 
     data = {
         filter_brand: data[0].innerHTML,
