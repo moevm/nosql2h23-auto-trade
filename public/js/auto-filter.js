@@ -40,16 +40,16 @@ function sendForm(input){
     db_dataset['Пробег'] = mileage.value
 
     data = {
-        brand: data[0].innerHTML,
-        model: data[1].innerHTML,
-        year: year.value,
-        color: data[2].innerHTML,
-        body: data[3].innerHTML,
-        mileage: mileage.value,
-        engine: data[4].innerHTML,
-        transmission: data[5].innerHTML,
-        drive: data[6].innerHTML,
-        helm: data[7].innerHTML
+        filter_brand: data[0].innerHTML,
+        filter_model: data[1].innerHTML,
+        filter_year: year.value,
+        filter_color: data[2].innerHTML,
+        filter_body: data[3].innerHTML,
+        filter_mileage: mileage.value,
+        filter_engine: data[4].innerHTML,
+        filter_transmission: data[5].innerHTML,
+        filter_drive: data[6].innerHTML,
+        filter_helm: data[7].innerHTML
     }
     // console.log(data)
 
