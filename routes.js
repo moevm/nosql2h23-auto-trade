@@ -152,7 +152,7 @@ router.get('/main', (req, res) => {
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
 
-router.get('/main1', (req, res) => {
+router.get('/mainfilter', (req, res) => {
     // const MongoClient = require("mongodb").MongoClient;
 //     const url = "mongodb://localhost:27017/";
     console.log("Main!")
@@ -328,13 +328,20 @@ router.post('/mainfilter', (req, res) => {
             }
             query.push({$eq: [ '$$ad.status', 'Опубликовано' ]})
 
+            let filter_year_box;
+            if (req.body.filter_year !== 'Год') filter_year_box = 'Год ' + req.body.filter_year;
+            else filter_year_box = req.body.filter_year;
+            let filter_mileage_box;
+            if (req.body.filter_mileage !== 'Пробег') filter_mileage_box = 'Пробег ' + req.body.filter_mileage;
+            else filter_mileage_box = req.body.filter_mileage;
+
             data12 = [
                 req.body.filter_brand,
                 req.body.filter_model,
-                req.body.filter_year,
+                filter_year_box,
                 req.body.filter_color,
                 req.body.filter_body,
-                req.body.filter_mileage,
+                filter_mileage_box,
                 req.body.filter_engine,
                 req.body.filter_transmission,
                 req.body.filter_drive,
