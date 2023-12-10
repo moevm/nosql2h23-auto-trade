@@ -35,7 +35,7 @@
     ads: [
         {
             ad_id: ObjectId('6563956f2bf7f94d97aeddd5'),
-            photo: './cars_photos/sellBestCarEver.jpg',
+            photo: './cars_photos/amggt.jpg',
             brand: 'Mercedes',
             model: 'AMG-GT',
             year: 2018,
@@ -73,7 +73,7 @@
         },
         {
             ad_id: ObjectId('657599f971dd4c9a9e467dff'),
-            photo: './cars_photos/sellBestCarEver.jpg',
+            photo: './cars_photos/landcruiser.png',
             brand: 'Toyota',
             model: 'Land Cruiser',
             year: 2023,
