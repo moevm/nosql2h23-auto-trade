@@ -29,10 +29,13 @@ ul.menus-filter
 
     li(style='--delay: 3;', tabindex='0').dropdown-el
         button(type="button").drop
-            span #{filter_data[2]}
+            span(title='Год') #{filter_data[2]}
             span.arrow
         ul.dropdown
-            input.w3-round-large(type='number', id='year', min=0)
+            li
+                a(onclick="filter(this)") Очистить
+            li
+                input.w3-round-large(type='number', id='year', min=0)
 
 
     li(style='--delay: 3;', tabindex='0').dropdown-el
@@ -65,10 +68,13 @@ ul.menus-filter
 
     li(style='--delay: 3;', tabindex='0').dropdown-el
         button(type="button").drop
-            span #{filter_data[5]}
+            span(title='Пробег') #{filter_data[5]}
             span.arrow
         ul.dropdown
-            input.w3-round-large(type='number', id='mileage', min=0)
+            li
+                a(onclick="filter(this)") Очистить
+            li
+                input.w3-round-large(type='number', id='mileage', min=0)
 
     li(style='--delay: 3;', tabindex='0').dropdown-el
         button(type="button").drop
