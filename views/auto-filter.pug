@@ -29,7 +29,7 @@ ul.menus-filter
 
     li(style='--delay: 3;', tabindex='0').dropdown-el
         button(type="button").drop
-            span Год
+            span #{filter_data[2]}
             span.arrow
         ul.dropdown
             input.w3-round-large(type='number', id='year', min=0)
@@ -65,7 +65,7 @@ ul.menus-filter
 
     li(style='--delay: 3;', tabindex='0').dropdown-el
         button(type="button").drop
-            span Пробег
+            span #{filter_data[5]}
             span.arrow
         ul.dropdown
             input.w3-round-large(type='number', id='mileage', min=0)
@@ -119,7 +119,38 @@ ul.menus-filter
                 a(onclick="filter(this)") Правый
             li
                 a(onclick="filter(this)") Левый
-    button.w3-button.w3-center.w3-hover-aqua.send-filter(onclick="sendForm(this)" type="button") Отправить форму
+    button.w3-button.w3-center.w3-hover-aqua.send-filter(id="submitButton") Отправить форму
+
+script.
+    $(document).ready(function () {
+        $('#submitButton').on('click', function () {
+            let filter = this.closest(".menus-filter")
+            let data = filter.getElementsByClassName('name-filter')
+            let year = document.getElementById('year')
+            let mileage = document.getElementById('mileage')
+            console.log(data)
+            // db_dataset['Год'] = year.value
+            // db_dataset['Пробег'] = mileage.value
+
+            data = {
+                filter_brand: data[0].innerHTML,
+                filter_model: data[1].innerHTML,
+                filter_year: year.value,
+                filter_color: data[2].innerHTML,
+                filter_body: data[3].innerHTML,
+                filter_mileage: mileage.value,
+                filter_engine: data[4].innerHTML,
+                filter_transmission: data[5].innerHTML,
+                filter_drive: data[6].innerHTML,
+                filter_helm: data[7].innerHTML
+            }
+            $.post('/mainfilter', data, function (filter_data) {
+                console.log(filter_data)
+                location.href = '/main1'
+                // обработка ответа от сервера
+            });
+        });
+    });
 //     -
 //         for item in db_dataset
 //             console.log(item)
