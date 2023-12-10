@@ -66,7 +66,7 @@ input:focus::placeholder{
 
 .create-advt-photo img{
     margin-top: 50px;
-    max-width: 400px;
+    max-width: 200px;
     max-height: 400px;
 }
 
