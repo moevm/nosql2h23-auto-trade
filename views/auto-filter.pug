@@ -21,9 +21,9 @@ ul.menus-filter
             li
                 a(onclick="filter(this)") Очистить
             li
-                a(onclick="filter(this)") AMG
+                a(onclick="filter(this)") AMG-GT
             li
-                a(onclick="filter(this)") GLS
+                a(onclick="filter(this)") Land Cruiser
             li
                 a(onclick="filter(this)") GLC
 
@@ -45,9 +45,9 @@ ul.menus-filter
             li
                 a(onclick="filter(this)") Красный
             li
-                a(onclick="filter(this)") Синий
+                a(onclick="filter(this)") Черный
             li
-                a(onclick="filter(this)") Голубой
+                a(onclick="filter(this)") Синий
 
     li(style='--delay: 3;', tabindex='0').dropdown-el
         button(type="button").drop
@@ -128,7 +128,7 @@ script.
             let data = filter.getElementsByClassName('name-filter')
             let year = document.getElementById('year')
             let mileage = document.getElementById('mileage')
-            console.log(data)
+            // console.log(data)
             // db_dataset['Год'] = year.value
             // db_dataset['Пробег'] = mileage.value
 
@@ -144,10 +144,9 @@ script.
                 filter_drive: data[6].innerHTML,
                 filter_helm: data[7].innerHTML
             }
-            $.post('/mainfilter', data, function (filter_data) {
-                console.log(filter_data)
+            $.post('/mainfilter', data, function (status) {
+                console.log(status)
                 location.href = '/mainfilter'
-                // обработка ответа от сервера
             });
         });
     });

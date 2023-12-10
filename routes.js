@@ -10,20 +10,8 @@ if (docker_status) {
     url = "mongodb://mongo:27017/";
     backup_path = "data/db/backup.bson"
 }
-let data12;
-let data123;
-// let db_dataset = {
-//     'Марка': ['Mercedes', 'BMW', 'Toyota'],
-//     'Модель': ['AMG', 'CLS', 'M5', 'GTR', 'Supra'],
-//     'Год': [1998, 2002, 2023],
-//     'Цвет': ['Красный', 'Синий', 'Голубой'],
-//     'Кузов': ['Купе', 'Внедорожник', 'Седан'],
-//     'Пробег': [],
-//     'Двигатель': ['Бензин', 'Дизель'],
-//     'Коробка': ['Автомат', 'Механика'],
-//     'Привод': ['Передний', 'Задний', 'Полный'],
-//     'Руль': ['Левый', 'Правый']
-// }
+let data_filters;
+let data_ads;
 
 const MongoClient = require("mongodb").MongoClient;
 const name_db = 'autotrade';
@@ -138,8 +126,8 @@ router.get('/main', (req, res) => {
                 "Привод",
                 "Руль"
             ]
-            console.log("1")
-            console.log(data)
+            // console.log("1")
+            // console.log(data)
             res.render('main-menu', {title: 'Главная', adds: data1, status: req.session.status, filter_data: data});
         } catch (error) {
             console.error('An error has occurred:', error);
@@ -152,64 +140,6 @@ router.get('/main', (req, res) => {
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
 
-router.get('/mainfilter', (req, res) => {
-    // const MongoClient = require("mongodb").MongoClient;
-//     const url = "mongodb://localhost:27017/";
-    console.log("Main!")
-    console.log(data12)
-    // const name_db = 'autotrade';
-    // const name_collection = 'users';
-    async function mainRender() {
-        const mongoClient = new MongoClient(url);
-        try {
-            console.log("main render");
-            await mongoClient.connect();
-            const db = mongoClient.db(name_db);
-            const collection = db.collection(name_collection);
-
-            let query = [];
-            query.push({$eq: [ '$$ad.status', 'Опубликовано' ]})
-            // data1 = await collection.find({ ads : { status: "Опубликовано" } }).project({ _id : 0, ads : 1 }).toArray();
-            data1 = await collection.aggregate([{
-                $project: {
-                    "ads": {
-                        $filter: {
-                            input: "$ads",
-                            as: "ad",
-                            cond: {
-                                "$and" : query
-                            }
-                        }
-                    }
-                }
-            }]).project({ _id : 0, ads : 1 }).toArray();
-            // console.log(data1)
-            // res.redirect('/create_advertisment')
-            data = [
-                "Марка",
-                "Модель",
-                "Год",
-                "Цвет",
-                "Кузов",
-                "Пробег",
-                "Двигатель",
-                "Коробка",
-                "Привод",
-                "Руль"
-            ]
-            console.log("1")
-            console.log(data)
-            res.render('main-menu', {title: 'Главная', adds: data123, status: req.session.status, filter_data: data12});
-        } catch (error) {
-            console.error('An error has occurred:', error);
-        } finally {
-            await mongoClient.close();
-        }
-    }
-    mainRender();
-    // console.log(req.body);
-//     res.send(`${req.body.login} - ${req.body.password}`);
-})
 router.post('/maincreate', (req, res) => {
     if(!req.body) return res.sendStatus(400);
     // const MongoClient = require("mongodb").MongoClient;
@@ -243,15 +173,15 @@ router.post('/maincreate', (req, res) => {
                photo: './cars_photos/sellBestCarEver.jpg',
                brand: req.body.brand,
                model: req.body.model,
-               year: req.body.year,
+               year: Number(req.body.year),
                color: req.body.color,
                body: req.body.body,
-               mileage: req.body.mileage,
+               mileage: Number(req.body.mileage),
                engine: req.body.engine,
                transmission: req.body.transmission,
                drive: req.body.drive,
                helm: req.body.helm,
-               price: req.body.price,
+               price: Number(req.body.price),
                create_date: create_date,
                edit_date: null,
                view: 0,
@@ -280,6 +210,15 @@ router.post('/maincreate', (req, res) => {
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
 
+router.get('/mainfilter', (req, res) => {
+    // const MongoClient = require("mongodb").MongoClient;
+//     const url = "mongodb://localhost:27017/";
+    console.log("Main filter page!")
+    res.render('main-menu', {title: 'Главная', adds: data_ads, status: req.session.status, filter_data: data_filters});
+    // console.log(req.body);
+//     res.send(`${req.body.login} - ${req.body.password}`);
+})
+
 router.post('/mainfilter', (req, res) => {
     // if(!req.body) return res.sendStatus(400);
     // const MongoClient = require("mongodb").MongoClient;
@@ -294,7 +233,7 @@ router.post('/mainfilter', (req, res) => {
             await mongoClient.connect();
             const db = mongoClient.db(name_db);
             const collection = db.collection(name_collection);
-            console.log(req.body)
+            // console.log(req.body)
             let query = [];
             if (req.body.filter_brand !== "Марка") {
                 query.push({$eq: [ '$$ad.brand', req.body.filter_brand ]})
@@ -306,10 +245,10 @@ router.post('/mainfilter', (req, res) => {
                 query.push({$eq: [ '$$ad.year', Number(req.body.filter_year) ]})
             }
             if (req.body.filter_color !== "Цвет") {
-                query.push({$eq: [ '$$ad.color', req.body.filter_color.toString() ]})
+                query.push({$eq: [ '$$ad.color', req.body.filter_color.toLowerCase() ]})
             }
             if (req.body.filter_body !== "Кузов") {
-                query.push({$eq: [ '$$ad.body', req.body.filter_body.toString() ]})
+                query.push({$eq: [ '$$ad.body', req.body.filter_body.toLowerCase() ]})
             }
             if (req.body.filter_mileage != "") {
                 query.push({$eq: [ '$$ad.mileage', Number(req.body.filter_mileage) ]})
@@ -318,7 +257,7 @@ router.post('/mainfilter', (req, res) => {
                 query.push({$eq: [ '$$ad.engine', req.body.filter_engine.toLowerCase() ]})
             }
             if (req.body.filter_transmission !== "Коробка") {
-                query.push({$eq: [ '$$ad.transmission', req.body.filter_transmission.toString() ]})
+                query.push({$eq: [ '$$ad.transmission', req.body.filter_transmission.toLowerCase() ]})
             }
             if (req.body.filter_drive !== "Привод") {
                 query.push({$eq: [ '$$ad.drive', req.body.filter_drive.toLowerCase() ]})
@@ -335,7 +274,7 @@ router.post('/mainfilter', (req, res) => {
             if (req.body.filter_mileage !== 'Пробег') filter_mileage_box = 'Пробег ' + req.body.filter_mileage;
             else filter_mileage_box = req.body.filter_mileage;
 
-            data12 = [
+            data_filters = [
                 req.body.filter_brand,
                 req.body.filter_model,
                 filter_year_box,
@@ -347,9 +286,9 @@ router.post('/mainfilter', (req, res) => {
                 req.body.filter_drive,
                 req.body.filter_helm
             ]
-            console.log("2")
-            console.log(data1)
-            data123 = await collection.aggregate([{
+            // console.log("2")
+            // console.log(data_filters)
+            data_ads = await collection.aggregate([{
                 $project: {
                     "ads": {
                         $filter: {
@@ -362,10 +301,9 @@ router.post('/mainfilter', (req, res) => {
                     }
                 }
             }]).project({ _id : 0, ads : 1 }).toArray();
-            console.log(query)
-            console.log(data)
-            console.log("Работает по нажатию дважды")
-            res.render('main-menu', {title: 'Главная', adds: data123, filter_data: data12});
+            res.send("Filter applied")
+            // console.log(query)
+            // console.log(data_ads)
             // return res.send(data1)
         } catch (error) {
             console.error('An error has occurred:', error);
@@ -374,7 +312,6 @@ router.post('/mainfilter', (req, res) => {
         }
     }
     mainFilter();
-    // res.render('main-menu', {title: 'Главная', adds: data});
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
 

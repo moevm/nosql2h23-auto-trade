@@ -55,11 +55,9 @@ function filter(input) {
 //
 //     var xhr = new XMLHttpRequest();
 //
-//     // настройка запроса
 //     xhr.open("POST", "/mainfilter", true);
 //     xhr.setRequestHeader("Content-Type", "application/json");
 //
-//     // преобразование результатов в JSON-строку
 //     data = JSON.stringify(data);
 //     console.log("Send")
 //     console.log(data)
