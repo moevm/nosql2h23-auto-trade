@@ -219,3 +219,10 @@ li:focus-within .arrow {
     background-color: #0B0C10;
     color: #01ACC6;
 }
+
+.pagination p{
+    font-size:50px;
+    display: inline-block;
+    padding: 5px;
+    margin: 5px;
+}
