@@ -22,9 +22,9 @@ html
                 .w3-container.add-container(style="display: inline-block;color:#66FCF1;")
                     .auto-cards
                         include mixins/arrAdds
-                        for item in adds
-                            if item.ads.length > 0
-                                +arrAdds(item.ads)
+                        // for item in adds
+                            //if item.ads.length > 0
+                        +arrAdds(adds)
 
         .right-panel
             // -console.log(db_dataset)
