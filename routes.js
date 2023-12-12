@@ -130,6 +130,7 @@ router.get('/main', (req, res) => {
             let count = data1.length
 
             let pages = Math.ceil(count / 6)
+            if (pages == 0) pages = 1
 
             let index_low = 0
             let index_high = 6
@@ -147,7 +148,9 @@ router.get('/main', (req, res) => {
             if (req.body.left != '' && req.body.right != '') {
                 console.log('main page')
                 page = 1
-                page_filter = 0 }
+                page_filter = 0
+                index_low_filter = 0
+                index_high_filter = 6}
             console.log(count, pages, page)
             console.log(index_low, index_high)
             // console.log(data1.length)
@@ -167,7 +170,7 @@ router.get('/main', (req, res) => {
             ]
             // console.log("1")
             // console.log(data)
-            res.render('main-menu', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages});
+            res.render('main-menu', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main'});
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {
@@ -220,6 +223,7 @@ router.post('/main', (req, res) => {
             let count = data_main.length
 
             let pages = Math.ceil(count / 6)
+            if (pages == 0) pages = 1
 
             console.log(req.body)
             if (req.body.left == '' && page - 1 > 0) {
@@ -254,7 +258,7 @@ router.post('/main', (req, res) => {
             ]
             // console.log("1")
             // console.log(data)
-            res.render('main-menu', {title: 'Главная', adds: data_main.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages});
+            res.render('main-menu', {title: 'Главная', adds: data_main.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main'});
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {
@@ -340,7 +344,7 @@ router.get('/mainfilter', (req, res) => {
     // const MongoClient = require("mongodb").MongoClient;
 //     const url = "mongodb://localhost:27017/";
     console.log("Main filter page!")
-    res.render('main-menu', {title: 'Главная', adds: data_ads.slice(index_low_filter, index_high_filter), status: req.session.status, filter_data: data_filters, page: page_filter, pages: pages_filter});
+    res.render('main-menu', {title: 'Главная', adds: data_ads.slice(index_low_filter, index_high_filter), status: req.session.status, filter_data: data_filters, page: page_filter, pages: pages_filter, url: '/mainfilter'});
     // console.log(req.body);
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
@@ -356,7 +360,7 @@ router.post('/mainfilter', (req, res) => {
         const mongoClient = new MongoClient(url);
         try {
             console.log("main filter");
-            if (page_filter == 0) {
+            if (req.body.submit == '') {
                 await mongoClient.connect();
                 const db = mongoClient.db(name_db);
                 const collection = db.collection(name_collection);
@@ -437,10 +441,13 @@ router.post('/mainfilter', (req, res) => {
 
                 page_filter += 1
             }
-            console.log(page_filter)
+            // console.log(page_filter)
+            // console.log(data_ads, data_filters)
+            console.log(req.body)
             let count = data_ads.length
 
             pages_filter = Math.ceil(count / 6)
+            if (pages_filter == 0) pages_filter = 1
 
             if (page_filter != pages_filter) {
             index_low_filter = 0
@@ -462,9 +469,7 @@ router.post('/mainfilter', (req, res) => {
             console.log('main filter page log')
             console.log(count, pages_filter, page_filter)
             console.log(index_low_filter, index_high_filter)
-            if (page_filter == 1)
-            res.send("Filter applied")
-            else res.redirect('/mainfilter')
+            res.redirect('/mainfilter')
             // console.log(query)
             // console.log(data_ads)
             // return res.send(data1)
