@@ -1,0 +1,98 @@
+p,
+a {
+    font-family: JetBrains;
+    color: #66FCF1;
+    font-size: 16px;
+    margin: 5px;
+}
+
+i {
+    font-family: JetBrains;
+}
+
+.watched {
+    display: flex;
+}
+
+.watched p {
+    margin-top: 0;
+}
+
+.watched i {
+    margin-top: 4.5px;
+}
+
+.all-info{
+    justify-content: space-around;
+    display: flex;
+}
+
+.all-info p,
+.all-info a {
+    font-size: 25px;
+    color: #66FCF1;
+}
+
+.photo-params{
+    display: flex;
+}
+
+.params{
+    margin-left: 30px;
+}
+
+.photo-price-buy {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+
+}
+
+.photo-price-buy img{
+    width: 400px;
+}
+
+.photo-price-buy button {
+    background: #45A29E;
+    font-family: JetBrains;
+    font-size: 25px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.photo-price-buy p {
+    font-size: 25px;
+}
+
+.seller{
+    padding-top: 150px;
+    text-align: center;
+}
+
+
+.change{
+    display: flex;
+}
+
+.change form{
+    padding-top: 5px;
+}
+
+.delete {
+    margin-left: 20px
+}
+.delete button{
+    color: red;
+    background: #1F2833;
+    border: none;
+}
+
+
+
+@font-face {
+    font-family: "JetBrains";
+    src: url("/public/css/font/JetBrainsMonoNL-Light.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}

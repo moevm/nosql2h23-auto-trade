@@ -1,0 +1,75 @@
+doctype html
+html
+    head
+        meta(charset='utf-8')
+        title= title
+        //adds= adds
+        link(rel="stylesheet", href="/public/css/w3.css")
+        link(rel="stylesheet", href="/public/css/auto-trade.css")
+        link(rel="stylesheet", href="/public/css/advertisment.css")
+        link(rel="stylesheet", href="https://fonts.cdnfonts.com/css/julius-sans-one")
+        link(rel="stylesheet" href='/font-awesome-4.7.0/css/font-awesome.min.css')
+        script(src='/public/js/jquery.min.js')
+        script(src="/public/js/auto-filter.js")
+
+
+    body(style='background-color: #1F2833')
+    if status == "Продавец" || status == "Покупатель"
+        include navbar.pug
+    else
+        include navbar-admin.pug
+    block content
+        .date-watch-info
+            p Дата создания: 01.09.2023
+            p Дата изменения: 08.08.2024
+            .watched
+                i.fa.fa-eye.fa-2x(style="color:#66FCF1; font-size: 16px")
+                p 228
+        .all-info
+            .photo-params
+                .photo-price-buy
+                    img(src="/public/cars_photos/sam.jpg")
+                    p 100000 Р
+                    if status === "Покупатель"
+                        form(action="/dialog", method="GET")
+                            button(type="submit") Купить
+                    else if status === "Продавец"
+                        .change
+                            form(action="/change_advert", method="GET")
+                                button(type="submit") Редактировать
+                            .delete
+                                button(type= 'button', onclick=`deleteUser(23);`)
+                                    i.fa.fa-trash.fa-2x
+                    else if status === "Администратор"
+                        .delete(style="margin:0;")
+                            button(type= 'button', onclick=`deleteUser(23);`)
+                                i.fa.fa-trash.fa-2x
+                .params
+                    p Марка:
+                    p Модель:
+                    p Год:
+                    p Цвет:
+                    p Кузов:
+                    p Пробег:
+                    p Двигатель:
+                    p Коробка:
+                    p Привод:
+                    p Руль:
+            .seller
+                a(href="/seller") Имя продавца
+                p Рейтинг продавца
+
+script.
+    function deleteUser(id){
+        let conf = confirm('Вы действительно хотите удалить выбранное объявление?');
+        if(conf){
+            $.ajax({
+    url: `/users/${id}`,
+        type: 'delete',
+        complete: function() {
+        window.location.href = '/main';
+    }
+    });
+
+    }
+    }
