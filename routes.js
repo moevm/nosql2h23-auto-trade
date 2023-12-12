@@ -585,6 +585,12 @@ router.get("/adminimport", (req, res) => {
     res.redirect('/admin');
 })
 
+router.get("/adverts/:id/:status", (req, res) => {
+    advert_id = Number(req.params.id)
+    console.log(advert_id)
+    res.render("advertisment_page", {title: 'Страница объявления', status: req.params.status})
+})
+
 router.get("*", (req, res) => {
     res.status(404)
     res.end("Page not found")
