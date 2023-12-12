@@ -7,10 +7,11 @@ html
         link(rel="stylesheet", href="/public/css/w3.css")
         link(rel="stylesheet", href="/public/css/auto-trade.css")
         link(rel="stylesheet", href="https://fonts.cdnfonts.com/css/julius-sans-one")
+        link(rel="stylesheet" href='/font-awesome-4.7.0/css/font-awesome.min.css')
         script(src='/public/js/jquery.min.js')
         script(src="/public/js/auto-filter.js")
 
-    script(src="https://kit.fontawesome.com/861c1ff1d9.js" crossorigin="anonymous")
+
     body(style='background-color: #1F2833')
     if status == "Пользователь"
         include navbar.pug
@@ -30,6 +31,7 @@ html
             // -console.log(db_dataset)
             //form(action="/mainfilter" method="POST" style="margin: 10px")
             include auto-filter
+            include pagination
 
         //.w3-container.auth-form
         //    form(action="/auth" method="POST" style="margin: 10px")
