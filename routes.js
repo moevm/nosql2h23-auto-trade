@@ -13,6 +13,12 @@ if (docker_status) {
 let data_filters;
 let data_ads;
 let page = 1;
+let page_filter = 0;
+let index_low;
+let index_high;
+let index_low_filter;
+let index_high_filter;
+let pages_filter;
 
 const MongoClient = require("mongodb").MongoClient;
 const name_db = 'autotrade';
@@ -120,7 +126,30 @@ router.get('/main', (req, res) => {
                 return temp;
             }, []);
 
-            page = 1;
+            // page = 1;
+            let count = data1.length
+
+            let pages = Math.ceil(count / 6)
+
+            let index_low = 0
+            let index_high = 6
+
+            if (req.body.left == '' && page - 1 > 0) {
+                page -= 1
+                index_low = 6 * (page - 1)
+                index_high = count }
+
+            if (req.body.right == '' && page + 1 <= pages) {
+                page += 1
+                index_low = 6 * (page - 1)
+                index_high = index_low + 6 }
+
+            if (req.body.left != '' && req.body.right != '') {
+                console.log('main page')
+                page = 1
+                page_filter = 0 }
+            console.log(count, pages, page)
+            console.log(index_low, index_high)
             // console.log(data1.length)
             // console.log(data1)
             // res.redirect('/create_advertisment')
@@ -138,7 +167,94 @@ router.get('/main', (req, res) => {
             ]
             // console.log("1")
             // console.log(data)
-            res.render('main-menu', {title: 'Главная', adds: data1.slice(0, 6), status: req.session.status, filter_data: data, page: page});
+            res.render('main-menu', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages});
+        } catch (error) {
+            console.error('An error has occurred:', error);
+        } finally {
+            await mongoClient.close();
+        }
+    }
+    mainRender();
+    // console.log(req.body);
+//     res.send(`${req.body.login} - ${req.body.password}`);
+})
+
+router.post('/main', (req, res) => {
+    // const MongoClient = require("mongodb").MongoClient;
+//     const url = "mongodb://localhost:27017/";
+    console.log("Main page!")
+    // const name_db = 'autotrade';
+    // const name_collection = 'users';
+    async function mainRender() {
+        const mongoClient = new MongoClient(url);
+        try {
+            console.log("main page");
+            await mongoClient.connect();
+            const db = mongoClient.db(name_db);
+            const collection = db.collection(name_collection);
+
+            let query = [];
+            query.push({$eq: [ '$$ad.status', 'Опубликовано' ]})
+            // data1 = await collection.find({ ads : { status: "Опубликовано" } }).project({ _id : 0, ads : 1 }).toArray();
+            data_main = await collection.aggregate([{
+                $project: {
+                    "ads": {
+                        $filter: {
+                            input: "$ads",
+                            as: "ad",
+                            cond: {
+                                "$and" : query
+                            }
+                        }
+                    }
+                }
+            }]).project({ _id : 0, ads : 1 }).toArray();
+            data_main = data_main.reduce((temp, curr) => {
+                if (curr.ads.length > 0) {
+                    temp = temp.concat(curr.ads);
+                }
+                return temp;
+            }, []);
+
+            // page = 1;
+            let count = data_main.length
+
+            let pages = Math.ceil(count / 6)
+
+            console.log(req.body)
+            if (req.body.left == '' && page - 1 > 0) {
+                page -= 1
+                index_low = 6 * (page - 1)
+                index_high = index_low + 6 }
+
+            if (req.body.right == '' && page + 1 <= pages) {
+                page += 1
+                index_low = 6 * (page - 1)
+                index_high = index_low + 6 }
+
+            if (req.body.left != '' && req.body.right != '') {
+                console.log('main page')
+                page = 1 }
+            console.log(count, pages, page)
+            console.log(index_low, index_high)
+            // console.log(data_main.length)
+            // console.log(data_main)
+            // res.redirect('/create_advertisment')
+            data = [
+                "Марка",
+                "Модель",
+                "Год",
+                "Цвет",
+                "Кузов",
+                "Пробег",
+                "Двигатель",
+                "Коробка",
+                "Привод",
+                "Руль"
+            ]
+            // console.log("1")
+            // console.log(data)
+            res.render('main-menu', {title: 'Главная', adds: data_main.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages});
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {
@@ -224,7 +340,7 @@ router.get('/mainfilter', (req, res) => {
     // const MongoClient = require("mongodb").MongoClient;
 //     const url = "mongodb://localhost:27017/";
     console.log("Main filter page!")
-    res.render('main-menu', {title: 'Главная', adds: data_ads, status: req.session.status, filter_data: data_filters, page: page});
+    res.render('main-menu', {title: 'Главная', adds: data_ads.slice(index_low_filter, index_high_filter), status: req.session.status, filter_data: data_filters, page: page_filter, pages: pages_filter});
     // console.log(req.body);
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
@@ -240,84 +356,115 @@ router.post('/mainfilter', (req, res) => {
         const mongoClient = new MongoClient(url);
         try {
             console.log("main filter");
-            await mongoClient.connect();
-            const db = mongoClient.db(name_db);
-            const collection = db.collection(name_collection);
-            // console.log(req.body)
-            let query = [];
-            if (req.body.filter_brand !== "Марка") {
-                query.push({$eq: [ '$$ad.brand', req.body.filter_brand ]})
-            }
-            if (req.body.filter_model !== "Модель") {
-                query.push({$eq: [ '$$ad.model', req.body.filter_model ]})
-            }
-            if (req.body.filter_year != "") {
-                query.push({$eq: [ '$$ad.year', Number(req.body.filter_year) ]})
-            }
-            if (req.body.filter_color !== "Цвет") {
-                query.push({$eq: [ '$$ad.color', req.body.filter_color.toLowerCase() ]})
-            }
-            if (req.body.filter_body !== "Кузов") {
-                query.push({$eq: [ '$$ad.body', req.body.filter_body.toLowerCase() ]})
-            }
-            if (req.body.filter_mileage != "") {
-                query.push({$eq: [ '$$ad.mileage', Number(req.body.filter_mileage) ]})
-            }
-            if (req.body.filter_engine !== "Двигатель") {
-                query.push({$eq: [ '$$ad.engine', req.body.filter_engine.toLowerCase() ]})
-            }
-            if (req.body.filter_transmission !== "Коробка") {
-                query.push({$eq: [ '$$ad.transmission', req.body.filter_transmission.toLowerCase() ]})
-            }
-            if (req.body.filter_drive !== "Привод") {
-                query.push({$eq: [ '$$ad.drive', req.body.filter_drive.toLowerCase() ]})
-            }
-            if (req.body.filter_helm !== "Руль") {
-                query.push({$eq: [ '$$ad.helm', req.body.filter_helm.toLowerCase() ]})
-            }
-            query.push({$eq: [ '$$ad.status', 'Опубликовано' ]})
+            if (page_filter == 0) {
+                await mongoClient.connect();
+                const db = mongoClient.db(name_db);
+                const collection = db.collection(name_collection);
+                // console.log(req.body)
+                let query = [];
+                if (req.body.filter_brand !== "Марка") {
+                    query.push({$eq: ['$$ad.brand', req.body.filter_brand]})
+                }
+                if (req.body.filter_model !== "Модель") {
+                    query.push({$eq: ['$$ad.model', req.body.filter_model]})
+                }
+                if (req.body.filter_year != "") {
+                    query.push({$eq: ['$$ad.year', Number(req.body.filter_year)]})
+                }
+                if (req.body.filter_color !== "Цвет") {
+                    query.push({$eq: ['$$ad.color', req.body.filter_color.toLowerCase()]})
+                }
+                if (req.body.filter_body !== "Кузов") {
+                    query.push({$eq: ['$$ad.body', req.body.filter_body.toLowerCase()]})
+                }
+                if (req.body.filter_mileage != "") {
+                    query.push({$eq: ['$$ad.mileage', Number(req.body.filter_mileage)]})
+                }
+                if (req.body.filter_engine !== "Двигатель") {
+                    query.push({$eq: ['$$ad.engine', req.body.filter_engine.toLowerCase()]})
+                }
+                if (req.body.filter_transmission !== "Коробка") {
+                    query.push({$eq: ['$$ad.transmission', req.body.filter_transmission.toLowerCase()]})
+                }
+                if (req.body.filter_drive !== "Привод") {
+                    query.push({$eq: ['$$ad.drive', req.body.filter_drive.toLowerCase()]})
+                }
+                if (req.body.filter_helm !== "Руль") {
+                    query.push({$eq: ['$$ad.helm', req.body.filter_helm.toLowerCase()]})
+                }
+                query.push({$eq: ['$$ad.status', 'Опубликовано']})
 
-            let filter_year_box;
-            if (req.body.filter_year !== 'Год') filter_year_box = 'Год ' + req.body.filter_year;
-            else filter_year_box = req.body.filter_year;
-            let filter_mileage_box;
-            if (req.body.filter_mileage !== 'Пробег') filter_mileage_box = 'Пробег ' + req.body.filter_mileage;
-            else filter_mileage_box = req.body.filter_mileage;
+                let filter_year_box;
+                if (req.body.filter_year !== 'Год') filter_year_box = 'Год ' + req.body.filter_year;
+                else filter_year_box = req.body.filter_year;
+                let filter_mileage_box;
+                if (req.body.filter_mileage !== 'Пробег') filter_mileage_box = 'Пробег ' + req.body.filter_mileage;
+                else filter_mileage_box = req.body.filter_mileage;
 
-            data_filters = [
-                req.body.filter_brand,
-                req.body.filter_model,
-                filter_year_box,
-                req.body.filter_color,
-                req.body.filter_body,
-                filter_mileage_box,
-                req.body.filter_engine,
-                req.body.filter_transmission,
-                req.body.filter_drive,
-                req.body.filter_helm
-            ]
-            // console.log("2")
-            // console.log(data_filters)
-            data_ads = await collection.aggregate([{
-                $project: {
-                    "ads": {
-                        $filter: {
-                            input: "$ads",
-                            as: "ad",
-                            cond: {
-                                "$and" : query
+                data_filters = [
+                    req.body.filter_brand,
+                    req.body.filter_model,
+                    filter_year_box,
+                    req.body.filter_color,
+                    req.body.filter_body,
+                    filter_mileage_box,
+                    req.body.filter_engine,
+                    req.body.filter_transmission,
+                    req.body.filter_drive,
+                    req.body.filter_helm
+                ]
+                // console.log("2")
+                // console.log(data_filters)
+                data_ads = await collection.aggregate([{
+                    $project: {
+                        "ads": {
+                            $filter: {
+                                input: "$ads",
+                                as: "ad",
+                                cond: {
+                                    "$and": query
+                                }
                             }
                         }
                     }
-                }
-            }]).project({ _id : 0, ads : 1 }).toArray();
-            data_ads = data_ads.reduce((temp, curr) => {
-                if (curr.ads.length > 0) {
-                    temp = temp.concat(curr.ads);
-                }
-                return temp;
-            }, []);
+                }]).project({_id: 0, ads: 1}).toArray();
+                data_ads = data_ads.reduce((temp, curr) => {
+                    if (curr.ads.length > 0) {
+                        temp = temp.concat(curr.ads);
+                    }
+                    return temp;
+                }, []);
+
+                page_filter += 1
+            }
+            console.log(page_filter)
+            let count = data_ads.length
+
+            pages_filter = Math.ceil(count / 6)
+
+            if (page_filter != pages_filter) {
+            index_low_filter = 0
+            index_high_filter = 6 }
+
+            if (req.body.left == '' && page_filter - 1 > 0) {
+                page_filter -= 1
+                index_low_filter = 6 * (page_filter - 1)
+                index_high_filter = index_low_filter + 6 }
+
+            if (req.body.right == '' && page_filter + 1 <= pages_filter) {
+                page_filter += 1
+                index_low_filter = 6 * (page_filter - 1)
+                index_high_filter = index_low_filter + 6 }
+
+            if (req.body.left != '' && req.body.right != '') {
+                console.log('main filter page')
+                page_filter = 1 }
+            console.log('main filter page log')
+            console.log(count, pages_filter, page_filter)
+            console.log(index_low_filter, index_high_filter)
+            if (page_filter == 1)
             res.send("Filter applied")
+            else res.redirect('/mainfilter')
             // console.log(query)
             // console.log(data_ads)
             // return res.send(data1)
@@ -345,7 +492,6 @@ router.post('/mainpage', (req, res) => {
             await mongoClient.connect();
             const db = mongoClient.db(name_db);
             const collection = db.collection(name_collection);
-
             data2 = await collection.find({}).project({ _id : 0, ads : 1 }).toArray();
             data2 = data2.reduce((temp, curr) => {
                 if (curr.ads.length > 0) {
@@ -361,16 +507,17 @@ router.post('/mainpage', (req, res) => {
             let index_low = 0
             let index_high = 6
 
-            if (req.body.left && page - 1 > 0) {
+            if (req.body.left == '' && page - 1 > 0) {
                 page -= 1
                 index_low = 6 * (page - 1)
                 index_high = count }
 
-            if (req.body.right && page + 1 < pages) {
+            if (req.body.right == '' && page + 1 <= pages) {
                 page += 1
                 index_low = 6 * (page - 1)
                 index_high = index_low + 6 }
-
+            console.log(count, pages, page)
+            console.log(index_low, index_high)
             res.render('main-menu', {title: 'Главная', adds: data2.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page});
         } catch (error) {
             console.error('An error has occurred:', error);
