@@ -1,0 +1,45 @@
+doctype html
+html
+    head
+        meta(charset='utf-8')
+        title= title
+        link(rel="stylesheet", href="/public/css/w3.css")
+        link(rel="stylesheet", href="/public/css/auto-trade.css")
+        link(rel="stylesheet", href="https://fonts.cdnfonts.com/css/julius-sans-one")
+        link(rel="stylesheet" href='/font-awesome-4.7.0/css/font-awesome.min.css')
+        script(src='/public/js/jquery.min.js')
+        script(src="/public/js/auto-filter.js")
+        link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css")
+
+
+
+    body(style='background-color: #1F2833')
+    if status == "Пользователь"
+        include navbar.pug
+    else
+        include navbar-admin
+    block content
+        h1.center(style='color: #66FCF1') Андрей Mercedes AMG-GT 2018
+        .center
+            .messages-box
+                h3.center(style='margin:20px; color: white') История сообщений
+                .messages-div
+                    .messages
+                        // for item in reviews
+                        //     .review
+                        //         p #{name}: #{message}
+
+                        - for (var i = 0; i < 20; ++i)
+                            .message
+                                p Я: Беру прямо сейчас
+
+
+                    .message-send
+                        //.w3-button.w3-hover-aqua kek
+                        //p(style='color:red') kek
+                        .row(style='height: 54px;border-spacing: 0px;')
+                            .column(style='width:80%;')
+                                textarea
+                            .column(style='width:15%;')
+                                .center(style='position: absolute;height:100%; padding: 50px')
+                                    .w3-button.w3-hover-aqua(class="fa fa-send-o" style="font-size:48px; color:black;background-color:#45A29E; border:0;")
