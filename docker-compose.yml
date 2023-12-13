@@ -24,7 +24,7 @@ services:
     volumes_from:
       - mongo
     ports:
-      - '3000:3000'
+      - '127.0.0.1:3000:3000'
     depends_on:
       - mongo
 volumes:
