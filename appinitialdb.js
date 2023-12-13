@@ -46,3 +46,5 @@ async function writeUserToDatabase() {
 writeUserToDatabase().then(() => {
     console.log("Yes!")
 });
+
+process.exit()
