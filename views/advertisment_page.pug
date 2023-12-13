@@ -19,6 +19,7 @@ html
     else
         include navbar-admin.pug
     block content
+        - let id = String(data.ad_id)
         .date-watch-info
             p Дата создания: #{data.create_date}
             p Дата изменения: #{data.edit_date}
@@ -38,11 +39,11 @@ html
                             form(action="/change_advert", method="GET")
                                 button(type="submit") Редактировать
                             .delete
-                                button(type= 'button', onclick=`deleteUser(23);`)
+                                button(type= 'button', onclick=`deleteUser("${data.ad_id}");`)
                                     i.fa.fa-trash.fa-2x
                     else if status === "Администратор"
                         .delete(style="margin:0;")
-                            button(type= 'button', onclick=`deleteUser(23);`)
+                            button(type= 'button', onclick=`deleteUser("${data.ad_id}");`)
                                 i.fa.fa-trash.fa-2x
                 .params
                     p Марка: #{data.brand}
@@ -61,10 +62,10 @@ html
 
 script.
     function deleteUser(id){
-        let conf = confirm('Вы действительно хотите удалить выбранное объявление?');
+        let conf = confirm(`Вы действительно хотите удалить выбранное объявление?`);
         if(conf){
             $.ajax({
-    url: `/users/${id}`,
+    url: `/delete_advert/${id}`,
         type: 'delete',
         complete: function() {
         window.location.href = '/main';

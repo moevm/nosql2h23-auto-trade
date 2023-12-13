@@ -619,7 +619,7 @@ router.get("/adverts/:id", (req, res) => {
                         }
                     }
                 }
-            }]).project({ _id : 1, ads : 1 }).toArray();
+            }]).project({ _id : 1, name : 1, rating : 1, ads : 1 }).toArray();
             data1 = data1.reduce((temp, curr) => {
                 if (curr.ads.length > 0) {
                     temp = temp.concat(curr._id, curr.ads);
@@ -645,6 +645,11 @@ router.get("/adverts/:id", (req, res) => {
     adData()
 })
 
+router.delete("/delete_advert/:id", (req, res) => {
+    console.log(`Ad ${req.params.id} will be deleted, ho-ho-ho e-he-he`)
+    // TODO delete ad with req.params.id from database
+    res.status(200).send({msg: "Данные успешно удалены"});
+})
 router.get("*", (req, res) => {
     res.status(404)
     res.end("Page not found")
