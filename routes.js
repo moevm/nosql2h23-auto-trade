@@ -300,7 +300,7 @@ router.post('/maincreate', (req, res) => {
            console.log(create_date_message);
            const newData = {
                ad_id: new ObjectId(),
-               photo: './cars_photos/sellBestCarEver.jpg',
+               photo: '/cars_photos/sellBestCarEver.jpg',
                brand: req.body.brand,
                model: req.body.model,
                year: Number(req.body.year),
@@ -592,8 +592,52 @@ router.get("/adminimport", (req, res) => {
 
 router.get("/adverts/:id/:status", (req, res) => {
     advert_id = Number(req.params.id)
+    advert_id = new ObjectId('6563956f2bf7f94d97aeddd5')
     console.log(advert_id)
-    res.render("advertisment_page", {title: 'Страница объявления', status: req.params.status})
+    async function adData() {
+        const mongoClient = new MongoClient(url);
+        try {
+            console.log("ad data");
+            await mongoClient.connect();
+            const db = mongoClient.db(name_db);
+            const collection = db.collection(name_collection);
+
+            let query = [];
+            query.push({$eq: [ '$$ad.ad_id', advert_id ]})
+            // data1 = await collection.find({ ads : { status: "Опубликовано" } }).project({ _id : 0, ads : 1 }).toArray();
+            data1 = await collection.aggregate([{
+                $project: {
+                    "ads": {
+                        $filter: {
+                            input: "$ads",
+                            as: "ad",
+                            cond: {
+                                "$and" : query
+                            }
+                        }
+                    }
+                }
+            }]).project({ _id : 1, ads : 1 }).toArray();
+            data1 = data1.reduce((temp, curr) => {
+                if (curr.ads.length > 0) {
+                    temp = temp.concat(curr._id,curr.name, curr.rating, curr.ads);
+                }
+                return temp;
+            }, []);
+            console.log(data1)
+            if (req.session.user_status == 'Администратор') {}
+            else {
+                if (req.session._id == data1[0]) status = 'Продавец'
+                else status = 'Покупатель'
+            }
+            res.render("advertisment_page", {title: 'Страница объявления', name: data1[1], rating: data1[2], data: data1[3], status: status})
+        } catch (error) {
+            console.error('An error has occurred:', error);
+        } finally {
+            await mongoClient.close();
+        }
+    }
+    adData()
 })
 
 router.get("*", (req, res) => {
