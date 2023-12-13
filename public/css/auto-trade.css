@@ -206,6 +206,7 @@ li:focus-within .arrow {
     height: 100%;
 }
 
+
 .right-panel{
     float: right;
     width: 20%;
@@ -237,4 +238,84 @@ li:focus-within .arrow {
 
 .pagination .p:hover{
     background-color: black;
+}
+
+.reviews-div{
+    position: relative;
+    background-color: #0B0C10;
+    height: 600px;
+}
+
+.reviews{
+    width: 100%;
+    height: 87%;
+    position: absolute;
+    overflow-y: scroll;
+}
+
+.review{
+    background-color: #45A29E;
+    color: black;
+    margin: 0;
+    border: 4px solid black;
+    padding: 5px;
+}
+
+.review p{
+    font-size: 15px;
+    margin: 0;
+}
+
+
+.review-btn{
+    font-size: 25px;
+    position: absolute;
+    bottom: 10px;
+    background-color: #45A29E;
+    color: black;
+    margin: 0;
+    border: 4px solid black;
+    width: 100%;
+}
+
+.center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.reviews::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+    background-color: black;
+}
+
+.reviews::-webkit-scrollbar
+{
+    width: 12px;
+    background-color: black;
+}
+
+.reviews::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #66FCF1;
+}
+
+
+.row {
+    display: table;
+    width: 100%; /*Optional*/
+    table-layout: fixed; /*Optional*/
+    border-spacing: 10px; /*Optional*/
+}
+.column {
+    display: table-cell;
+}
+
+html *{
+    font-family: "JetBrains";
 }

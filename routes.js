@@ -170,7 +170,8 @@ router.get('/main', (req, res) => {
             ]
             // console.log("1")
             // console.log(data)
-            res.render('main-menu', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main'});
+            // res.render('main-menu', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main'});
+            res.render('my-acc', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main'});
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {

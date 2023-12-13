@@ -1,0 +1,35 @@
+doctype html
+html
+    head
+        meta(charset='utf-8')
+        title= title
+        //adds= adds
+        link(rel="stylesheet", href="/public/css/w3.css")
+        link(rel="stylesheet", href="/public/css/auto-trade.css")
+        link(rel="stylesheet", href="https://fonts.cdnfonts.com/css/julius-sans-one")
+        link(rel="stylesheet" href='/font-awesome-4.7.0/css/font-awesome.min.css')
+        script(src='/public/js/jquery.min.js')
+        script(src="/public/js/auto-filter.js")
+
+
+    body(style='background-color: #1F2833')
+    if status == "Пользователь"
+        include navbar.pug
+    else
+        include navbar-admin
+    block content
+        .left-panel(style='width:50%; padding:100px;')
+            .center
+                div
+                    h1(style='color: #66FCF1') Имя пользователя
+                    h1(style='color: #66FCF1') Рейтинг
+                    //h1(style='color: #66FCF1') Имя пользователя #{username}
+                    //h1(style='color: #66FCF1') Рейтинг #{rating}
+
+        .right-panel(style='width:50%; padding:100px;')
+            include reviews
+
+        h3(style='position: absolute; color: #66FCF1; left:24px; bottom:7px;') Зарегистрирован: 01.09.2023
+        //h3(style='position: absolute; color: pink; left:0; bottom:0;') Зарегистрирован: #{date}
+
+
