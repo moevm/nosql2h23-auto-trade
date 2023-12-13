@@ -169,7 +169,7 @@ router.get('/main', (req, res) => {
                 "Руль"
             ]
             // console.log("1")
-            // console.log(data)
+            //console.log(data1)
             res.render('main-menu', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main'});
             // res.render('my-acc', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main'});
             // res.render('user-page', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main'});
@@ -592,9 +592,9 @@ router.get("/adminimport", (req, res) => {
     res.redirect('/admin');
 })
 
-router.get("/adverts/:id/:status", (req, res) => {
-    advert_id = Number(req.params.id)
-    advert_id = new ObjectId('6563956f2bf7f94d97aeddd5')
+router.get("/adverts/:id", (req, res) => {
+    advert_id = req.params.id
+    advert_id = new ObjectId(advert_id)
     console.log(advert_id)
     async function adData() {
         const mongoClient = new MongoClient(url);
@@ -627,11 +627,12 @@ router.get("/adverts/:id/:status", (req, res) => {
                 return temp;
             }, []);
             console.log(data1)
-            if (req.session.user_status == 'Администратор') {}
+            if (req.session.user_status == 'Администратор') {status = "Администратор"}
             else {
                 if (req.session._id == data1[0]) status = 'Продавец'
                 else status = 'Покупатель'
             }
+            // TODO add increment to views counter
             res.render("advertisment_page", {title: 'Страница объявления', name: data1[1], rating: data1[2], data: data1[3], status: status})
         } catch (error) {
             console.error('An error has occurred:', error);
