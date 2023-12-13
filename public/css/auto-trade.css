@@ -225,4 +225,16 @@ li:focus-within .arrow {
     display: inline-block;
     padding: 5px;
     margin: 5px;
+
+}
+
+.pagination .p{
+    font-size: 50px;
+    color: #66FCF1;
+    background-color: #1F2833;
+    border: 0;
+}
+
+.pagination .p:hover{
+    background-color: black;
 }
