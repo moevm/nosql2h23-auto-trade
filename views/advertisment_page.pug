@@ -16,10 +16,9 @@ html
     body(style='background-color: #1F2833')
     if status == "Продавец" || status == "Покупатель"
         include navbar.pug
-    else
+    else if status == "Администратор"
         include navbar-admin.pug
     block content
-        - let id = String(data.ad_id)
         .date-watch-info
             p Дата создания: #{data.create_date}
             p Дата изменения: #{data.edit_date}

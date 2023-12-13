@@ -619,7 +619,7 @@ router.get("/adverts/:id", (req, res) => {
                         }
                     }
                 }
-            }]).project({ _id : 1, name : 1, rating : 1, ads : 1 }).toArray();
+            }]).project({ _id : 1, ads : 1 }).toArray();
             data1 = data1.reduce((temp, curr) => {
                 if (curr.ads.length > 0) {
                     temp = temp.concat(curr._id, curr.ads);
@@ -629,10 +629,15 @@ router.get("/adverts/:id", (req, res) => {
             // console.log(data1)
             data2 = await collection.find({ _id : data1[0] }).project({ _id : 0, name : 1, rating : 1 }).toArray();
             // console.log(data2)
-            if (req.session.user_status == 'Администратор') {status = "Администратор"}
-            else {
-                if (req.session._id == data1[0]) status = 'Продавец'
-                else status = 'Покупатель'
+            if (req.session.status == 'Администратор') {
+                status = "Администратор"
+            } else {
+                if (req.session._id == data1[0]) {
+                    status = 'Продавец'
+                }
+                else {
+                    status = 'Покупатель'
+                }
             }
             // TODO add increment to views counter
             res.render("advertisment_page", {title: 'Страница объявления', name: data2[0].name, rating: data2[0].rating, data: data1[1], status: status})
