@@ -20,16 +20,16 @@ html
         include navbar-admin.pug
     block content
         .date-watch-info
-            p Дата создания: 01.09.2023
-            p Дата изменения: 08.08.2024
+            p Дата создания: #{data.create_date}
+            p Дата изменения: #{data.edit_date}
             .watched
                 i.fa.fa-eye.fa-2x(style="color:#66FCF1; font-size: 16px")
-                p 228
+                p #{data.view}
         .all-info
             .photo-params
                 .photo-price-buy
-                    img(src="/public/cars_photos/sam.jpg")
-                    p 100000 Р
+                    img(src=data.photo)
+                    p #{data.price} Р
                     if status === "Покупатель"
                         form(action="/dialog", method="GET")
                             button(type="submit") Купить
@@ -45,19 +45,19 @@ html
                             button(type= 'button', onclick=`deleteUser(23);`)
                                 i.fa.fa-trash.fa-2x
                 .params
-                    p Марка:
-                    p Модель:
-                    p Год:
-                    p Цвет:
-                    p Кузов:
-                    p Пробег:
-                    p Двигатель:
-                    p Коробка:
-                    p Привод:
-                    p Руль:
+                    p Марка: #{data.brand}
+                    p Модель: #{data.model}
+                    p Год: #{data.year}
+                    p Цвет: #{data.color}
+                    p Кузов: #{data.body}
+                    p Пробег: #{data.mileage}
+                    p Двигатель: #{data.engine}
+                    p Коробка: #{data.transmission}
+                    p Привод: #{data.drive}
+                    p Руль: #{data.helm}
             .seller
-                a(href="/seller") Имя продавца
-                p Рейтинг продавца
+                a(href="/seller") #{name}
+                p #{rating}
 
 script.
     function deleteUser(id){
