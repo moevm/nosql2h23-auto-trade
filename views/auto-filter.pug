@@ -29,7 +29,8 @@ ul.menus-filter
 
     li(style='--delay: 3;', tabindex='0').dropdown-el
         button(type="button").drop
-            span(title='Год') #{filter_data[2]}
+            //span(id='years', title='Год') Год от 2017 до
+            span(id='years', title='Год') #{filter_data[2]}
             span.arrow
         ul.dropdown
             li
@@ -71,7 +72,7 @@ ul.menus-filter
 
     li(style='--delay: 3;', tabindex='0').dropdown-el
         button(type="button").drop
-            span(title='Пробег') #{filter_data[5]}
+            span(id='mileages', title='Пробег') #{filter_data[5]}
             span.arrow
         ul.dropdown
             li
@@ -134,7 +135,7 @@ ul.menus-filter
 
     li(style='--delay: 3;', tabindex='0').dropdown-el
         button(type="button").drop
-            span(title='Цена') #{filter_data[10]}
+            span(id='prices', title='Цена') #{filter_data[10]}
             span.arrow
         ul.dropdown
             li
@@ -158,6 +159,55 @@ script.
             let mileage2 = document.getElementById('mileage2')
             let price1 = document.getElementById('price1')
             let price2 = document.getElementById('price2')
+
+            let years = document.getElementById('years').innerHTML.split(' ')
+            let mileages = document.getElementById('mileages').innerHTML.split(' ')
+            let prices = document.getElementById('years').innerHTML.split(' ')
+            const eqSet = (array1, array2) => array1.length === array2.length &&
+                array1.every(function (value, index) {
+                return value === array2[index]
+            })
+
+            console.log(years)
+            if (year1.value === ''){
+                if (!eqSet(years, ['Год'])) {
+                    if (years[2] !== 'от')
+                        year1.value = years[2]
+                }
+            }
+            if (year2.value === '') {
+                if (!eqSet(years, ['Год'])) {
+                    year2.value = years[4]
+                }
+            }
+
+            if (mileage1.value === '') {
+                if (!eqSet(mileages, ['Пробег'])) {
+                    if (mileages[2] !== 'от')
+                        mileage1.value = mileages[2]
+                }
+            }
+            if (mileage2.value === '') {
+                if (!eqSet(mileages, ['Пробег'])) {
+                    mileage2.value = mileages[4]
+                }
+            }
+
+            if (price1.value === '') {
+                if (!eqSet(prices, ['Цена'])) {
+                    if (prices[2] !== 'от')
+                        price1.value = prices[2]
+                }
+            }
+            if (price2.value === '') {
+                if (!eqSet(prices, ['Цена'])) {
+                    price2.value = prices[4]
+                }
+            }
+
+
+            // console.log(document.getElementById('years').innerHTML.split(' '))
+
             // console.log(data)
             // db_dataset['Год'] = year.value
             // db_dataset['Пробег'] = mileage.value

@@ -371,6 +371,11 @@ router.post('/mainfilter', (req, res) => {
                 const collection = db.collection(name_collection);
                 // console.log(req.body)
                 let query = [];
+
+                console.log('keeeeeeeeeeeeeeeeeeeeeeek')
+                console.log(req.body.filter_year1)
+                console.log(req.body.filter_year2)
+                console.log('keeeeeeeeeeeeeeeeeeeeeeek')
                 const eqSet = (array1, array2) => array1.length === array2.length && array1.every(function(value, index) { return value === array2[index]})
                 if (!eqSet(req.body.filter_brand, ["Марка"])) {
                     query.push({$in: ['$$ad.brand', req.body.filter_brand]})
@@ -419,13 +424,13 @@ router.post('/mainfilter', (req, res) => {
 
                 let filter_year_box;
                 console.log(req.body.filter_year1)
-                if (req.body.filter_year1 !== '') filter_year_box = 'Год ' + 'от ' + req.body.filter_year1 + ' до ' + req.body.filter_year2;
+                if (req.body.filter_year1 !== '' || req.body.filter_year2 !== '') filter_year_box = 'Год ' + 'от ' + req.body.filter_year1 + ' до ' + req.body.filter_year2;
                 else filter_year_box = 'Год';
                 let filter_mileage_box;
-                if (req.body.filter_mileage1 !== '') filter_mileage_box = 'Пробег ' + 'от ' + req.body.filter_mileage1 + ' до ' +  req.body.filter_mileage2;
+                if (req.body.filter_mileage1 !== '' || req.body.filter_mileage2 !== '') filter_mileage_box = 'Пробег ' + 'от ' + req.body.filter_mileage1 + ' до ' +  req.body.filter_mileage2;
                 else filter_mileage_box = 'Пробег';
                 let filter_price_box;
-                if (req.body.filter_price1 !== '') filter_price_box = 'Цена ' + 'от ' + req.body.filter_price1 + ' до ' +  req.body.filter_price2;
+                if (req.body.filter_price1 !== '' || req.body.filter_price2 !== '') filter_price_box = 'Цена ' + 'от ' + req.body.filter_price1 + ' до ' +  req.body.filter_price2;
                 else filter_price_box = 'Цена';
 
                 data_filters = [
