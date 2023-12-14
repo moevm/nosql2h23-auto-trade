@@ -275,6 +275,199 @@ router.post('/main', (req, res) => {
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
 
+router.get('/mainseller', (req, res) => {
+    // const MongoClient = require("mongodb").MongoClient;
+//     const url = "mongodb://localhost:27017/";
+    console.log("Main!")
+    // const name_db = 'autotrade';
+    // const name_collection = 'users';
+    async function mainRender() {
+        const mongoClient = new MongoClient(url);
+        try {
+            console.log("main render");
+            await mongoClient.connect();
+            const db = mongoClient.db(name_db);
+            const collection = db.collection(name_collection);
+
+            let query = [];
+            query.push({$eq: [ '$$ad.status', 'Проверка' ]})
+            // data1 = await collection.find({ ads : { status: "Опубликовано" } }).project({ _id : 0, ads : 1 }).toArray();
+            data1 = await collection.aggregate([{
+                $project: {
+                    "ads": {
+                        $filter: {
+                            input: "$ads",
+                            as: "ad",
+                            cond: {
+                                "$and" : query
+                            }
+                        }
+                    }
+                }
+            }]).project({ _id : 0, ads : 1 }).toArray();
+            data1 = data1.reduce((temp, curr) => {
+                if (curr.ads.length > 0) {
+                    temp = temp.concat(curr.ads);
+                }
+                return temp;
+            }, []);
+
+            // page = 1;
+            let count = data1.length
+
+            let pages = Math.ceil(count / 6)
+            if (pages == 0) pages = 1
+
+            let index_low = 0
+            let index_high = 6
+
+            if (req.body.left == '' && page - 1 > 0) {
+                page -= 1
+                index_low = 6 * (page - 1)
+                index_high = count }
+
+            if (req.body.right == '' && page + 1 <= pages) {
+                page += 1
+                index_low = 6 * (page - 1)
+                index_high = index_low + 6 }
+
+            if (req.body.left != '' && req.body.right != '') {
+                console.log('main page')
+                page = 1
+                page_filter = 0
+                index_low_filter = 0
+                index_high_filter = 6}
+            console.log(count, pages, page)
+            console.log(index_low, index_high)
+            // console.log(data1.length)
+            // console.log(data1)
+            // res.redirect('/create_advertisment')
+            data = [
+                "Марка",
+                "Модель",
+                "Год",
+                "Цвет",
+                "Кузов",
+                "Пробег",
+                "Двигатель",
+                "Коробка",
+                "Привод",
+                "Руль",
+                "Цена"
+            ]
+            // console.log("1")
+            //console.log(data1)
+            res.render('main-menu', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/mainseller'});
+            // res.render('my-acc', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main'});
+            // res.render('user-page', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main'});
+            // res.render('my-messages', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main'});
+        } catch (error) {
+            console.error('An error has occurred:', error);
+        } finally {
+            await mongoClient.close();
+        }
+    }
+    mainRender();
+    // console.log(req.body);
+//     res.send(`${req.body.login} - ${req.body.password}`);
+})
+
+router.get('/mainadmin', (req, res) => {
+    // const MongoClient = require("mongodb").MongoClient;
+//     const url = "mongodb://localhost:27017/";
+    console.log("Main!")
+    // const name_db = 'autotrade';
+    // const name_collection = 'users';
+    async function mainRender() {
+        const mongoClient = new MongoClient(url);
+        try {
+            console.log("main render");
+            await mongoClient.connect();
+            const db = mongoClient.db(name_db);
+            const collection = db.collection(name_collection);
+
+            let query = [];
+            // data1 = await collection.find({ ads : { status: "Опубликовано" } }).project({ _id : 0, ads : 1 }).toArray();
+            data1 = await collection.aggregate([{
+                $project: {
+                    "ads": {
+                        $filter: {
+                            input: "$ads",
+                            as: "ad",
+                            cond: {
+                                "$and" : query
+                            }
+                        }
+                    }
+                }
+            }]).project({ _id : 0, ads : 1 }).toArray();
+            data1 = data1.reduce((temp, curr) => {
+                if (curr.ads.length > 0) {
+                    temp = temp.concat(curr.ads);
+                }
+                return temp;
+            }, []);
+
+            // page = 1;
+            let count = data1.length
+
+            let pages = Math.ceil(count / 6)
+            if (pages == 0) pages = 1
+
+            let index_low = 0
+            let index_high = 6
+
+            if (req.body.left == '' && page - 1 > 0) {
+                page -= 1
+                index_low = 6 * (page - 1)
+                index_high = count }
+
+            if (req.body.right == '' && page + 1 <= pages) {
+                page += 1
+                index_low = 6 * (page - 1)
+                index_high = index_low + 6 }
+
+            if (req.body.left != '' && req.body.right != '') {
+                console.log('main page')
+                page = 1
+                page_filter = 0
+                index_low_filter = 0
+                index_high_filter = 6}
+            console.log(count, pages, page)
+            console.log(index_low, index_high)
+            // console.log(data1.length)
+            // console.log(data1)
+            // res.redirect('/create_advertisment')
+            data = [
+                "Марка",
+                "Модель",
+                "Год",
+                "Цвет",
+                "Кузов",
+                "Пробег",
+                "Двигатель",
+                "Коробка",
+                "Привод",
+                "Руль",
+                "Цена"
+            ]
+            // console.log("1")
+            //console.log(data1)
+            res.render('main-menu', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/mainadmin'});
+            // res.render('my-acc', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main'});
+            // res.render('user-page', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main'});
+            // res.render('my-messages', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main'});
+        } catch (error) {
+            console.error('An error has occurred:', error);
+        } finally {
+            await mongoClient.close();
+        }
+    }
+    mainRender();
+    // console.log(req.body);
+//     res.send(`${req.body.login} - ${req.body.password}`);
+})
+
 router.post('/maincreate', (req, res) => {
     if(!req.body) return res.sendStatus(400);
     // const MongoClient = require("mongodb").MongoClient;
@@ -675,7 +868,7 @@ router.get("/adverts/:id", (req, res) => {
                 }
             }
             // TODO add increment to views counter
-            res.render("advertisment_page", {title: 'Страница объявления', name: data2[0].name, rating: data2[0].rating, data: data1[1], status: status})
+            res.render("advertisment_page", {title: 'Страница объявления', name: data2[0].name, rating: data2[0].rating, data: data1[1], status: status, id: data1[0]})
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {
@@ -690,6 +883,65 @@ router.delete("/delete_advert/:id", (req, res) => {
     // TODO delete ad with req.params.id from database
     res.status(200).send({msg: "Данные успешно удалены"});
 })
+
+router.get("/user/:id", (req, res) => {
+    user_id = req.params.id
+    user_id = new ObjectId(user_id)
+    console.log(user_id)
+    async function adData() {
+        const mongoClient = new MongoClient(url);
+        try {
+            console.log("ad data");
+            await mongoClient.connect();
+            const db = mongoClient.db(name_db);
+            const collection = db.collection(name_collection);
+
+            // let query = [];
+            // query.push({$eq: [ '$$ad.ad_id', advert_id ]})
+            // // data1 = await collection.find({ ads : { status: "Опубликовано" } }).project({ _id : 0, ads : 1 }).toArray();
+            // data1 = await collection.aggregate([{
+            //     $project: {
+            //         "ads": {
+            //             $filter: {
+            //                 input: "$ads",
+            //                 as: "ad",
+            //                 cond: {
+            //                     "$and" : query
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }]).project({ _id : 1, ads : 1 }).toArray();
+            // data1 = data1.reduce((temp, curr) => {
+            //     if (curr.ads.length > 0) {
+            //         temp = temp.concat(curr._id, curr.ads);
+            //     }
+            //     return temp;
+            // }, []);
+            // // console.log(data1)
+            data2 = await collection.find({ _id : user_id }).project({ _id : 0, name : 1, rating : 1 }).toArray();
+            // console.log(data2)
+            if (req.session.status == 'Администратор') {
+                status = "Администратор"
+            } else {
+                if (req.session._id == data1[0]) {
+                    status = 'Продавец'
+                }
+                else {
+                    status = 'Покупатель'
+                }
+            }
+            // TODO add increment to views counter
+            res.render("advertisment_page", {title: 'Страница объявления', name: data2[0].name, rating: data2[0].rating, data: data1[1], status: status})
+        } catch (error) {
+            console.error('An error has occurred:', error);
+        } finally {
+            await mongoClient.close();
+        }
+    }
+    adData()
+})
+
 router.get("*", (req, res) => {
     res.status(404)
     res.end("Page not found")
