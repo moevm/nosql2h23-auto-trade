@@ -585,7 +585,6 @@ router.get("/adminexport", (req, res) => {
 
             fs.writeFileSync(backup_path, BSONData);
             console.log('Данные успешно записаны в backup.bson');
-            alert('Данные успешно записаны в backup.bson');
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {
@@ -611,7 +610,6 @@ router.get("/adminimport", (req, res) => {
             await collection.deleteMany({});
             const result = await collection.insertMany(bsonData.arrayData);
             console.log(`Импорт прошел успешно. ${result.insertedCount} элементов было добавлено в коллекцию users.`);
-            alert(`Импорт прошел успешно. ${result.insertedCount} элементов было добавлено в коллекцию users.`);
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {
