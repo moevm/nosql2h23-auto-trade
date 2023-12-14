@@ -17,7 +17,8 @@ function filter(input) {
     console.log(input)
     if (input.innerHTML === "Очистить"){
         par.innerHTML = par.title
-        db_dataset[par.title] = []
+        if (par.title == 'Год' || par.title == 'Пробег' || par.title == 'Цена') db_dataset[par.title] = []
+        else db_dataset[par.title] = new Set()
     }
     else{
         db_dataset[par.title].add(input.innerHTML)
