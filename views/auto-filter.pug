@@ -35,7 +35,10 @@ ul.menus-filter
             li
                 a(onclick="filter(this)") Очистить
             li
-                input.w3-round-large(type='number', id='year', min=0)
+                p от
+                input.w3-round-large(type='number', id='year1', min=0)
+                p до
+                input.w3-round-large(type='number', id='year2', min=0)
 
 
     li(style='--delay: 3;', tabindex='0').dropdown-el
@@ -74,7 +77,10 @@ ul.menus-filter
             li
                 a(onclick="filter(this)") Очистить
             li
-                input.w3-round-large(type='number', id='mileage', min=0)
+                p от
+                input.w3-round-large(type='number', id='mileage1', min=0)
+                p до
+                input.w3-round-large(type='number', id='mileage2', min=0)
 
     li(style='--delay: 3;', tabindex='0').dropdown-el
         button(type="button").drop
@@ -125,6 +131,20 @@ ul.menus-filter
                 a(onclick="filter(this)") Правый
             li
                 a(onclick="filter(this)") Левый
+
+    li(style='--delay: 3;', tabindex='0').dropdown-el
+        button(type="button").drop
+            span(title='Цена') #{filter_data[10]}
+            span.arrow
+        ul.dropdown
+            li
+                a(onclick="filter(this)") Очистить
+            li
+                p от
+                input.w3-round-large(type='number', id='price1', min=0)
+                p до
+                input.w3-round-large(type='number', id='price2', min=0)
+
     button.w3-button.w3-center.w3-hover-aqua.send-filter(id="submitButton") Отправить форму
 
 script.
@@ -132,8 +152,12 @@ script.
         $('#submitButton').on('click', function () {
             let filter = this.closest(".menus-filter")
             let data = filter.getElementsByClassName('name-filter')
-            let year = document.getElementById('year')
-            let mileage = document.getElementById('mileage')
+            let year1 = document.getElementById('year1')
+            let year2 = document.getElementById('year2')
+            let mileage1 = document.getElementById('mileage1')
+            let mileage2 = document.getElementById('mileage1')
+            let price1 = document.getElementById('price1')
+            let price2 = document.getElementById('price2')
             // console.log(data)
             // db_dataset['Год'] = year.value
             // db_dataset['Пробег'] = mileage.value
@@ -142,14 +166,18 @@ script.
                 submit: document.getElementById('submitButton').value,
                 filter_brand: data[0].innerHTML,
                 filter_model: data[1].innerHTML,
-                filter_year: year.value,
+                filter_year1: year1.value,
+                filter_year2: year2.value,
                 filter_color: data[2].innerHTML,
                 filter_body: data[3].innerHTML,
-                filter_mileage: mileage.value,
+                filter_mileage1: mileage1.value,
+                filter_mileage2: mileage2.value,
                 filter_engine: data[4].innerHTML,
                 filter_transmission: data[5].innerHTML,
                 filter_drive: data[6].innerHTML,
-                filter_helm: data[7].innerHTML
+                filter_helm: data[7].innerHTML,
+                filter_price1: price1.value,
+                filter_price2: price2.value,
             }
             $.post('/mainfilter', data, function (status) {
                 console.log(status)

@@ -1,32 +1,31 @@
-// let db_dataset = {
-//     'Марка': [],
-//     'Модель': [],
-//     'Год': [],
-//     'Цвет': [],
-//     'Кузов': [],
-//     'Пробег': [],
-//     'Двигатель': [],
-//     'Коробка': [],
-//     'Привод': [],
-//     'Руль': []
-// }
+let db_dataset = {
+    'Марка': new Set(),
+    'Модель': new Set(),
+    'Год': [],
+    'Цвет': new Set(),
+    'Кузов': new Set(),
+    'Пробег': [],
+    'Двигатель': new Set(),
+    'Коробка': new Set(),
+    'Привод': new Set(),
+    'Руль': new Set(),
+    'Цена': []
+}
 
 function filter(input) {
     let par = input.closest(".dropdown-el").getElementsByTagName('span')[0]
     console.log(input)
     if (input.innerHTML === "Очистить"){
         par.innerHTML = par.title
-        // db_dataset[par.title] = []
+        db_dataset[par.title] = []
     }
     else{
-        // db_dataset[par.title].push(input.innerHTML)
-        if (par.innerHTML === par.title)
-            par.innerHTML = input.innerHTML
-        else {
-            par.innerHTML = input.innerHTML
-            // par.innerHTML += ' ' + input.innerHTML
+        db_dataset[par.title].add(input.innerHTML)
+        par.innerHTML = ''
+        console.log(db_dataset[par.title])
+        for (const item of db_dataset[par.title]) {
+            par.innerHTML += item + ' '
         }
-
     }
 }
 
