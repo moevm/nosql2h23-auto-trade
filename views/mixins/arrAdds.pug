@@ -3,5 +3,6 @@ mixin arrAdds(item)
         .auto-card
             .create-advt-photo
                 img(src=item[i].photo)
-            h5 #{item[i].brand} #{item[i].model} #{item[i].year}
+            a(href= `/adverts/${item[i].ad_id}`) #{item[i].brand} #{item[i].model} #{item[i].year}
             h5 #{item[i].price}₽
+
