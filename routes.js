@@ -5,7 +5,7 @@ const fs = require("fs");
 var router = express.Router();
 var url = "mongodb://localhost:27017/";
 var backup_path = "backup.bson"
-const docker_status = true;
+const docker_status = false;
 if (docker_status) {
     url = "mongodb://mongo:27017/";
     backup_path = "data/db/backup.bson"
@@ -571,6 +571,7 @@ router.get("/admin", (req, res) => {
 })
 
 router.get("/adminexport", (req, res) => {
+    let msg;
     async function exportDatabase() {
         const mongoClient = new MongoClient(url);
         try {
@@ -584,18 +585,22 @@ router.get("/adminexport", (req, res) => {
             const BSONData = BSON.serialize(wrappedData);
 
             fs.writeFileSync(backup_path, BSONData);
-            console.log('Данные успешно записаны в backup.bson');
+            msg = "Данные успешно записаны в backup.bson";
+            console.log(msg);
+
         } catch (error) {
-            console.error('An error has occurred:', error);
+            msg = "При экспорте данных произошла следующая ошибка: " + error;
+            console.error(msg);
         } finally {
             await mongoClient.close();
+            res.render('import-export-status-page', {imex_message: msg});
         }
     }
     exportDatabase().then(r => {});
-    res.redirect('/admin');
 })
 
 router.get("/adminimport", (req, res) => {
+    let msg;
     async function importDatabase() {
         const mongoClient = new MongoClient(url);
         try {
@@ -609,15 +614,17 @@ router.get("/adminimport", (req, res) => {
             const bsonData = BSON.deserialize(fileData);
             await collection.deleteMany({});
             const result = await collection.insertMany(bsonData.arrayData);
-            console.log(`Импорт прошел успешно. ${result.insertedCount} элементов было добавлено в коллекцию users.`);
+            msg = `Импорт прошел успешно. ${result.insertedCount} элементов было добавлено в коллекцию users.`;
+            console.log(msg)
         } catch (error) {
-            console.error('An error has occurred:', error);
+            msg = "При импорте данных произошла ошибка: " + error;
+            console.log(msg);
         } finally {
             await mongoClient.close();
+            res.render("import-export-status-page", {imex_message: msg})
         }
     }
     importDatabase().then(r => {});
-    res.redirect('/admin');
 })
 
 router.get("/adverts/:id", (req, res) => {

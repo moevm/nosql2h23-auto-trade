@@ -1,0 +1,22 @@
+body {
+    font-family: JetBrains;
+}
+
+.imex-status{
+    font-size: 45px;
+    text-align: center;
+    color: #66FCF1;
+}
+
+button.back{
+    background: #45A29E;
+    font-size: 20px;
+    margin: 20px;
+}
+
+@font-face {
+    font-family: "JetBrains";
+    src: url("/public/css/font/JetBrainsMonoNL-Light.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
