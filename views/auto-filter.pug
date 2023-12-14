@@ -155,27 +155,26 @@ script.
             let year1 = document.getElementById('year1')
             let year2 = document.getElementById('year2')
             let mileage1 = document.getElementById('mileage1')
-            let mileage2 = document.getElementById('mileage1')
+            let mileage2 = document.getElementById('mileage2')
             let price1 = document.getElementById('price1')
             let price2 = document.getElementById('price2')
             // console.log(data)
             // db_dataset['Год'] = year.value
             // db_dataset['Пробег'] = mileage.value
-
             data = {
                 submit: document.getElementById('submitButton').value,
-                filter_brand: data[0].innerHTML,
-                filter_model: data[1].innerHTML,
+                filter_brand: data[0].innerHTML.split(','),
+                filter_model: data[1].innerHTML.split(','),
                 filter_year1: year1.value,
                 filter_year2: year2.value,
-                filter_color: data[2].innerHTML,
-                filter_body: data[3].innerHTML,
+                filter_color: data[2].innerHTML.split(','),
+                filter_body: data[3].innerHTML.split(','),
                 filter_mileage1: mileage1.value,
                 filter_mileage2: mileage2.value,
-                filter_engine: data[4].innerHTML,
-                filter_transmission: data[5].innerHTML,
-                filter_drive: data[6].innerHTML,
-                filter_helm: data[7].innerHTML,
+                filter_engine: data[4].innerHTML.split(','),
+                filter_transmission: data[5].innerHTML.split(','),
+                filter_drive: data[6].innerHTML.split(','),
+                filter_helm: data[7].innerHTML.split(','),
                 filter_price1: price1.value,
                 filter_price2: price2.value,
             }

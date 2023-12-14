@@ -166,7 +166,8 @@ router.get('/main', (req, res) => {
                 "Двигатель",
                 "Коробка",
                 "Привод",
-                "Руль"
+                "Руль",
+                "Цена"
             ]
             // console.log("1")
             //console.log(data1)
@@ -257,7 +258,8 @@ router.post('/main', (req, res) => {
                 "Двигатель",
                 "Коробка",
                 "Привод",
-                "Руль"
+                "Руль",
+                "Цена"
             ]
             // console.log("1")
             // console.log(data)
@@ -369,44 +371,62 @@ router.post('/mainfilter', (req, res) => {
                 const collection = db.collection(name_collection);
                 // console.log(req.body)
                 let query = [];
-                if (req.body.filter_brand !== "Марка") {
-                    query.push({$eq: ['$$ad.brand', req.body.filter_brand]})
+                const eqSet = (array1, array2) => array1.length === array2.length && array1.every(function(value, index) { return value === array2[index]})
+                if (!eqSet(req.body.filter_brand, ["Марка"])) {
+                    query.push({$in: ['$$ad.brand', req.body.filter_brand]})
                 }
-                if (req.body.filter_model !== "Модель") {
-                    query.push({$eq: ['$$ad.model', req.body.filter_model]})
+                console.log(req.body.filter_brand)
+                if (!eqSet(req.body.filter_model, ["Модель"])) {
+                    query.push({$in: ['$$ad.model', req.body.filter_model]})
                 }
-                if (req.body.filter_year != "") {
-                    query.push({$eq: ['$$ad.year', Number(req.body.filter_year)]})
+                if (req.body.filter_year1 != "") {
+                    query.push({$gte: ['$$ad.year', Number(req.body.filter_year1)]})
                 }
-                if (req.body.filter_color !== "Цвет") {
-                    query.push({$eq: ['$$ad.color', req.body.filter_color.toLowerCase()]})
+                if (req.body.filter_year2 != "") {
+                    query.push({$lte: ['$$ad.year', Number(req.body.filter_year2)]})
                 }
-                if (req.body.filter_body !== "Кузов") {
-                    query.push({$eq: ['$$ad.body', req.body.filter_body.toLowerCase()]})
+                if (!eqSet(req.body.filter_color, ["Цвет"])) {
+                    query.push({$in: ['$$ad.color', req.body.filter_color.map(e => e.toLowerCase())]})
                 }
-                if (req.body.filter_mileage != "") {
-                    query.push({$eq: ['$$ad.mileage', Number(req.body.filter_mileage)]})
+                if (!eqSet(req.body.filter_body, ["Кузов"])) {
+                    query.push({$in: ['$$ad.body', req.body.filter_body.map(e => e.toLowerCase())]})
                 }
-                if (req.body.filter_engine !== "Двигатель") {
-                    query.push({$eq: ['$$ad.engine', req.body.filter_engine.toLowerCase()]})
+                if (req.body.filter_mileage1 != "") {
+                    query.push({$gte: ['$$ad.mileage', Number(req.body.filter_mileage1)]})
                 }
-                if (req.body.filter_transmission !== "Коробка") {
-                    query.push({$eq: ['$$ad.transmission', req.body.filter_transmission.toLowerCase()]})
+                if (req.body.filter_mileage2 != "") {
+                    query.push({$lte: ['$$ad.mileage', Number(req.body.filter_mileage2)]})
                 }
-                if (req.body.filter_drive !== "Привод") {
-                    query.push({$eq: ['$$ad.drive', req.body.filter_drive.toLowerCase()]})
+                if (!eqSet(req.body.filter_engine, ["Двигатель"])) {
+                    query.push({$in: ['$$ad.engine', req.body.filter_engine.map(e => e.toLowerCase())]})
                 }
-                if (req.body.filter_helm !== "Руль") {
-                    query.push({$eq: ['$$ad.helm', req.body.filter_helm.toLowerCase()]})
+                if (!eqSet(req.body.filter_transmission, ["Коробка"])) {
+                    query.push({$in: ['$$ad.transmission', req.body.filter_transmission.map(e => e.toLowerCase())]})
+                }
+                if (!eqSet(req.body.filter_drive, ["Привод"])) {
+                    query.push({$in: ['$$ad.drive', req.body.filter_drive.map(e => e.toLowerCase())]})
+                }
+                if (!eqSet(req.body.filter_helm, ["Руль"])) {
+                    query.push({$in: ['$$ad.helm', req.body.filter_helm.map(e => e.toLowerCase())]})
+                }
+                if (req.body.filter_price1 != "") {
+                    query.push({$gte: ['$$ad.price', Number(req.body.filter_price1)]})
+                }
+                if (req.body.filter_price2 != "") {
+                    query.push({$lte: ['$$ad.price', Number(req.body.filter_price2)]})
                 }
                 query.push({$eq: ['$$ad.status', 'Опубликовано']})
 
                 let filter_year_box;
-                if (req.body.filter_year !== 'Год') filter_year_box = 'Год ' + req.body.filter_year;
-                else filter_year_box = req.body.filter_year;
+                console.log(req.body.filter_year1)
+                if (req.body.filter_year1 !== '') filter_year_box = 'Год ' + 'от ' + req.body.filter_year1 + ' до ' + req.body.filter_year2;
+                else filter_year_box = 'Год';
                 let filter_mileage_box;
-                if (req.body.filter_mileage !== 'Пробег') filter_mileage_box = 'Пробег ' + req.body.filter_mileage;
-                else filter_mileage_box = req.body.filter_mileage;
+                if (req.body.filter_mileage1 !== '') filter_mileage_box = 'Пробег ' + 'от ' + req.body.filter_mileage1 + ' до ' +  req.body.filter_mileage2;
+                else filter_mileage_box = 'Пробег';
+                let filter_price_box;
+                if (req.body.filter_price1 !== '') filter_price_box = 'Цена ' + 'от ' + req.body.filter_price1 + ' до ' +  req.body.filter_price2;
+                else filter_price_box = 'Цена';
 
                 data_filters = [
                     req.body.filter_brand,
@@ -418,10 +438,12 @@ router.post('/mainfilter', (req, res) => {
                     req.body.filter_engine,
                     req.body.filter_transmission,
                     req.body.filter_drive,
-                    req.body.filter_helm
+                    req.body.filter_helm,
+                    filter_price_box
                 ]
                 // console.log("2")
                 // console.log(data_filters)
+                console.log(query)
                 data_ads = await collection.aggregate([{
                     $project: {
                         "ads": {

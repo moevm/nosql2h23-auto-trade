@@ -24,7 +24,7 @@ function filter(input) {
         par.innerHTML = ''
         console.log(db_dataset[par.title])
         for (const item of db_dataset[par.title]) {
-            par.innerHTML += item + ' '
+            par.innerHTML += item + ','
         }
     }
 }
