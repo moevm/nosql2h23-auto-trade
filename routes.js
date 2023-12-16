@@ -878,10 +878,64 @@ router.get("/adverts/:id", (req, res) => {
     adData()
 })
 
-router.delete("/delete_advert/:id", (req, res) => {
+router.get("/delete_advert/:id", (req, res) => {
     console.log(`Ad ${req.params.id} will be deleted, ho-ho-ho e-he-he`)
-    // TODO delete ad with req.params.id from database
-    res.status(200).send({msg: "Данные успешно удалены"});
+    advert_id = req.params.id
+    advert_id = new ObjectId(advert_id)
+    console.log(advert_id)
+    async function adData() {
+        const mongoClient = new MongoClient(url);
+        try {
+            console.log("ad data");
+            await mongoClient.connect();
+            const db = mongoClient.db(name_db);
+            const collection = db.collection(name_collection);
+
+            let query = [];
+            query.push({$eq: [ '$$ad.ad_id', advert_id ]})
+            // data1 = await collection.find({ ads : { status: "Опубликовано" } }).project({ _id : 0, ads : 1 }).toArray();
+            data1 = await collection.deleteOne(collection.aggregate([{
+                $project: {
+                    "ads": {
+                        $filter: {
+                            input: "$ads",
+                            as: "ad",
+                            cond: {
+                                "$and" : query
+                            }
+                        }
+                    }
+                }
+            }]).project({ _id : 0, ads : 1 }).toArray())
+            // aggregate([{
+            //     $project: {
+            //         "ads": {
+            //             $filter: {
+            //                 input: "$ads",
+            //                 as: "ad",
+            //                 cond: {
+            //                     "$and" : query
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }]).project({ _id : 1, ads : 1 }).toArray();
+            // data1 = data1.reduce((temp, curr) => {
+            //     if (curr.ads.length > 0) {
+            //         temp = temp.concat(curr._id, curr.ads);
+            //     }
+            //     return temp;
+            // }, []);
+            console.log(data1)
+            res.redirect('/main')
+        } catch (error) {
+            console.error('An error has occurred:', error);
+        } finally {
+            await mongoClient.close();
+        }
+    }
+    adData()
+    // res.status(200).send({msg: "Данные успешно удалены"});
 })
 
 router.get("/user/:id", (req, res) => {

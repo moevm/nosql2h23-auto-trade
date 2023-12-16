@@ -5,6 +5,7 @@ services:
     image: mongo:7.0.3
     volumes:
       - vol:/data/db
+      - ./mongo-init/:/docker-entrypoint-initdb.d/:ro
   mongo-express:
     image: mongo-express:1.0.0-20
     ports:
