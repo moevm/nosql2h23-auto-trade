@@ -5,7 +5,7 @@ const fs = require("fs");
 var router = express.Router();
 var url = "mongodb://localhost:27017/";
 var backup_path = "backup.bson"
-const docker_status = true;
+const docker_status = false;
 if (docker_status) {
     url = "mongodb://mongo:27017/";
     backup_path = "data/db/backup.bson"
@@ -894,7 +894,7 @@ router.get("/delete_advert/:id", (req, res) => {
             let query = [];
             query.push({$eq: [ '$$ad.ad_id', advert_id ]})
             // data1 = await collection.find({ ads : { status: "Опубликовано" } }).project({ _id : 0, ads : 1 }).toArray();
-            data1 = await collection.deleteOne(collection.aggregate([{
+            data1 = await collection.aggregate([{
                 $project: {
                     "ads": {
                         $filter: {
@@ -906,28 +906,9 @@ router.get("/delete_advert/:id", (req, res) => {
                         }
                     }
                 }
-            }]).project({ _id : 0, ads : 1 }).toArray())
-            // aggregate([{
-            //     $project: {
-            //         "ads": {
-            //             $filter: {
-            //                 input: "$ads",
-            //                 as: "ad",
-            //                 cond: {
-            //                     "$and" : query
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }]).project({ _id : 1, ads : 1 }).toArray();
-            // data1 = data1.reduce((temp, curr) => {
-            //     if (curr.ads.length > 0) {
-            //         temp = temp.concat(curr._id, curr.ads);
-            //     }
-            //     return temp;
-            // }, []);
+            }]).project({ _id : 1, ads : 1 }).toArray();
             console.log(data1)
-            res.redirect('/main')
+            // res.redirect('/main')
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {
