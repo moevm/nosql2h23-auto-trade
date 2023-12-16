@@ -883,39 +883,24 @@ router.get("/delete_advert/:id", (req, res) => {
     advert_id = req.params.id
     advert_id = new ObjectId(advert_id)
     console.log(advert_id)
-    async function adData() {
+    async function adDelete() {
         const mongoClient = new MongoClient(url);
         try {
-            console.log("ad data");
+            console.log("ad delete");
             await mongoClient.connect();
             const db = mongoClient.db(name_db);
             const collection = db.collection(name_collection);
 
-            let query = [];
-            query.push({$eq: [ '$$ad.ad_id', advert_id ]})
-            // data1 = await collection.find({ ads : { status: "Опубликовано" } }).project({ _id : 0, ads : 1 }).toArray();
-            data1 = await collection.aggregate([{
-                $project: {
-                    "ads": {
-                        $filter: {
-                            input: "$ads",
-                            as: "ad",
-                            cond: {
-                                "$and" : query
-                            }
-                        }
-                    }
-                }
-            }]).project({ _id : 1, ads : 1 }).toArray();
-            console.log(data1)
-            // res.redirect('/main')
+            data2 = await collection.updateMany({}, {"$pull": {"ads": {"ad_id": advert_id}}}, {multi: true});
+            // console.log(data2)
+            res.redirect('/main')
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {
             await mongoClient.close();
         }
     }
-    adData()
+    adDelete()
     // res.status(200).send({msg: "Данные успешно удалены"});
 })
 
