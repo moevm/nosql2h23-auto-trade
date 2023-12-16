@@ -1,10 +1,15 @@
 var path = require('path');
-const {ObjectId} = require("mongodb");
+const {ObjectId, BSON} = require("mongodb");
+const fs = require("fs");
 
 const MongoClient = require("mongodb").MongoClient;
 var url = "mongodb://localhost:27017/";
-const docker_status = false;
-if (docker_status) url = "mongodb://mongo:27017/";
+var backup_path = "backup.bson"
+const docker_status = true;
+if (docker_status) {
+    url = "mongodb://mongo:27017/";
+    backup_path = "data/db/backup.bson";
+}
 console.log("Im here!")
 const name_db = 'hellodatabase';
 const name_collection = 'hellocollection';
@@ -42,9 +47,35 @@ async function writeUserToDatabase() {
     }
 }
 
+let msg;
+async function exportDatabase() {
+    const mongoClient = new MongoClient(url);
+    try {
+        console.log("Imhereexport");
+        await mongoClient.connect();
+        const db = mongoClient.db(name_db);
+        const collection = db.collection(name_collection);
+
+        data = await collection.find({}).toArray();
+        const wrappedData = { arrayData: data };
+        const BSONData = BSON.serialize(wrappedData);
+
+        fs.writeFileSync(backup_path, BSONData);
+        msg = "Данные успешно записаны в backup.bson";
+        console.log(msg);
+
+    } catch (error) {
+        msg = "При экспорте данных произошла следующая ошибка: " + error;
+        console.error(msg);
+    } finally {
+        await mongoClient.close();
+    }
+}
+
 
 writeUserToDatabase().then(() => {
     console.log("Yes!")
+    exportDatabase().then(r => {
+        process.exit()
+    });
 });
-
-process.exit()
