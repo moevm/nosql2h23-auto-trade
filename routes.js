@@ -867,7 +867,7 @@ router.get("/adverts/:id", (req, res) => {
                     status = 'Покупатель'
                 }
             }
-            // TODO add increment to views counter
+            data3 = await collection.updateMany({"ads.ad_id": data1[1].ad_id}, {"$set": {"ads.$.view": data1[1].view + 1}});
             res.render("advertisment_page", {title: 'Страница объявления', name: data2[0].name, rating: data2[0].rating, data: data1[1], status: status, id: data1[0]})
         } catch (error) {
             console.error('An error has occurred:', error);
