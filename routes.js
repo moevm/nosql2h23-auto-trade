@@ -904,6 +904,32 @@ router.get("/delete_advert/:id", (req, res) => {
     // res.status(200).send({msg: "Данные успешно удалены"});
 })
 
+router.get("/adminvalidation/:id", (req, res) => {
+    console.log(`Ad ${req.params.id} will be validated, ho-ho-ho e-he-he`)
+    advert_id = req.params.id
+    advert_id = new ObjectId(advert_id)
+    console.log(advert_id)
+    async function adValidate() {
+        const mongoClient = new MongoClient(url);
+        try {
+            console.log("ad validate");
+            await mongoClient.connect();
+            const db = mongoClient.db(name_db);
+            const collection = db.collection(name_collection);
+
+            data2 = await collection.updateMany({"ads.ad_id": advert_id}, {"$set": {"ads.$.status": "Опубликовано"}});
+            // console.log(data2)
+            res.redirect('/main')
+        } catch (error) {
+            console.error('An error has occurred:', error);
+        } finally {
+            await mongoClient.close();
+        }
+    }
+    adValidate()
+    // res.status(200).send({msg: "Данные успешно удалены"});
+})
+
 router.get("/user/:id", (req, res) => {
     user_id = req.params.id
     user_id = new ObjectId(user_id)
