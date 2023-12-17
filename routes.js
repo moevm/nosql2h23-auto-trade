@@ -816,6 +816,7 @@ router.post('/mainfilter', (req, res) => {
 // })
 
 router.get("/admin", (req, res) => {
+    data_admin = []
     data_admin_filters = [
         "Марка",
         "Модель",
@@ -829,11 +830,11 @@ router.get("/admin", (req, res) => {
         "Руль",
         "Цена"
     ]
-    res.render('admin');
+    res.render('admin', {title: 'Администратор', data: data_admin, filter_data: data_admin_filters});
 })
 
 router.get("/adminfilter", (req, res) => {
-    res.render('admin');
+    res.render('admin', {title: 'Администратор', data: data_admin, filter_data: data_admin_filters});
 })
 
 router.post('/adminfilter', (req, res) => {
@@ -853,10 +854,6 @@ router.post('/adminfilter', (req, res) => {
             // console.log(req.body)
             let query = [];
 
-            console.log('keeeeeeeeeeeeeeeeeeeeeeek')
-            console.log(req.body.filter_year1)
-            console.log(req.body.filter_year2)
-            console.log('keeeeeeeeeeeeeeeeeeeeeeek')
             const eqSet = (array1, array2) => array1.length === array2.length && array1.every(function(value, index) { return value === array2[index]})
             if (!eqSet(req.body.filter_brand, ["Марка"])) {
                 query.push({$in: ['$$ad.brand', req.body.filter_brand]})
