@@ -988,58 +988,31 @@ router.get("/user/:id", (req, res) => {
     user_id = req.params.id
     user_id = new ObjectId(user_id)
     console.log(user_id)
-    async function adData() {
+    async function userPage() {
         const mongoClient = new MongoClient(url);
         try {
-            console.log("ad data");
+            console.log("user page");
             await mongoClient.connect();
             const db = mongoClient.db(name_db);
             const collection = db.collection(name_collection);
 
-            // let query = [];
-            // query.push({$eq: [ '$$ad.ad_id', advert_id ]})
-            // // data1 = await collection.find({ ads : { status: "Опубликовано" } }).project({ _id : 0, ads : 1 }).toArray();
-            // data1 = await collection.aggregate([{
-            //     $project: {
-            //         "ads": {
-            //             $filter: {
-            //                 input: "$ads",
-            //                 as: "ad",
-            //                 cond: {
-            //                     "$and" : query
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }]).project({ _id : 1, ads : 1 }).toArray();
-            // data1 = data1.reduce((temp, curr) => {
-            //     if (curr.ads.length > 0) {
-            //         temp = temp.concat(curr._id, curr.ads);
-            //     }
-            //     return temp;
-            // }, []);
-            // // console.log(data1)
-            data2 = await collection.find({ _id : user_id }).project({ _id : 0, name : 1, rating : 1 }).toArray();
-            // console.log(data2)
-            if (req.session.status == 'Администратор') {
-                status = "Администратор"
+            data2 = await collection.find({ _id : user_id }).project({ _id : 0, name : 1, rating : 1, reviews: 1, dialogs: 1 }).toArray();
+            console.log(data2)
+            if (req.session._id == user_id) {
+                status = "Мой"
+                title = "Мой аккаунт"
             } else {
-                if (req.session._id == data1[0]) {
-                    status = 'Продавец'
-                }
-                else {
-                    status = 'Покупатель'
-                }
+                status = 'Чужой'
+                title = "Страница пользователя"
             }
-            // TODO add increment to views counter
-            res.render("advertisment_page", {title: 'Страница объявления', name: data2[0].name, rating: data2[0].rating, data: data1[1], status: status})
+            res.render("user-page", {title: title, name: data2.name, rating: data2.rating, reviews: data2.reviews, dialogs: data2.dialogs, status: status})
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {
             await mongoClient.close();
         }
     }
-    adData()
+    userPage()
 })
 
 router.get("*", (req, res) => {
