@@ -88,6 +88,25 @@ i {
     border: none;
 }
 
+.validation-buttons {
+    font-size: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.validation-buttons button{
+    margin: 20px;
+    margin-top: 70px;
+}
+
+.validation-buttons .validate {
+    background: #45A29E;
+}
+.validation-buttons .decline {
+    background: #BE3455;
+    color: white;
+}
 
 
 @font-face {

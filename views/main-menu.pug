@@ -26,7 +26,7 @@ html
                         // for item in adds
                             //if item.ads.length > 0
                         +arrAdds(adds)
-        if url !== "/mainseller"
+        if url !== "/mainseller" && url !== "/mainadmin"
             .right-panel
                 // -console.log(db_dataset)
                 //form(action="/mainfilter" method="POST" style="margin: 10px")
@@ -50,6 +50,12 @@ html
             .mainseller-forms
                 form(action="/create_advertisment", method="get")
                     button.mainseller-create-advt-button(style="background-color: #45A29E; color: white") Создать объявление
+                form(action=url method="POST" style="margin: 10px")
+                    include pagination
+        else if url === "/mainadmin"
+            .mainseller-forms
+                form(action="/adminvalidation/all", method="get")
+                    button.mainseller-create-advt-button(style="background-color: #45A29E; color: white") Опубликовать всё
                 form(action=url method="POST" style="margin: 10px")
                     include pagination
 

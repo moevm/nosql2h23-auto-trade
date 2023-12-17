@@ -14,17 +14,20 @@ html
 
 
     body(style='background-color: #1F2833')
-    if status == "Продавец" || status == "Покупатель"
+    if status === "Продавец" || status === "Покупатель"
         include navbar.pug
-    else if status == "Администратор"
+    else if status === "Администратор"
         include navbar-admin.pug
     block content
         .date-watch-info
             p Дата создания: #{data.create_date}
             p Дата изменения: #{data.edit_date}
-            .watched
-                i.fa.fa-eye.fa-2x(style="color:#66FCF1; font-size: 16px")
-                p #{data.view}
+
+            if data.status !== "Проверка"
+                .watched
+                    i.fa.fa-eye.fa-2x(style="color:#66FCF1; font-size: 16px")
+                    p #{data.view}
+
         .all-info
             .photo-params
                 .photo-price-buy
@@ -35,15 +38,16 @@ html
                             button(type="submit") Купить
                     else if status === "Продавец"
                         .change
-                            form(action="/change_advert", method="GET")
+                            form(action=`/change_advert/${data.ad_id}`, method="GET")
                                 button(type="submit") Редактировать
                             .delete
                                 button(type= 'button', onclick=`deleteUser("${data.ad_id}");`)
                                     i.fa.fa-trash.fa-2x
                     else if status === "Администратор"
-                        .delete(style="margin:0;")
-                            button(type= 'button', onclick=`deleteUser("${data.ad_id}");`)
-                                i.fa.fa-trash.fa-2x
+                        if data.status !== "Проверка"
+                            .delete(style="margin:0;")
+                                button(type= 'button', onclick=`deleteUser("${data.ad_id}");`)
+                                    i.fa.fa-trash.fa-2x
                 .params
                     p Марка: #{data.brand}
                     p Модель: #{data.model}
@@ -58,6 +62,12 @@ html
             .seller
                 a(href=`/user/${id}`) #{name}
                 p #{rating}
+
+        if data.status === "Проверка" && status == "Администратор"
+            .validation-buttons
+                form(action=`/adminvalidation/${data.ad_id}`, method="GET")
+                    button.validate(type="submit") Опубликовать
+                button.decline(type= 'button', onclick=`deleteUser("${data.ad_id}");`) Удалить
 
 script.
     function deleteUser(id){
