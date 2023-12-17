@@ -306,7 +306,7 @@ router.get('/mainseller', (req, res) => {
                 }
             }]).project({ _id : 0, ads : 1 }).toArray();
             data1 = data1.reduce((temp, curr) => {
-                if (curr.ads.length > 0) {
+                if (curr.ads.length > 0 && curr._id == req.session._id) {
                     temp = temp.concat(curr.ads);
                 }
                 return temp;
@@ -531,6 +531,66 @@ router.post('/maincreate', (req, res) => {
        } finally {
            await mongoClient.close();
        }
+    }
+    adCreate();
+    // console.log(req.body);
+    // res.render('main-menu', {title: 'Главная', adds: data});
+//     res.send(`${req.body.login} - ${req.body.password}`);
+})
+
+router.post('/mainedit', (req, res) => {
+    if(!req.body) return res.sendStatus(400);
+    // const MongoClient = require("mongodb").MongoClient;
+//     const url = "mongodb://localhost:27017/";
+    console.log("Main edit!")
+    // const name_db = 'autotrade';
+    // const name_collection = 'users';
+    async function adEdit() {
+        const mongoClient = new MongoClient(url);
+        try {
+            console.log("ad edit");
+            await mongoClient.connect();
+            const db = mongoClient.db(name_db);
+            const collection = db.collection(name_collection);
+            data = await collection.find({}).toArray();
+            // console.log(data)
+            // const { ObjectId } = require('mongodb');
+            let today_date = new Date();
+            let date = ("0" + today_date.getDate()).slice(-2);
+            let month = ("0" + (today_date.getMonth() + 1)).slice(-2);
+            let year = today_date.getFullYear();
+            let edit_date = year + "-" + month + "-" + date;
+            console.log(edit_date);
+            const newData = {
+                brand: req.body.brand,
+                model: req.body.model,
+                year: Number(req.body.year),
+                color: req.body.color,
+                body: req.body.body,
+                mileage: Number(req.body.mileage),
+                engine: req.body.engine,
+                transmission: req.body.transmission,
+                drive: req.body.drive,
+                helm: req.body.helm,
+                price: Number(req.body.price),
+                edit_date: edit_date
+            };
+            // console.log(newData)
+            // console.log(req.session._id)
+            const data1 = await collection.updateOne({ _id: new ObjectId(req.session._id)}, {$push: { ads: newData }},
+                (updateErr, result) => {
+                    if (updateErr) throw updateErr;
+                    console.log(`Документ с id ${newData.ad_id} обновлен`);
+                    client.close();
+                });
+            // console.log(data1)
+            // data2 = await collection.find({}).project({ _id : 0, ads : 1 }).toArray();
+            res.redirect('/main')
+        } catch (error) {
+            console.error('An error has occurred:', error);
+        } finally {
+            await mongoClient.close();
+        }
     }
     adCreate();
     // console.log(req.body);
