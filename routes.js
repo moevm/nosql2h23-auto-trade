@@ -453,7 +453,7 @@ router.get('/mainadmin', (req, res) => {
             ]
             // console.log("1")
             //console.log(data1)
-            res.render('main-menu', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/mainadmin'});
+            res.render('main-menu', {title: 'Главная', adds: data1, status: req.session.status, filter_data: data, page: page, pages: pages, url: '/mainadmin'});
             // res.render('my-acc', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main'});
             // res.render('user-page', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main'});
             // res.render('my-messages', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main'});
