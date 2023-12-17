@@ -1179,7 +1179,9 @@ router.get("/delete_advert/:id", (req, res) => {
 router.get("/adminvalidation/:id", (req, res) => {
     console.log(`Ad ${req.params.id} will be validated, ho-ho-ho e-he-he`)
     advert_id = req.params.id
-    advert_id = new ObjectId(advert_id)
+    if (advert_id !== "all"){
+        advert_id = new ObjectId(advert_id)
+    }
     console.log(advert_id)
     async function adValidate() {
         const mongoClient = new MongoClient(url);
