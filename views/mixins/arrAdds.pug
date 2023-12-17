@@ -1,8 +1,35 @@
 mixin arrAdds(item)
     - for(let i = 0; i < item.length; i++)
-        .auto-card
-            .create-advt-photo
-                img(src=item[i].photo)
-            a(href= `/adverts/${item[i].ad_id}`) #{item[i].brand} #{item[i].model} #{item[i].year}
-            h5 #{item[i].price}₽
+        if url === "/mainseller"
+            .auto-card-with-delete-button
+                .auto-card
+                    .create-advt-photo
+                        img(src=item[i].photo)
+                    a(href= `/adverts/${item[i].ad_id}`) #{item[i].brand} #{item[i].model} #{item[i].year}
+                    h5 #{item[i].price}₽
+                    if url === "/mainseller" && item[i].status === "Проверка"
+                        h5(style="color: #66FCF1;") Объявление находится на проверке
+                button(type= 'button', onclick=`deleteUser("${item[i].ad_id}");`)
+                    i.fa.fa-trash.fa-2x
+        else
+            .auto-card
+                .create-advt-photo
+                    img(src=item[i].photo)
+                a(href= `/adverts/${item[i].ad_id}`) #{item[i].brand} #{item[i].model} #{item[i].year}
+                h5 #{item[i].price}₽
 
+
+script.
+    function deleteUser(id){
+        let conf = confirm(`Вы действительно хотите удалить выбранное объявление?`);
+        if(conf){
+            $.ajax({
+                url: `/delete_advert/${id}`,
+                type: 'get',
+                complete: function() {
+                    window.location.href = '/main';
+                }
+            });
+
+        }
+    }

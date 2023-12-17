@@ -65,7 +65,7 @@ script.
         if(conf){
             $.ajax({
     url: `/delete_advert/${id}`,
-        type: 'delete',
+        type: 'get',
         complete: function() {
         window.location.href = '/main';
     }

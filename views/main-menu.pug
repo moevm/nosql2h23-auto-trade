@@ -26,13 +26,13 @@ html
                         // for item in adds
                             //if item.ads.length > 0
                         +arrAdds(adds)
-
-        .right-panel
-            // -console.log(db_dataset)
-            //form(action="/mainfilter" method="POST" style="margin: 10px")
-            include auto-filter
-            form(action=url method="POST" style="margin: 10px")
-                include pagination
+        if url !== "/mainseller"
+            .right-panel
+                // -console.log(db_dataset)
+                //form(action="/mainfilter" method="POST" style="margin: 10px")
+                include auto-filter
+                form(action=url method="POST" style="margin: 10px")
+                    include pagination
 
         //.w3-container.auth-form
         //    form(action="/auth" method="POST" style="margin: 10px")
@@ -46,7 +46,10 @@ html
         //            input.w3-round-large(type='text', placeholder='Пароль', name='password')
         //        button.w3-button.w3-round-large(style="background-color: #01ACC6; font-size : 25px;"
         //            type="submit") Войти
-
-        form(action="/create_advertisment", method="get")
-            button(style="background-color: #45A29E; color: white") Создать объявление
+        if url === "/mainseller"
+            .mainseller-forms
+                form(action="/create_advertisment", method="get")
+                    button.mainseller-create-advt-button(style="background-color: #45A29E; color: white") Создать объявление
+                form(action=url method="POST" style="margin: 10px")
+                    include pagination
 

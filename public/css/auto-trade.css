@@ -90,6 +90,7 @@ input:focus::placeholder{
     flex-direction: row;
     justify-content: space-between;
     padding: 10px;
+    color: #01ACC6;
     font-size: 20px;
     background-color: #0B0C10;
 }
@@ -122,6 +123,33 @@ input:focus::placeholder{
     text-align: center;
     display: block;
     margin: 20px;
+}
+
+.auto-card-with-delete-button{
+    display: flex;
+}
+
+.auto-card-with-delete-button button{
+    margin: auto;
+    margin-top: 70px;
+    background: none;
+    color: red;
+    border: none;
+}
+
+.mainseller-forms {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+}
+
+.mainseller-forms form {
+    margin: 20px;
+    text-align: center;
+}
+
+.mainseller-create-advt-button {
+    font-size: 30px;
 }
 
 @font-face {
