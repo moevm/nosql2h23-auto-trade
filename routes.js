@@ -543,6 +543,7 @@ router.post('/maincreate', (req, res) => {
 
 router.post('/edit_advert/:id', (req, res) => {
     console.log(`Ad ${req.params.id} will be edited, ho-ho-ho e-he-he`)
+    console.log("BODY: ", req.body)
     advert_id = req.params.id
     advert_id = new ObjectId(advert_id)
     console.log(advert_id)
@@ -565,17 +566,17 @@ router.post('/edit_advert/:id', (req, res) => {
             console.log(edit_date);
             let query = {}
             // if (req.body.photo) query["ads.$.photo"] = req.body.photo;
-            if (req.body.brand == "") query["ads.$.brand"] = req.body.brand;
-            if (req.body.model == "") query["ads.$.model"] = req.body.model;
-            if (req.body.year == "") query["ads.$.year"] = Number(req.body.year);
-            if (req.body.color == "") query["ads.$.color"] = req.body.color;
-            if (req.body.body == "") query["ads.$.body"] = req.body.body;
-            if (req.body.mileage == "") query["ads.$.mileage"] = Number(req.body.mileage);
-            if (req.body.engine == "") query["ads.$.engine"] = req.body.engine;
-            if (req.body.transmission == "") query["ads.$.transmission"] = req.body.transmission;
-            if (req.body.drive == "") query["ads.$.drive"] = req.body.drive;
-            if (req.body.price == "") query["ads.$.price"] = Number(req.body.price);
-            if (req.body.helm == "") query["ads.$.helm"] = req.body.helm;
+            query["ads.$.brand"] = req.body.brand;
+            query["ads.$.model"] = req.body.model;
+            query["ads.$.year"] = Number(req.body.year);
+            query["ads.$.color"] = req.body.color;
+            query["ads.$.body"] = req.body.body;
+            query["ads.$.mileage"] = Number(req.body.mileage);
+            query["ads.$.engine"] = req.body.engine;
+            query["ads.$.transmission"] = req.body.transmission;
+            query["ads.$.drive"] = req.body.drive;
+            query["ads.$.price"] = Number(req.body.price);
+            query["ads.$.helm"] = req.body.helm;
             query["ads.$.edit_date"] = edit_date;
             query["ads.$.status"] = "Проверка";
             console.log(query)
@@ -596,6 +597,63 @@ router.post('/edit_advert/:id', (req, res) => {
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
 
+router.get("/edit_advert/:id", (req, res) => {
+    advert_id = req.params.id
+    advert_id = new ObjectId(advert_id)
+    console.log(advert_id)
+    async function adData() {
+        const mongoClient = new MongoClient(url);
+        try {
+            console.log("ad data");
+            await mongoClient.connect();
+            const db = mongoClient.db(name_db);
+            const collection = db.collection(name_collection);
+
+            let query = [];
+            query.push({$eq: [ '$$ad.ad_id', advert_id ]})
+            // data1 = await collection.find({ ads : { status: "Опубликовано" } }).project({ _id : 0, ads : 1 }).toArray();
+            data1 = await collection.aggregate([{
+                $project: {
+                    "ads": {
+                        $filter: {
+                            input: "$ads",
+                            as: "ad",
+                            cond: {
+                                "$and" : query
+                            }
+                        }
+                    }
+                }
+            }]).project({ _id : 1, ads : 1 }).toArray();
+            data1 = data1.reduce((temp, curr) => {
+                if (curr.ads.length > 0) {
+                    temp = temp.concat(curr._id, curr.ads);
+                }
+                return temp;
+            }, []);
+            // console.log(data1)
+            data2 = await collection.find({ _id : data1[0] }).project({ _id : 0, name : 1, rating : 1 }).toArray();
+            // console.log(data2)
+            if (req.session.status == 'Администратор') {
+                status = "Администратор"
+            } else {
+                if (req.session._id == data1[0]) {
+                    status = 'Продавец'
+                }
+                else {
+                    status = 'Покупатель'
+                }
+            }
+            data3 = await collection.updateMany({"ads.ad_id": data1[1].ad_id}, {"$set": {"ads.$.view": data1[1].view + 1}});
+            res.render("edit_advert", {title: 'Редактирование объявления', data: data1[1], status: status, id: data1[0]})
+        } catch (error) {
+            console.error('An error has occurred:', error);
+        } finally {
+            await mongoClient.close();
+        }
+    }
+    adData()
+})
 router.get('/mainfilter', (req, res) => {
     // const MongoClient = require("mongodb").MongoClient;
 //     const url = "mongodb://localhost:27017/";

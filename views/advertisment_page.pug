@@ -38,7 +38,7 @@ html
                             button(type="submit") Купить
                     else if status === "Продавец"
                         .change
-                            form(action=`/change_advert/${data.ad_id}`, method="GET")
+                            form(action=`/edit_advert/${data.ad_id}`, method="GET")
                                 button(type="submit") Редактировать
                             .delete
                                 button(type= 'button', onclick=`deleteUser("${data.ad_id}");`)
