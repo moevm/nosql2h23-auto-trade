@@ -855,7 +855,7 @@ router.get("/admin", (req, res) => {
                 "Дата объявления",
                 "Цена",
                 "Пробег",
-                "Бренд",
+                "Марка",
                 "Год"
             ]
             count_admin = data_admin.length
