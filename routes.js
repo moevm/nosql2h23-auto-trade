@@ -304,7 +304,7 @@ router.get('/mainseller', (req, res) => {
                         }
                     }
                 }
-            }]).project({ _id : 0, ads : 1 }).toArray();
+            }]).project({ _id : 1, ads : 1 }).toArray();
             data1 = data1.reduce((temp, curr) => {
                 if (curr.ads.length > 0 && curr._id == req.session._id) {
                     temp = temp.concat(curr.ads);
