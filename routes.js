@@ -538,11 +538,11 @@ router.post('/maincreate', (req, res) => {
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
 
-router.post('/mainedit', (req, res) => {
-    if(!req.body) return res.sendStatus(400);
-    // const MongoClient = require("mongodb").MongoClient;
-//     const url = "mongodb://localhost:27017/";
-    console.log("Main edit!")
+router.post('/edit_advert/:id', (req, res) => {
+    console.log(`Ad ${req.params.id} will be edited, ho-ho-ho e-he-he`)
+    advert_id = req.params.id
+    advert_id = new ObjectId(advert_id)
+    console.log(advert_id)
     // const name_db = 'autotrade';
     // const name_collection = 'users';
     async function adEdit() {
@@ -552,7 +552,6 @@ router.post('/mainedit', (req, res) => {
             await mongoClient.connect();
             const db = mongoClient.db(name_db);
             const collection = db.collection(name_collection);
-            data = await collection.find({}).toArray();
             // console.log(data)
             // const { ObjectId } = require('mongodb');
             let today_date = new Date();
@@ -561,31 +560,26 @@ router.post('/mainedit', (req, res) => {
             let year = today_date.getFullYear();
             let edit_date = year + "-" + month + "-" + date;
             console.log(edit_date);
-            const newData = {
-                brand: req.body.brand,
-                model: req.body.model,
-                year: Number(req.body.year),
-                color: req.body.color,
-                body: req.body.body,
-                mileage: Number(req.body.mileage),
-                engine: req.body.engine,
-                transmission: req.body.transmission,
-                drive: req.body.drive,
-                helm: req.body.helm,
-                price: Number(req.body.price),
-                edit_date: edit_date
-            };
-            // console.log(newData)
+            let query = {}
+            // if (req.body.photo) query["ads.$.photo"] = req.body.photo;
+            if (req.body.brand == "") query["ads.$.brand"] = req.body.brand;
+            if (req.body.model == "") query["ads.$.model"] = req.body.model;
+            if (req.body.year == "") query["ads.$.year"] = Number(req.body.year);
+            if (req.body.color == "") query["ads.$.color"] = req.body.color;
+            if (req.body.body == "") query["ads.$.body"] = req.body.body;
+            if (req.body.mileage == "") query["ads.$.mileage"] = Number(req.body.mileage);
+            if (req.body.engine == "") query["ads.$.engine"] = req.body.engine;
+            if (req.body.transmission == "") query["ads.$.transmission"] = req.body.transmission;
+            if (req.body.drive == "") query["ads.$.drive"] = req.body.drive;
+            if (req.body.price == "") query["ads.$.price"] = Number(req.body.price);
+            if (req.body.helm == "") query["ads.$.helm"] = req.body.helm;
+            query["ads.$.edit_date"] = edit_date;
+            console.log(query)
             // console.log(req.session._id)
-            const data1 = await collection.updateOne({ _id: new ObjectId(req.session._id)}, {$push: { ads: newData }},
-                (updateErr, result) => {
-                    if (updateErr) throw updateErr;
-                    console.log(`Документ с id ${newData.ad_id} обновлен`);
-                    client.close();
-                });
+            data2 = await collection.updateMany({"ads.ad_id": advert_id}, {"$set": query});
             // console.log(data1)
             // data2 = await collection.find({}).project({ _id : 0, ads : 1 }).toArray();
-            res.redirect('/main')
+            res.redirect('/mainseller')
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {
