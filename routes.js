@@ -135,8 +135,8 @@ router.get('/main', (req, res) => {
             let pages = Math.ceil(count / 6)
             if (pages == 0) pages = 1
 
-            let index_low = 0
-            let index_high = 6
+            index_low = 0
+            index_high = 6
 
             if (req.body.left == '' && page - 1 > 0) {
                 page -= 1
@@ -320,8 +320,8 @@ router.get('/mainseller', (req, res) => {
             let pages = Math.ceil(count / 6)
             if (pages == 0) pages = 1
 
-            let index_low = 0
-            let index_high = 6
+            index_low = 0
+            index_high = 6
 
             if (req.body.left == '' && page - 1 > 0) {
                 page -= 1
@@ -505,8 +505,8 @@ router.get('/mainadmin', (req, res) => {
             let pages = Math.ceil(count / 6)
             if (pages == 0) pages = 1
 
-            let index_low = 0
-            let index_high = 6
+            index_low = 0
+            index_high = 6
 
             if (req.body.left == '' && page - 1 > 0) {
                 page -= 1
