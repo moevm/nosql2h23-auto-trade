@@ -1192,7 +1192,7 @@ router.get("/adminvalidation/:id", (req, res) => {
             const collection = db.collection(name_collection);
 
             if (req.params.id != "all") data2 = await collection.updateMany({"ads.ad_id": advert_id}, {"$set": {"ads.$.status": "Опубликовано"}});
-            else data2 = await collection.updateMany({}, {"$set": {"ads.$.status": "Опубликовано"}});
+            else data2 = await collection.updateMany({"ads.status" : "Проверка"}, {"$set": {"ads.$.status": "Опубликовано"}});
             // console.log(data2)
             res.redirect('/main')
         } catch (error) {
