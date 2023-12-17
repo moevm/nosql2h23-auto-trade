@@ -577,6 +577,7 @@ router.post('/edit_advert/:id', (req, res) => {
             if (req.body.price == "") query["ads.$.price"] = Number(req.body.price);
             if (req.body.helm == "") query["ads.$.helm"] = req.body.helm;
             query["ads.$.edit_date"] = edit_date;
+            query["ads.$.status"] = "Проверка";
             console.log(query)
             // console.log(req.session._id)
             data2 = await collection.updateMany({"ads.ad_id": advert_id}, {"$set": query});
