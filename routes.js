@@ -290,7 +290,6 @@ router.get('/mainseller', (req, res) => {
             const collection = db.collection(name_collection);
 
             let query = [];
-            query.push({$eq: [ '$$ad.status', 'Проверка' ]})
             // data1 = await collection.find({ ads : { status: "Опубликовано" } }).project({ _id : 0, ads : 1 }).toArray();
             data1 = await collection.aggregate([{
                 $project: {
@@ -387,6 +386,7 @@ router.get('/mainadmin', (req, res) => {
             const collection = db.collection(name_collection);
 
             let query = [];
+            query.push({$eq: [ '$$ad.status', 'Проверка' ]})
             // data1 = await collection.find({ ads : { status: "Опубликовано" } }).project({ _id : 0, ads : 1 }).toArray();
             data1 = await collection.aggregate([{
                 $project: {
@@ -592,7 +592,7 @@ router.post('/mainedit', (req, res) => {
             await mongoClient.close();
         }
     }
-    adCreate();
+    adEdit();
     // console.log(req.body);
     // res.render('main-menu', {title: 'Главная', adds: data});
 //     res.send(`${req.body.login} - ${req.body.password}`);
