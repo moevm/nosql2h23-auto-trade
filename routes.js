@@ -12,6 +12,8 @@ if (docker_status) {
 }
 let data_filters;
 let data_ads;
+let data_admin_filters;
+let data_admin;
 let page = 1;
 let page_filter = 0;
 let index_low;
@@ -814,7 +816,154 @@ router.post('/mainfilter', (req, res) => {
 // })
 
 router.get("/admin", (req, res) => {
+    data_admin_filters = [
+        "Марка",
+        "Модель",
+        "Год",
+        "Цвет",
+        "Кузов",
+        "Пробег",
+        "Двигатель",
+        "Коробка",
+        "Привод",
+        "Руль",
+        "Цена"
+    ]
     res.render('admin');
+})
+
+router.get("/adminfilter", (req, res) => {
+    res.render('admin');
+})
+
+router.post('/adminfilter', (req, res) => {
+    // if(!req.body) return res.sendStatus(400);
+    // const MongoClient = require("mongodb").MongoClient;
+//     const url = "mongodb://localhost:27017/";
+    console.log("Admin filter!")
+    // const name_db = 'autotrade';
+    // const name_collection = 'users';
+    async function adminFilter() {
+        const mongoClient = new MongoClient(url);
+        try {
+            console.log("Admin filter");
+            await mongoClient.connect();
+            const db = mongoClient.db(name_db);
+            const collection = db.collection(name_collection);
+            // console.log(req.body)
+            let query = [];
+
+            console.log('keeeeeeeeeeeeeeeeeeeeeeek')
+            console.log(req.body.filter_year1)
+            console.log(req.body.filter_year2)
+            console.log('keeeeeeeeeeeeeeeeeeeeeeek')
+            const eqSet = (array1, array2) => array1.length === array2.length && array1.every(function(value, index) { return value === array2[index]})
+            if (!eqSet(req.body.filter_brand, ["Марка"])) {
+                query.push({$in: ['$$ad.brand', req.body.filter_brand]})
+            }
+            console.log(req.body.filter_brand)
+            if (!eqSet(req.body.filter_model, ["Модель"])) {
+                query.push({$in: ['$$ad.model', req.body.filter_model]})
+            }
+            if (req.body.filter_year1 != "") {
+                query.push({$gte: ['$$ad.year', Number(req.body.filter_year1)]})
+            }
+            if (req.body.filter_year2 != "") {
+                query.push({$lte: ['$$ad.year', Number(req.body.filter_year2)]})
+            }
+            if (!eqSet(req.body.filter_color, ["Цвет"])) {
+                query.push({$in: ['$$ad.color', req.body.filter_color.map(e => e.toLowerCase())]})
+            }
+            if (!eqSet(req.body.filter_body, ["Кузов"])) {
+                query.push({$in: ['$$ad.body', req.body.filter_body.map(e => e.toLowerCase())]})
+            }
+            if (req.body.filter_mileage1 != "") {
+                query.push({$gte: ['$$ad.mileage', Number(req.body.filter_mileage1)]})
+            }
+            if (req.body.filter_mileage2 != "") {
+                query.push({$lte: ['$$ad.mileage', Number(req.body.filter_mileage2)]})
+            }
+            if (!eqSet(req.body.filter_engine, ["Двигатель"])) {
+                query.push({$in: ['$$ad.engine', req.body.filter_engine.map(e => e.toLowerCase())]})
+            }
+            if (!eqSet(req.body.filter_transmission, ["Коробка"])) {
+                query.push({$in: ['$$ad.transmission', req.body.filter_transmission.map(e => e.toLowerCase())]})
+            }
+            if (!eqSet(req.body.filter_drive, ["Привод"])) {
+                query.push({$in: ['$$ad.drive', req.body.filter_drive.map(e => e.toLowerCase())]})
+            }
+            if (!eqSet(req.body.filter_helm, ["Руль"])) {
+                query.push({$in: ['$$ad.helm', req.body.filter_helm.map(e => e.toLowerCase())]})
+            }
+            if (req.body.filter_price1 != "") {
+                query.push({$gte: ['$$ad.price', Number(req.body.filter_price1)]})
+            }
+            if (req.body.filter_price2 != "") {
+                query.push({$lte: ['$$ad.price', Number(req.body.filter_price2)]})
+            }
+            query.push({$eq: ['$$ad.status', 'Опубликовано']})
+
+            let filter_year_box;
+            console.log(req.body.filter_year1)
+            if (req.body.filter_year1 !== '' || req.body.filter_year2 !== '') filter_year_box = 'Год ' + 'от ' + req.body.filter_year1 + ' до ' + req.body.filter_year2;
+            else filter_year_box = 'Год';
+            let filter_mileage_box;
+            if (req.body.filter_mileage1 !== '' || req.body.filter_mileage2 !== '') filter_mileage_box = 'Пробег ' + 'от ' + req.body.filter_mileage1 + ' до ' +  req.body.filter_mileage2;
+            else filter_mileage_box = 'Пробег';
+            let filter_price_box;
+            if (req.body.filter_price1 !== '' || req.body.filter_price2 !== '') filter_price_box = 'Цена ' + 'от ' + req.body.filter_price1 + ' до ' +  req.body.filter_price2;
+            else filter_price_box = 'Цена';
+
+            data_admin_filters = [
+                req.body.filter_brand,
+                req.body.filter_model,
+                filter_year_box,
+                req.body.filter_color,
+                req.body.filter_body,
+                filter_mileage_box,
+                req.body.filter_engine,
+                req.body.filter_transmission,
+                req.body.filter_drive,
+                req.body.filter_helm,
+                filter_price_box
+            ]
+            // console.log("2")
+            // console.log(data_filters)
+            console.log(query)
+            data_admin = await collection.aggregate([{
+                $project: {
+                    "ads": {
+                        $filter: {
+                            input: "$ads",
+                            as: "ad",
+                            cond: {
+                                "$and": query
+                            }
+                        }
+                    }
+                }
+            }]).project({_id: 0, ads: 1}).toArray();
+            data_admin = data_admin.reduce((temp, curr) => {
+                if (curr.ads.length > 0) {
+                    temp = temp.concat(curr.ads);
+                }
+                return temp;
+            }, []);
+            // console.log(page_filter)
+            // console.log(data_ads, data_filters)
+            console.log(req.body)
+            res.redirect('/adminfilter')
+            // console.log(query)
+            // console.log(data_ads)
+            // return res.send(data1)
+        } catch (error) {
+            console.error('An error has occurred:', error);
+        } finally {
+            await mongoClient.close();
+        }
+    }
+    adminFilter();
+//     res.send(`${req.body.login} - ${req.body.password}`);
 })
 
 router.get("/adminexport", (req, res) => {
