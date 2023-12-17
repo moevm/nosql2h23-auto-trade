@@ -1131,7 +1131,8 @@ router.get("/adminvalidation/:id", (req, res) => {
             const db = mongoClient.db(name_db);
             const collection = db.collection(name_collection);
 
-            data2 = await collection.updateMany({"ads.ad_id": advert_id}, {"$set": {"ads.$.status": "Опубликовано"}});
+            if (req.params.id != "all") data2 = await collection.updateMany({"ads.ad_id": advert_id}, {"$set": {"ads.$.status": "Опубликовано"}});
+            else data2 = await collection.updateMany({}, {"$set": {"ads.$.status": "Опубликовано"}});
             // console.log(data2)
             res.redirect('/main')
         } catch (error) {
