@@ -3,6 +3,7 @@ const path = require("path");
 const {ObjectId, BSON} = require("mongodb");
 const fs = require("fs");
 var router = express.Router();
+
 var url = "mongodb://localhost:27017/";
 var backup_path = "backup.bson"
 const docker_status = false;
@@ -28,6 +29,9 @@ const name_db = 'autotrade';
 const name_collection = 'users';
 
 router.use("/public", express.static(path.join(__dirname + '/public')));
+
+const multer = require("multer");
+const upload = multer({ dest: "./public/cars_photos" });
 
 router.get('/', (req, res, next) => {
     res.render('authorization', {title: 'Авторизация'});
@@ -471,8 +475,11 @@ router.get('/mainadmin', (req, res) => {
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
 
-router.post('/maincreate', (req, res) => {
+router.post('/maincreate', upload.single("photo"), (req, res) => {
     if(!req.body) return res.sendStatus(400);
+    let tempPath = req.file.path
+    let targetPath = `./public/cars_photos/${req.file.originalname}`
+    fs.rename(tempPath, targetPath, (error)=> {console.log(error)})
     // const MongoClient = require("mongodb").MongoClient;
 //     const url = "mongodb://localhost:27017/";
     console.log("Main create!")
@@ -501,7 +508,7 @@ router.post('/maincreate', (req, res) => {
            console.log(create_date_message);
            const newData = {
                ad_id: new ObjectId(),
-               photo: '/cars_photos/sellBestCarEver.jpg',
+               photo: `/cars_photos/${req.file.originalname}`,
                brand: req.body.brand,
                model: req.body.model,
                year: Number(req.body.year),
@@ -541,9 +548,16 @@ router.post('/maincreate', (req, res) => {
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
 
-router.post('/edit_advert/:id', (req, res) => {
+router.post('/edit_advert/:id', upload.single("photo"),(req, res) => {
     console.log(`Ad ${req.params.id} will be edited, ho-ho-ho e-he-he`)
-    console.log("BODY: ", req.body)
+    // Обработка фотографии
+    console.log(`FILE ${req.file}`)
+    if (req.file) { // Пользователь хочет обновить фотографию
+        let tempPath = req.file.path
+        let targetPath = `./public/cars_photos/${req.file.originalname}`
+        fs.rename(tempPath, targetPath, (error)=> {console.log(error)})
+    }
+
     advert_id = req.params.id
     advert_id = new ObjectId(advert_id)
     console.log(advert_id)
@@ -565,7 +579,7 @@ router.post('/edit_advert/:id', (req, res) => {
             let edit_date = year + "-" + month + "-" + date;
             console.log(edit_date);
             let query = {}
-            // if (req.body.photo) query["ads.$.photo"] = req.body.photo;
+            if (req.file) query["ads.$.photo"] = `/cars_photos/${req.file.originalname}`;
             query["ads.$.brand"] = req.body.brand;
             query["ads.$.model"] = req.body.model;
             query["ads.$.year"] = Number(req.body.year);
