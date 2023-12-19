@@ -414,7 +414,7 @@ router.post('/mainseller', (req, res) => {
                 }
                 return temp;
             }, []);
-            console.log(data1)
+            // console.log(data1)
             // page = 1;
             let count = data1.length
 
