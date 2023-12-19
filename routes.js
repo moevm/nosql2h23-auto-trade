@@ -61,6 +61,7 @@ router.post('/mainauth', (req, res) => {
                    console.log('login and password ok')
                    req.session._id = data[i]._id
                    req.session.status = data[i].user_status
+                   req.session.name = data[i].name
                    // res.redirect('/main');
                    // console.log('-------------------------------------------');
                    // console.log(data[0].name);
@@ -701,7 +702,6 @@ router.post('/maincreate', (req, res) => {
             (updateErr, result) => {
             if (updateErr) throw updateErr;
             console.log(`Документ с id ${newData.ad_id} обновлен`);
-            client.close();
            });
            // console.log(data1)
            // data2 = await collection.find({}).project({ _id : 0, ads : 1 }).toArray();
@@ -1411,6 +1411,52 @@ router.get("/user/:id", (req, res) => {
         }
     }
     userPage()
+})
+
+router.get('/user/review/:id', (req, res) => {
+    res.render("review", {title: "Отзыв"})
+})
+
+router.post('/user/review/:id', (req, res) => {
+    user_id = req.params.id
+    user_id = new ObjectId(user_id)
+    console.log(user_id)
+    async function reviewCreate() {
+        const mongoClient = new MongoClient(url);
+        try {
+            console.log("review create");
+            await mongoClient.connect();
+            const db = mongoClient.db(name_db);
+            const collection = db.collection(name_collection);
+
+            let today_date = new Date();
+            let date = ("0" + today_date.getDate()).slice(-2);
+            let month = ("0" + (today_date.getMonth() + 1)).slice(-2);
+            let year = today_date.getFullYear();
+            let create_date = year + "-" + month + "-" + date;
+            console.log(create_date);
+            const newData = {
+                name: req.session.name,
+                mark: req.body.mark,
+                text: req.body.text,
+                date: create_date,
+            };
+            // console.log(newData)
+            // console.log(req.session._id)
+            const data1 = await collection.updateOne({ _id: user_id}, {$push: { reviews: newData }},
+                (updateErr, result) => {
+                    if (updateErr) throw updateErr;
+                    console.log(`Отзыв добавлен пользователю с id ${user_id}`);
+                });
+            console.log(data1)
+            res.redirect(`/user/${user_id}`)
+        } catch (error) {
+            console.error('An error has occurred:', error);
+        } finally {
+            await mongoClient.close();
+        }
+    }
+    reviewCreate()
 })
 
 router.get("*", (req, res) => {
