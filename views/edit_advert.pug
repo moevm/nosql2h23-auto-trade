@@ -4,59 +4,68 @@ block content
     body(style='background-color: #1F2833').w3-centered
 
         .create-advt-all-info
-            .create-advt-photo-price
-                .create-advt-photo
-                    img(src=data.photo, sizes="max-width= 400px")
-                .create-advt-btn
-                    button() Загрузить фото
             .w3-container.w3-left-align
-                form(action=`/edit_advert/${data.ad_id}` method="POST" style="margin: 10px")
-                    .watch-advt-info
-                        label Марка:
-                        =" "
-                        input.w3-round-large(type='text', name='brand', value=data.brand)
-                    .watch-advt-info
-                        label Модель:
-                        =" "
-                        input.w3-round-large(type='text', name='model', value=data.model)
-                    .watch-advt-info
-                        label Год:
-                        =" "
-                        input.w3-round-large(type='text', name='year', value=data.year)
-                    .watch-advt-info
-                        label Цвет:
-                        =" "
-                        input.w3-round-large(type='text', name='color', value=data.color)
-                    .watch-advt-info
-                        label Кузов:
-                        =" "
-                        input.w3-round-large(type='text', name='body', value=data.body)
-                    .watch-advt-info
-                        label Пробег:
-                        =" "
-                        input.w3-round-large(type='text', name='mileage', value=data.mileage)
-                    .watch-advt-info
-                        label Двигатель:
-                        =" "
-                        input.w3-round-large(type='text', name='engine', value=data.engine)
-                    .watch-advt-info
-                        label Коробка:
-                        =" "
-                        input.w3-round-large(type='text', name='transmission', value=data.transmission)
-                    .watch-advt-info
-                        label Привод:
-                        =" "
-                        input.w3-round-large(type='text', name='drive', value=data.drive)
-                    .watch-advt-info
-                        label Руль:
-                        =" "
-                        input.w3-round-large(type='text', name='helm', value=data.helm)
-                    .watch-advt-info.w3-margin-top
-                        label Стоимость:
-                        =" "
-                        input.w3-round-large(type='number', name='price', min=0, value=data.price)
+                form(action=`/edit_advert/${data.ad_id}` method="POST" style="margin: 10px", enctype="multipart/form-data")
+                    .two
+                        .upload-photo
+                            .publish-advt-photo
+                                img(sizes="max-width= 400px", id="image", src=`${data.photo}`)
+                            .watch-advt-info
+                                label Загрузить другое фото:
+                                input(type='file', name="photo", id="file", accept="image/png, image/jpg, image/jpeg")
+                        .all-what-remains
+                            .watch-advt-info
+                                label Марка:
+                                =" "
+                                input.w3-round-large(type='text', name='brand', value=data.brand)
+                            .watch-advt-info
+                                label Модель:
+                                =" "
+                                input.w3-round-large(type='text', name='model', value=data.model)
+                            .watch-advt-info
+                                label Год:
+                                =" "
+                                input.w3-round-large(type='text', name='year', value=data.year)
+                            .watch-advt-info
+                                label Цвет:
+                                =" "
+                                input.w3-round-large(type='text', name='color', value=data.color)
+                            .watch-advt-info
+                                label Кузов:
+                                =" "
+                                input.w3-round-large(type='text', name='body', value=data.body)
+                            .watch-advt-info
+                                label Пробег:
+                                =" "
+                                input.w3-round-large(type='text', name='mileage', value=data.mileage)
+                            .watch-advt-info
+                                label Двигатель:
+                                =" "
+                                input.w3-round-large(type='text', name='engine', value=data.engine)
+                            .watch-advt-info
+                                label Коробка:
+                                =" "
+                                input.w3-round-large(type='text', name='transmission', value=data.transmission)
+                            .watch-advt-info
+                                label Привод:
+                                =" "
+                                input.w3-round-large(type='text', name='drive', value=data.drive)
+                            .watch-advt-info
+                                label Руль:
+                                =" "
+                                input.w3-round-large(type='text', name='helm', value=data.helm)
+                            .watch-advt-info.w3-margin-top
+                                label Стоимость:
+                                =" "
+                                input.w3-round-large(type='number', name='price', min=0, value=data.price)
 
-                    button.w3-button.w3-margin-16(style="background-color: #45A29E; font-size : 20px; font-family: JetBrains; margin-top:10px"
-                        type="submit") Создать объявление
+                            button.w3-button.w3-margin-16(style="background-color: #45A29E; font-size : 20px; font-family: JetBrains; margin-top:10px"
+                                type="submit",) Обновить объявление
 
+script.
+    let image = document.getElementById("image");
+    let file = document.getElementById("file");
 
+    file.addEventListener('change', function(){
+        image.src = URL.createObjectURL(file.files[0]);
+    });

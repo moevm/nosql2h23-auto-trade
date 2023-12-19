@@ -70,6 +70,11 @@ input:focus::placeholder{
     max-height: 200px;
 }
 
+.publish-advt-photo img{
+    max-width: 500px;
+    max-height: 500px;
+}
+
 .create-advt-btn button{
     background-color: #45A29E;
     color: #0B0C10;
@@ -80,6 +85,21 @@ input:focus::placeholder{
     justify-content: center;
     padding-top: 10px;
     display: flex;
+}
+
+.two {
+    display: flex;
+    flex-direction: row;
+}
+
+.upload-photo > .watch-advt-info {
+    position: relative;
+    bottom: 0;
+    text-align: center;
+}
+
+.upload-photo {
+    margin-right: 50px;
 }
 
 .navbar,
@@ -123,6 +143,7 @@ input:focus::placeholder{
     text-align: center;
     display: block;
     margin: 20px;
+    width: 400px;
 }
 
 .auto-card-with-delete-button{
