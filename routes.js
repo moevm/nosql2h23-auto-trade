@@ -1473,6 +1473,67 @@ router.post('/user/review/:id', (req, res) => {
     reviewCreate()
 })
 
+router.get('/dialog/:id', (req, res) => {
+    res.render("dialog", {title: "Диалог"})
+})
+
+router.post('/dialog/:id_advert/:id_other', (req, res) => {
+    advert_id = req.params.id_advert
+    advert_id = new ObjectId(advert_id)
+    console.log(advert_id)
+    user_id = req.params.id_other
+    user_id = new ObjectId(user_id)
+    console.log(user_id)
+    // TODO проверка существования диалога через id_other и id_advert
+    // TODO достать данные или добавить диалог для обоих пользователей
+    res.redirect(`/dialog/${advert_id}`)
+})
+
+router.post('/advert_dialog/:id_dialog/:id_advert', (req, res) => {
+    dialog_id = req.params.id_other
+    dialog_id = new ObjectId(dialog_id)
+    console.log(dialog_id)
+    advert_id = req.params.id_advert
+    advert_id = new ObjectId(advert_id)
+    console.log(advert_id)
+    async function messageCreate() {
+        const mongoClient = new MongoClient(url);
+        try {
+            console.log("review create");
+            await mongoClient.connect();
+            const db = mongoClient.db(name_db);
+            const collection = db.collection(name_collection);
+
+            let today_date = new Date();
+            let date = ("0" + today_date.getDate()).slice(-2);
+            let month = ("0" + (today_date.getMonth() + 1)).slice(-2);
+            let year = today_date.getFullYear();
+            let create_date = year + "-" + month + "-" + date;
+            console.log(create_date);
+            const newData = {
+                name: req.session.name,
+                mark: req.body.mark,
+                text: req.body.text,
+                date: create_date,
+            };
+            // console.log(newData)
+            // console.log(req.session._id)
+            const data1 = await collection.updateOne({ _id: user_id}, {$push: { reviews: newData }},
+                (updateErr, result) => {
+                    if (updateErr) throw updateErr;
+                    console.log(`Отзыв добавлен пользователю с id ${user_id}`);
+                });
+            console.log(data1)
+            res.redirect(`/user/${user_id}`)
+        } catch (error) {
+            console.error('An error has occurred:', error);
+        } finally {
+            await mongoClient.close();
+        }
+    }
+    messageCreate()
+})
+
 router.get("*", (req, res) => {
     res.status(404)
     res.end("Page not found")
