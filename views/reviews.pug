@@ -11,4 +11,5 @@ h1(style='color: #66FCF1;') Отзывы
                 p 4/5
                 p Андрей: Машина огонь
 
-    .w3-button.w3-hover-aqua.review-btn() Оставить отзыв
+    form(action=`/user/review/${user_id}`, method="GET")
+        button.w3-button.w3-hover-aqua.review-btn(type="submit") Оставить отзыв
