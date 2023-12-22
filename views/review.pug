@@ -17,15 +17,15 @@ html
     include navbar.pug
     block content
         .review-create
-            form(action="coming soon", method="GET")
+            form(action=`/user/review/${id}`, method="POST")
                 .review-create-name-exit
                     p Отзыв
                     a(href="https://www.youtube.com/")
                         i.fa.fa-times.fa-2x
                 .review-create-mark
                     label Рейтинг:
-                    input(type="number", min=0, max=5, placeholder="Введите оценку")
+                    input(type="number", min=0, max=5, placeholder="Введите оценку", name="mark")
                 .review-create-text
-                    textarea(placeholder="Введите текст отзыва")
+                    textarea(placeholder="Введите текст отзыва", name="review")
                 .review-create-btn
                     button(type="submit") Отправить отзыв

@@ -1428,7 +1428,7 @@ router.get("/user/:id", (req, res) => {
 })
 
 router.get('/user/review/:id', (req, res) => {
-    res.render("review", {title: "Отзыв"})
+    res.render("review", {title: "Отзыв", id: req.params.id})
 })
 
 router.post('/user/review/:id', (req, res) => {
@@ -1452,7 +1452,7 @@ router.post('/user/review/:id', (req, res) => {
             const newData = {
                 name: req.session.name,
                 mark: req.body.mark,
-                text: req.body.text,
+                text: req.body.review,
                 date: create_date,
             };
             // console.log(newData)
