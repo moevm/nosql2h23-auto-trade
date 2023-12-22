@@ -27,7 +27,7 @@
     password: 'nosqlisbetterthansql',
     user_status: 'Пользователь',
     name: 'Анастасия',
-    rating: 4.5,
+    rating: 5.0,
     create_date: '2022-03-29',
     reviews: [
         {
@@ -119,7 +119,7 @@
     password: 'nosql',
     user_status: 'Пользователь',
     name: 'Рудольф',
-    rating: 4.5,
+    rating: [],
     create_date: '2022-03-29',
     reviews: [],
     dialogs: [
