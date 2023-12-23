@@ -1385,7 +1385,7 @@ router.get("/adminvalidation/:id", (req, res) => {
             if (req.params.id != "all") data2 = await collection.updateMany({"ads.ad_id": advert_id}, {"$set": {"ads.$.status": "Опубликовано"}});
             else data2 = await collection.updateMany({"ads.status" : "Проверка"}, {"$set": {"ads.$[elem].status": "Опубликовано"}}, { "arrayFilters": [{ "elem.status": "Проверка" }], "multi": true });
             // console.log(data2)
-            res.redirect('/main')
+            res.redirect('/mainadmin')
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {

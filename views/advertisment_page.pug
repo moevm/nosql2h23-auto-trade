@@ -77,7 +77,12 @@ script.
     url: `/delete_advert/${id}`,
         type: 'get',
         complete: function() {
-        window.location.href = '/main';
+        let a = '';
+        if(`#{status}` === "Продавец"){
+            window.location.href = "/mainseller";
+        } else if(`#{status}` === "Администратор") {
+            window.location.href = "/mainadmin";
+        }
     }
     });
 
