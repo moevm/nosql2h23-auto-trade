@@ -1408,7 +1408,7 @@ router.get("/user/:id", (req, res) => {
             const db = mongoClient.db(name_db);
             const collection = db.collection(name_collection);
 
-            data2 = await collection.find({ _id : user_id }).project({ _id : 0, name : 1, rating : 1, reviews: 1, dialogs: 1 }).toArray();
+            data2 = await collection.find({ _id : user_id }).project({ _id : 0, name : 1, rating : 1, create_date : 1, reviews: 1, dialogs: 1 }).toArray();
             // console.log(data2)
             if (req.session._id == user_id) {
                 status_account = "Мой"
@@ -1417,7 +1417,38 @@ router.get("/user/:id", (req, res) => {
                 status_account = 'Чужой'
                 title = "Страница пользователя"
             }
-            res.render("user-page", {title: title, name: data2.name, rating: data2.rating, reviews: data2[0].reviews, dialogs: data2.dialogs, status: req.session.status, status_account: status_account, id: user_id})
+            for (let i = 0; i < data2[0].dialogs.length; i++) {
+                data1 = await collection.find({ "dialogs.dialog_id" : data2[0].dialogs[i].dialog_id, "dialogs.ad_id": data2[0].dialogs[i].ad_id }).project({ _id : 1, name : 1}).toArray();
+                for (j in data1) {
+                    if (data1[j] != req.session._id) data2[0].dialogs[i].name = data1[j].name
+                }
+                let query = [];
+                query.push({$eq: [ '$$ad.ad_id', data2[0].dialogs[i].ad_id ]})
+                data1 = await collection.aggregate([{
+                    $project: {
+                        "ads": {
+                            $filter: {
+                                input: "$ads",
+                                as: "ad",
+                                cond: {
+                                    "$and" : query
+                                }
+                            }
+                        }
+                    }
+                }]).project({ _id : 1, ads : 1 }).toArray();
+                data1 = data1.reduce((temp, curr) => {
+                    if (curr.ads.length > 0) {
+                        for (let i = 0; i < curr.ads.length; i++) {
+                            temp = temp.concat(curr.ads[i].brand, curr.ads[i].model, curr.ads[i].year);
+                        }
+                    }
+                    return temp;
+                }, []);
+                data2[0].dialogs[i].ad = data1
+            }
+            console.log(data2[0].dialogs)
+            res.render("user-page", {title: title, name: data2[0].name, rating: data2[0].rating, create_date: data2[0].create_date, reviews: data2[0].reviews, dialogs: data2[0].dialogs, status: req.session.status, status_account: status_account, id: user_id})
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {
