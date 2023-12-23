@@ -1,14 +1,15 @@
 h1(style='color: #66FCF1;') Отзывы
 .reviews-div
     .reviews
-        // for item in reviews
-        //     .review
-        //         p #{item.num}
-        //         p #{item.name}: #{item.comment}
-
-        - for (var i = 0; i < 10; ++i)
+        for item in reviews
             .review
-                p 4/5
-                p Андрей: Машина огонь
+                p #{item.mark}/5
+                p #{item.name}: #{item.text}
 
-    .w3-button.w3-hover-aqua.review-btn() Оставить отзыв
+        // - for (var i = 0; i < 10; ++i)
+        //     .review
+        //         p 4/5
+        //         p Андрей: Машина огонь
+
+    form(action=`/user/review/${user_id}`, method="GET")
+        button.w3-button.w3-hover-aqua.review-btn(type="submit") Оставить отзыв

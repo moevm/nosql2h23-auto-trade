@@ -1417,7 +1417,7 @@ router.get("/user/:id", (req, res) => {
                 status = 'Чужой'
                 title = "Страница пользователя"
             }
-            res.render("user-page", {title: title, name: data2.name, rating: data2.rating, reviews: data2.reviews, dialogs: data2.dialogs, status: status})
+            res.render("user-page", {title: title, name: data2.name, rating: data2.rating, reviews: data2[0].reviews, dialogs: data2.dialogs, status: status, user_id: user_id})
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {
