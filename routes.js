@@ -38,7 +38,7 @@ router.get('/', (req, res, next) => {
 });
 
 router.get("/create_advertisment", (req, res) => {
-    res.render("create_advt", {title: 'Добавление'})
+    res.render("create_advt", {title: 'Добавление', id: req.session._id})
 })
 
 router.post('/mainauth', (req, res) => {
@@ -1417,7 +1417,7 @@ router.get("/user/:id", (req, res) => {
                 status_account = 'Чужой'
                 title = "Страница пользователя"
             }
-            res.render("user-page", {title: title, name: data2.name, rating: data2.rating, reviews: data2[0].reviews, dialogs: data2.dialogs, status: req.session.status, status_account: status_account, user_id: user_id})
+            res.render("user-page", {title: title, name: data2.name, rating: data2.rating, reviews: data2[0].reviews, dialogs: data2.dialogs, status: req.session.status, status_account: status_account, id: user_id})
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {
