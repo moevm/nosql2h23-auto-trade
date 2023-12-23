@@ -271,7 +271,7 @@ router.post('/main', (req, res) => {
             ]
             // console.log("1")
             // console.log(data)
-            res.render('main-menu', {title: 'Главная', adds: data_main.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main'});
+            res.render('main-menu', {title: 'Главная', adds: data_main.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main', id: req.session._id});
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {
@@ -455,7 +455,7 @@ router.post('/mainseller', (req, res) => {
             ]
             // console.log("1")
             // console.log(data)
-            res.render('main-menu', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/mainseller'});
+            res.render('main-menu', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/mainseller', id: req.session._id});
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {
