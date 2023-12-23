@@ -1411,13 +1411,13 @@ router.get("/user/:id", (req, res) => {
             data2 = await collection.find({ _id : user_id }).project({ _id : 0, name : 1, rating : 1, reviews: 1, dialogs: 1 }).toArray();
             // console.log(data2)
             if (req.session._id == user_id) {
-                status = "Мой"
+                status_account = "Мой"
                 title = "Мой аккаунт"
             } else {
-                status = 'Чужой'
+                status_account = 'Чужой'
                 title = "Страница пользователя"
             }
-            res.render("user-page", {title: title, name: data2.name, rating: data2.rating, reviews: data2[0].reviews, dialogs: data2.dialogs, status: status, user_id: user_id})
+            res.render("user-page", {title: title, name: data2.name, rating: data2.rating, reviews: data2[0].reviews, dialogs: data2.dialogs, status: status, status_account: status_account, user_id: user_id})
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {
