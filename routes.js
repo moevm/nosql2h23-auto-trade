@@ -179,7 +179,7 @@ router.get('/main', (req, res) => {
             ]
             // console.log("1")
             //console.log(data1)
-            res.render('main-menu', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main'});
+            res.render('main-menu', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main', id: req.session._id});
             // res.render('my-acc', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main'});
             // res.render('user-page', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main'});
             // res.render('my-messages', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main'});
@@ -364,7 +364,7 @@ router.get('/mainseller', (req, res) => {
             ]
             // console.log("1")
             //console.log(data1)
-            res.render('main-menu', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/mainseller'});
+            res.render('main-menu', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/mainseller', id: req.session._id});
             // res.render('my-acc', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main'});
             // res.render('user-page', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main'});
             // res.render('my-messages', {title: 'Главная', adds: data1.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page, pages: pages, url: '/main'});
