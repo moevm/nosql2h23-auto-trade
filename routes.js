@@ -1409,7 +1409,7 @@ router.get("/user/:id", (req, res) => {
             const collection = db.collection(name_collection);
 
             data2 = await collection.find({ _id : user_id }).project({ _id : 0, name : 1, rating : 1, reviews: 1, dialogs: 1 }).toArray();
-            console.log(data2)
+            // console.log(data2)
             if (req.session._id == user_id) {
                 status = "Мой"
                 title = "Мой аккаунт"
@@ -1451,18 +1451,25 @@ router.post('/user/review/:id', (req, res) => {
             console.log(create_date);
             const newData = {
                 name: req.session.name,
-                mark: req.body.mark,
+                mark: Number(req.body.mark),
                 text: req.body.review,
                 date: create_date,
             };
             // console.log(newData)
             // console.log(req.session._id)
-            const data1 = await collection.updateOne({ _id: user_id}, {$push: { reviews: newData }},
+            data = await collection.find({ _id : user_id }).project({ _id : 0, reviews: 1}).toArray();
+            let new_rating = 0;
+            let count_reviews = data[0].reviews.length;
+            for (let i = 0; i < count_reviews; i++) {
+                new_rating += data[0].reviews[i].mark
+            }
+            const data1 = await collection.updateOne({ _id: user_id}, {$push: { reviews: newData },
+                    $set: { rating: Math.round((new_rating + Number(req.body.mark)) / (count_reviews + 1) * 10) / 10}},
                 (updateErr, result) => {
                     if (updateErr) throw updateErr;
                     console.log(`Отзыв добавлен пользователю с id ${user_id}`);
                 });
-            console.log(data1)
+            // console.log(data1)
             res.redirect(`/user/${user_id}`)
         } catch (error) {
             console.error('An error has occurred:', error);
