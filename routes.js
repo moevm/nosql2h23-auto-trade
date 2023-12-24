@@ -1511,20 +1511,150 @@ router.post('/user/review/:id', (req, res) => {
     reviewCreate()
 })
 
-router.get('/dialog/:id', (req, res) => {
-    res.render("dialog", {title: "Диалог"})
+let messages;
+let other_id;
+let ad_info;
+let other_name;
+
+router.post('/dialog/:id', (req, res) => {
+    res.render("dialog", {title: "Диалог", ad_info: ad_info, messages: messages, id: req.session._id, other_id: other_id, other_name: other_name})
 })
 
 router.post('/dialog/:id_advert/:id_other', (req, res) => {
     advert_id = req.params.id_advert
     advert_id = new ObjectId(advert_id)
     console.log(advert_id)
-    user_id = req.params.id_other
-    user_id = new ObjectId(user_id)
-    console.log(user_id)
-    // TODO проверка существования диалога через id_other и id_advert
-    // TODO достать данные или добавить диалог для обоих пользователей
-    res.redirect(`/dialog/${advert_id}`)
+    other_id = req.params.id_other
+    other_id = new ObjectId(other_id)
+    console.log(other_id)
+    async function dialogData() {
+        const mongoClient = new MongoClient(url);
+        try {
+            console.log("dialog data");
+            await mongoClient.connect();
+            const db = mongoClient.db(name_db);
+            const collection = db.collection(name_collection);
+            // купить
+            // узнаю, есть ли id диалога
+            let query = [];
+            query.push({$eq: [ '$$dialog.ad_id', advert_id ]})
+            console.log(req.session._id, advert_id)
+            data1 = await collection.aggregate([
+                { "$match": { "_id": new ObjectId(req.session._id) }},{
+                $project: {
+                    "dialogs": {
+                        $filter: {
+                            input: "$dialogs",
+                            as: "dialog",
+                            cond: {
+                                "$and" : query
+                            }
+                        }
+                    }
+                }
+            }]).project({ _id : 0, dialogs : 1 }).toArray();
+            console.log(data1[0].dialogs[0].dialog_id)
+            // если есть, то я получаю сообщения с двух пользователей, если нет, то массив пустой
+            if (data1[0].dialogs[0].dialog_id) {
+                messages = data1[0].dialogs[0].messages;
+                query = [];
+                query.push({$eq: [ '$$dialog.dialog_id', data1[0].dialogs[0].dialog_id ]})
+                console.log(other_id, data1[0].dialogs[0].dialog_id)
+                data1 = await collection.aggregate([
+                    { "$match": { "_id": other_id }},{
+                        $project: {
+                            "dialogs": {
+                                $filter: {
+                                    input: "$dialogs",
+                                    as: "dialog",
+                                    cond: {
+                                        "$and" : query
+                                    }
+                                }
+                            }
+                        }
+                    }]).project({ _id : 0, dialogs : 1 }).toArray();
+                console.log(data1)
+                messages = messages.concat(data1[0].dialogs[0].messages);
+                console.log(messages)
+                dialog_id = data1[0].dialogs[0].dialog_id
+            }
+            else {
+                messages = []
+                dialog_id = 1
+            }
+            // TODO сортировка сообщений
+            ad_info = {
+                brand: req.body.brand,
+                model: req.body.model,
+                year: req.body.year
+            }
+            other_name = req.body.name
+            // res.redirect(`/dialog/${dialog_id}`)
+        } catch (error) {
+            console.error('An error has occurred:', error);
+        } finally {
+            await mongoClient.close();
+        }
+    }
+    dialogData()
+})
+
+router.get('/dialog/:id', (req, res) => {
+    dialog_id = req.params.id
+    dialog_id = new ObjectId(dialog_id)
+    console.log(dialog_id)
+    async function dialogData() {
+        const mongoClient = new MongoClient(url);
+        try {
+            console.log("dialog data from user page");
+            await mongoClient.connect();
+            const db = mongoClient.db(name_db);
+            const collection = db.collection(name_collection);
+            // со страницы пользователя
+            // получаю сообщения с двух пользователей
+            let query = [];
+            query.push({$eq: [ '$$dialog.dialog_id', dialog_id ]})
+            data1 = await collection.aggregate([{
+                    $project: {
+                        "dialogs": {
+                            $filter: {
+                                input: "$dialogs",
+                                as: "dialog",
+                                cond: {
+                                    "$and" : query
+                                }
+                            }
+                        }
+                    }
+                }]).project({ _id : 1, dialogs : 1 }).toArray();
+            console.log(data1)
+            messages = []
+            for (let i in data1) {
+                if (data1[i].dialogs.length > 0) {
+                    console.log(i)
+                    console.log(data1[i].dialogs)
+                    if (data1[i]._id != req.session._id) other_id = data1[i]._id;
+                    messages = messages.concat(data1[i].dialogs[0].messages);
+                }
+            }
+            console.log(other_id)
+            console.log(messages)
+            // TODO сортировка сообщений
+            ad_info = {
+                brand: req.body.brand,
+                model: req.body.model,
+                year: req.body.year
+            }
+            other_name = req.body.name
+            // res.redirect(`/dialog/${dialog_id}`)
+        } catch (error) {
+            console.error('An error has occurred:', error);
+        } finally {
+            await mongoClient.close();
+        }
+    }
+    dialogData()
 })
 
 router.post('/advert_dialog/:id_dialog/:id_advert', (req, res) => {
