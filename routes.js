@@ -1516,7 +1516,7 @@ let other_id;
 let ad_info;
 let other_name;
 
-router.post('/dialog/:id', (req, res) => {
+router.get('/dialog/:id', (req, res) => {
     res.render("dialog", {title: "Диалог", ad_info: ad_info, messages: messages, id: req.session._id, other_id: other_id, other_name: other_name})
 })
 
@@ -1600,7 +1600,7 @@ router.post('/dialog/:id_advert/:id_other', (req, res) => {
     dialogData()
 })
 
-router.get('/dialog/:id', (req, res) => {
+router.post('/dialog/:id', (req, res) => {
     dialog_id = req.params.id
     dialog_id = new ObjectId(dialog_id)
     console.log(dialog_id)
