@@ -1585,6 +1585,7 @@ router.post('/dialog/:id_advert/:id_other', (req, res) => {
             }
             // TODO сортировка сообщений
             ad_info = {
+                ad_id: advert_id,
                 brand: req.body.brand,
                 model: req.body.model,
                 year: req.body.year
@@ -1634,14 +1635,19 @@ router.post('/dialog/:id', (req, res) => {
                 if (data1[i].dialogs.length > 0) {
                     console.log(i)
                     console.log(data1[i].dialogs)
-                    if (data1[i]._id != req.session._id) other_id = data1[i]._id;
+                    if (data1[i]._id != req.session._id) {
+                        other_id = data1[i]._id;
+                        advert_id = data1[i].dialogs[0].ad_id;
+                    }
                     messages = messages.concat(data1[i].dialogs[0].messages);
                 }
             }
             console.log(other_id)
             console.log(messages)
+            console.log(advert_id)
             // TODO сортировка сообщений
             ad_info = {
+                ad_id: advert_id,
                 brand: req.body.brand,
                 model: req.body.model,
                 year: req.body.year
