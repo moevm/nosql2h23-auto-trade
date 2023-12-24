@@ -27,7 +27,11 @@ script.
                 url: `/delete_advert/${id}`,
                 type: 'get',
                 complete: function() {
-                    window.location.href = '/main';
+                    if (`#{url}` === "/mainseller") {
+                        window.location.href = "/mainseller"
+                    } else {
+                        window.location.href = '/main';
+                    }
                 }
             });
 
