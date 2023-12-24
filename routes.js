@@ -1663,17 +1663,21 @@ router.post('/dialog/:id', (req, res) => {
     dialogData()
 })
 
-router.post('/advert_dialog/:id_dialog/:id_advert', (req, res) => {
-    dialog_id = req.params.id_other
-    dialog_id = new ObjectId(dialog_id)
+router.post('/dialog_message/:id_dialog/:id_advert/:id_other', (req, res) => {
+    dialog_id = req.params.id_dialog
+    console.log(dialog_id)
+    if (dialog_id != 1) dialog_id = new ObjectId(dialog_id)
     console.log(dialog_id)
     advert_id = req.params.id_advert
     advert_id = new ObjectId(advert_id)
     console.log(advert_id)
+    user_id = req.params.id_other
+    user_id = new ObjectId(user_id)
+    console.log(user_id)
     async function messageCreate() {
         const mongoClient = new MongoClient(url);
         try {
-            console.log("review create");
+            console.log("message create");
             await mongoClient.connect();
             const db = mongoClient.db(name_db);
             const collection = db.collection(name_collection);
@@ -1682,23 +1686,88 @@ router.post('/advert_dialog/:id_dialog/:id_advert', (req, res) => {
             let date = ("0" + today_date.getDate()).slice(-2);
             let month = ("0" + (today_date.getMonth() + 1)).slice(-2);
             let year = today_date.getFullYear();
-            let create_date = year + "-" + month + "-" + date;
-            console.log(create_date);
-            const newData = {
-                name: req.session.name,
-                mark: req.body.mark,
-                text: req.body.text,
-                date: create_date,
-            };
-            // console.log(newData)
-            // console.log(req.session._id)
-            const data1 = await collection.updateOne({ _id: user_id}, {$push: { reviews: newData }},
-                (updateErr, result) => {
-                    if (updateErr) throw updateErr;
-                    console.log(`Отзыв добавлен пользователю с id ${user_id}`);
-                });
+            let hours = today_date.getHours();
+            let minutes = today_date.getMinutes();
+            let seconds = today_date.getSeconds();
+            let create_date_message = year + "-" + month + "-" + date + "T" + hours + ":" + minutes + ":" + seconds + "Z";
+            console.log(create_date_message);
+            // если диалога нет
+            if (dialog_id == 1) {
+                console.log("There is not dialog")
+                dialog_id = new ObjectId()
+                let newData = {
+                    dialog_id: dialog_id,
+                    ad_id: advert_id,
+                    messages: []
+                };
+                // console.log(newData)
+                let data1 = await collection.updateOne({ _id: user_id}, {$push: { dialogs: newData }});
+                // console.log(data1)
+                newData.messages = [
+                    {
+                        user_id: new ObjectId(req.session._id),
+                        text: req.body.text,
+                        timestamp: create_date_message
+                    }
+                ]
+                // console.log(newData)
+                data1 = await collection.updateOne({ _id: new ObjectId(req.session._id)}, {$push: { dialogs: newData }});
+                // console.log(data1)
+            }
+            // если диалог есть
+            else {
+                console.log("There is dialog")
+                let message = {
+                    user_id: new ObjectId(req.session._id),
+                    text: req.body.text,
+                    timestamp: create_date_message
+                }
+                // console.log(message)
+                data1 = await collection.updateOne({ _id: new ObjectId(req.session._id), "dialogs.dialog_id": dialog_id}, {$push: { "dialogs.$.messages": message }});
+                // console.log(data1)
+            }
+
+            // получаю сообщения с двух пользователей
+            let query = [];
+            query.push({$eq: [ '$$dialog.dialog_id', dialog_id ]})
+            data1 = await collection.aggregate([{
+                $project: {
+                    "dialogs": {
+                        $filter: {
+                            input: "$dialogs",
+                            as: "dialog",
+                            cond: {
+                                "$and" : query
+                            }
+                        }
+                    }
+                }
+            }]).project({ _id : 1, dialogs : 1 }).toArray();
             console.log(data1)
-            res.redirect(`/user/${user_id}`)
+            messages = []
+            for (let i in data1) {
+                if (data1[i].dialogs.length > 0) {
+                    console.log(i)
+                    console.log(data1[i].dialogs)
+                    if (data1[i]._id != req.session._id) {
+                        other_id = data1[i]._id;
+                        advert_id = data1[i].dialogs[0].ad_id;
+                    }
+                    messages = messages.concat(data1[i].dialogs[0].messages);
+                }
+            }
+            console.log(other_id)
+            console.log(messages)
+            console.log(advert_id)
+            // TODO сортировка сообщений
+            ad_info = {
+                ad_id: advert_id,
+                brand: req.body.brand,
+                model: req.body.model,
+                year: req.body.year
+            }
+            other_name = req.body.name
+            // res.redirect(`/dialog/${dialog_id}`)
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {
