@@ -1143,8 +1143,13 @@ router.post('/adminfilter', (req, res) => {
             const collection = db.collection(name_collection);
             // console.log(req.body)
             let query = [];
-
             const eqSet = (array1, array2) => array1.length === array2.length && array1.every(function(value, index) { return value === array2[index]})
+            if (req.body.filter_date1 != "") {
+                query.push({$gte: ['$$ad.create_date', req.body.filter_date1]})
+            }
+            if (req.body.filter_date2 != "") {
+                query.push({$lte: ['$$ad.create_date', req.body.filter_date2]})
+            }
             if (req.body.filter_price1 != "") {
                 query.push({$gte: ['$$ad.price', Number(req.body.filter_price1)]})
             }
@@ -1167,8 +1172,10 @@ router.post('/adminfilter', (req, res) => {
                 query.push({$lte: ['$$ad.year', Number(req.body.filter_year2)]})
             }
 
+            let filter_date_box;
+            if (req.body.filter_date1 !== '' || req.body.filter_date2 !== '') filter_date_box = 'Дата объявления ' + 'от ' + req.body.filter_date1 + ' до ' + req.body.filter_date2;
+            else filter_date_box = 'Дата объявления';
             let filter_year_box;
-            console.log(req.body.filter_year1)
             if (req.body.filter_year1 !== '' || req.body.filter_year2 !== '') filter_year_box = 'Год ' + 'от ' + req.body.filter_year1 + ' до ' + req.body.filter_year2;
             else filter_year_box = 'Год';
             let filter_mileage_box;
@@ -1179,13 +1186,12 @@ router.post('/adminfilter', (req, res) => {
             else filter_price_box = 'Цена';
 
             data_admin_filters = [
+                filter_date_box,
                 filter_price_box,
                 filter_mileage_box,
                 req.body.filter_brand,
                 filter_year_box
             ]
-            // console.log("2")
-            // console.log(data_filters)
             console.log(query)
             data_admin = await collection.aggregate([{
                 $project: {
@@ -1209,12 +1215,10 @@ router.post('/adminfilter', (req, res) => {
                 return temp;
             }, []);
             count_admin = data_admin.length
-            // console.log(page_filter)
-            // console.log(data_ads, data_filters)
+            console.log(data_admin)
+            console.log(count_admin)
             console.log(req.body)
             res.redirect('/adminfilter')
-            // console.log(query)
-            // console.log(data_ads)
             // return res.send(data1)
         } catch (error) {
             console.error('An error has occurred:', error);
@@ -1447,7 +1451,7 @@ router.get("/user/:id", (req, res) => {
                 }, []);
                 data2[0].dialogs[i].ad = data1
             }
-            console.log(data2[0].dialogs)
+            // console.log(data2[0].dialogs)
             res.render("user-page", {title: title, name: data2[0].name, rating: data2[0].rating, create_date: data2[0].create_date, reviews: data2[0].reviews, dialogs: data2[0].dialogs, status: req.session.status, status_account: status_account, id: req.session._id, user_id: user_id})
         } catch (error) {
             console.error('An error has occurred:', error);
@@ -1517,12 +1521,12 @@ let ad_info;
 let other_name;
 
 router.get('/dialog/:id', (req, res) => {
-    console.log("Ша сортировать будем")
+    console.log("dialog render")
     messages.sort(function(a,b){
         console.log(new Date(b.timestamp), b.timestamp)
         return new Date(a.timestamp) - new Date(b.timestamp);
     });
-    console.log("Отсортированный список ", messages)
+    // console.log("Отсортированный список ", messages)
 
     res.render("my-messages", {title: "Диалог", ad_info: ad_info, messages: messages, id: req.session._id, other_id: other_id, other_name: other_name, status: req.session.status, id_dialog: req.params.id})
 })
@@ -1560,13 +1564,13 @@ router.post('/dialog/:id_advert/:id_other',(req, res) => {
                     }
                 }
             }]).project({ _id : 0, dialogs : 1 }).toArray();
-            console.log(data1[0].dialogs[0])
+            // console.log(data1[0].dialogs[0])
             // если есть, то я получаю сообщения с двух пользователей, если нет, то массив пустой
             if (data1[0].dialogs[0]) {
                 messages = data1[0].dialogs[0].messages;
                 query = [];
                 query.push({$eq: [ '$$dialog.dialog_id', data1[0].dialogs[0].dialog_id ]})
-                console.log(other_id, data1[0].dialogs[0].dialog_id)
+                // console.log(other_id, data1[0].dialogs[0].dialog_id)
                 data1 = await collection.aggregate([
                     { "$match": { "_id": other_id }},{
                         $project: {
@@ -1581,9 +1585,9 @@ router.post('/dialog/:id_advert/:id_other',(req, res) => {
                             }
                         }
                     }]).project({ _id : 0, dialogs : 1 }).toArray();
-                console.log(data1)
+                // console.log(data1)
                 messages = messages.concat(data1[0].dialogs[0].messages);
-                console.log(messages)
+                // console.log(messages)
                 dialog_id = data1[0].dialogs[0].dialog_id
             }
             else {
@@ -1598,7 +1602,7 @@ router.post('/dialog/:id_advert/:id_other',(req, res) => {
             }
             other_name = req.body.name
             console.log(req.body)
-            console.log(req.body.brand)
+            // console.log(req.body.brand)
             res.send(JSON.stringify({"dialog_id": dialog_id}))
         } catch (error) {
             console.error('An error has occurred:', error);
@@ -1637,7 +1641,7 @@ router.post('/dialog/:id', (req, res) => {
                         }
                     }
                 }]).project({ _id : 1, dialogs : 1 }).toArray();
-            console.log(data1)
+            // console.log(data1)
             messages = []
             for (let i in data1) {
                 if (data1[i].dialogs.length > 0) {
@@ -1650,10 +1654,9 @@ router.post('/dialog/:id', (req, res) => {
                     messages = messages.concat(data1[i].dialogs[0].messages);
                 }
             }
-            console.log(other_id)
-            console.log(messages)
-            console.log(advert_id)
-            // TODO сортировка сообщений
+            // console.log(other_id)
+            // console.log(messages)
+            // console.log(advert_id)
             ad_info = {
                 ad_id: advert_id,
                 brand: req.body.brand,
@@ -1756,8 +1759,8 @@ router.post('/dialog_message/:id_dialog/:id_advert/:id_other', (req, res) => {
             messages = []
             for (let i in data1) {
                 if (data1[i].dialogs.length > 0) {
-                    console.log(i)
-                    console.log(data1[i].dialogs)
+                    // console.log(i)
+                    // console.log(data1[i].dialogs)
                     if (data1[i]._id != req.session._id) {
                         other_id = data1[i]._id;
                         advert_id = data1[i].dialogs[0].ad_id;
@@ -1765,10 +1768,9 @@ router.post('/dialog_message/:id_dialog/:id_advert/:id_other', (req, res) => {
                     messages = messages.concat(data1[i].dialogs[0].messages);
                 }
             }
-            console.log(other_id)
-            console.log(messages)
-            console.log(advert_id)
-            // TODO сортировка сообщений
+            // console.log(other_id)
+            // console.log(messages)
+            // console.log(advert_id)
             ad_info = {
                 ad_id: advert_id,
                 brand: req.body.brand,
