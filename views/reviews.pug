@@ -10,5 +10,5 @@ h1(style='color: #66FCF1;') Отзывы
                 p #{item.name}: #{item.text}
 
     if status_account != "Мой" && status == "Пользователь"
-        form(action=`/user/review/${id}`, method="GET")
+        form(action=`/user/review/${user_id}`, method="GET")
             button.w3-button.w3-hover-aqua.review-btn(type="submit") Оставить отзыв

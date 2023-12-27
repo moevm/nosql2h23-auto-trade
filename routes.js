@@ -1448,7 +1448,7 @@ router.get("/user/:id", (req, res) => {
                 data2[0].dialogs[i].ad = data1
             }
             console.log(data2[0].dialogs)
-            res.render("user-page", {title: title, name: data2[0].name, rating: data2[0].rating, create_date: data2[0].create_date, reviews: data2[0].reviews, dialogs: data2[0].dialogs, status: req.session.status, status_account: status_account, id: req.session._id})
+            res.render("user-page", {title: title, name: data2[0].name, rating: data2[0].rating, create_date: data2[0].create_date, reviews: data2[0].reviews, dialogs: data2[0].dialogs, status: req.session.status, status_account: status_account, id: req.session._id, user_id: user_id})
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {
