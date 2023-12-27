@@ -1420,7 +1420,7 @@ router.get("/user/:id", (req, res) => {
             for (let i = 0; i < data2[0].dialogs.length; i++) {
                 data1 = await collection.find({ "dialogs.dialog_id" : data2[0].dialogs[i].dialog_id, "dialogs.ad_id": data2[0].dialogs[i].ad_id }).project({ _id : 1, name : 1}).toArray();
                 for (j in data1) {
-                    if (data1[j] != req.session._id) data2[0].dialogs[i].name = data1[j].name
+                    if (data1[j]._id != req.session._id) data2[0].dialogs[i].name = data1[j].name
                 }
                 let query = [];
                 query.push({$eq: [ '$$ad.ad_id', data2[0].dialogs[i].ad_id ]})
@@ -1517,7 +1517,7 @@ let ad_info;
 let other_name;
 
 router.get('/dialog/:id', (req, res) => {
-    res.render("dialog", {title: "Диалог", ad_info: ad_info, messages: messages, id: req.session._id, other_id: other_id, other_name: other_name})
+    res.render("my-messages", {title: "Диалог", ad_info: ad_info, messages: messages, id: req.session._id, other_id: other_id, other_name: other_name})
 })
 
 router.post('/dialog/:id_advert/:id_other', (req, res) => {

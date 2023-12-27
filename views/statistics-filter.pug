@@ -1,0 +1,155 @@
+ul.menus-filter(style='color: black;')
+    li(style='--delay: 1;', tabindex='0').dropdown-el
+        button(type="button").drop
+            span(id='prices', title='Цена') #{filter_data[0]}
+            span.arrow
+        ul.dropdown
+            li
+                a(onclick="filter(this)") Очистить
+            li
+                p от
+                input.w3-round-large(type='number', id='price1', min=0)
+                p до
+                input.w3-round-large(type='number', id='price2', min=0)
+
+    li(style='--delay: 2;', tabindex='0').dropdown-el
+        button(type="button").drop
+            span(id='statprices', title='Цена') #{filter_data[1]}
+            span.arrow
+        ul.dropdown
+            li
+                a(onclick="filter(this)") Очистить
+            li
+                p от
+                input.w3-round-large(type='number', id='statprice1', min=0)
+                p до
+                input.w3-round-large(type='number', id='statprice2', min=0)
+
+    li(style='--delay: 3;', tabindex='0').dropdown-el
+        button(type="button").drop
+            span(id='statmileages', title='Пробег') #{filter_data[2]}
+            span.arrow
+        ul.dropdown
+            li
+                a(onclick="filter(this)") Очистить
+            li
+                p от
+                input.w3-round-large(type='number', id='statmileage1', min=0)
+                p до
+                input.w3-round-large(type='number', id='statmileage2', min=0)
+
+
+    li(style='--delay: 3;', tabindex='0').dropdown-el
+        button(type="button").drop
+            span.name-filter(title='Марка') #{filter_data[3]}
+            span.arrow
+        ul.dropdown()
+            li
+                a(onclick="filter(this)") Очистить
+            li
+                a(onclick="filter(this)") Mercedes
+            li
+                a(onclick="filter(this)") BMW
+            li
+                a(onclick="filter(this)") Toyota
+
+    li(style='--delay: 3;', tabindex='0').dropdown-el
+        button(type="button").drop
+            span(id='statyears', title='Год') #{filter_data[4]}
+            span.arrow
+        ul.dropdown
+            li
+                a(onclick="filter(this)") Очистить
+            li
+                p от
+                input.w3-round-large(type='number', id='statyear1', min=0)
+                p до
+                input.w3-round-large(type='number', id='statyear2', min=0)
+
+
+    button.w3-button.w3-center.w3-hover-aqua.send-filter(id="statSubmitButton") Отправить форму
+
+script.
+    $(document).ready(function () {
+        $('#statSubmitButton').on('click', function () {
+            let filter = this.closest(".menus-filter")
+            let data = filter.getElementsByClassName('name-filter')
+            let year1 = document.getElementById('statyear1')
+            let year2 = document.getElementById('statyear2')
+            let mileage1 = document.getElementById('statmileage1')
+            let mileage2 = document.getElementById('statmileage2')
+            let price1 = document.getElementById('statprice1')
+            let price2 = document.getElementById('statprice2')
+
+            let years = document.getElementById('statyears').innerHTML.split(' ')
+            let mileages = document.getElementById('statmileages').innerHTML.split(' ')
+            let prices = document.getElementById('statprices').innerHTML.split(' ')
+            const eqSet = (array1, array2) => array1.length === array2.length &&
+                array1.every(function (value, index) {
+                    return value === array2[index]
+                })
+
+            console.log(years)
+            if (year1.value === ''){
+                if (!eqSet(years, ['Год'])) {
+                    if (years[2] !== 'от')
+                        year1.value = years[2]
+                }
+            }
+            if (year2.value === '') {
+                if (!eqSet(years, ['Год'])) {
+                    year2.value = years[4]
+                }
+            }
+
+            if (mileage1.value === '') {
+                if (!eqSet(mileages, ['Пробег'])) {
+                    if (mileages[2] !== 'от')
+                        mileage1.value = mileages[2]
+                }
+            }
+            if (mileage2.value === '') {
+                if (!eqSet(mileages, ['Пробег'])) {
+                    mileage2.value = mileages[4]
+                }
+            }
+
+            if (price1.value === '') {
+                if (!eqSet(prices, ['Цена'])) {
+                    if (prices[2] !== 'от')
+                        price1.value = prices[2]
+                }
+            }
+            if (price2.value === '') {
+                if (!eqSet(prices, ['Цена'])) {
+                    price2.value = prices[4]
+                }
+            }
+
+
+            // console.log(document.getElementById('years').innerHTML.split(' '))
+
+            // console.log(data)
+            // db_dataset['Год'] = year.value
+            // db_dataset['Пробег'] = mileage.value
+            data = {
+                submit: document.getElementById('submitButton').value,
+
+
+                filter_price1: price1.value,
+                filter_price2: price2.value,
+                filter_mileage1: mileage1.value,
+                filter_mileage2: mileage2.value,
+                filter_brand: data[0].innerHTML.split(','),
+                filter_year1: year1.value,
+                filter_year2: year2.value,
+            }
+
+            console.log('keeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeekk')
+            console.log(data)
+            $.post('/adminfilter', data, function (status) {
+                console.log(status)
+                location.href = '/adminfilter'
+            });
+        });
+    });

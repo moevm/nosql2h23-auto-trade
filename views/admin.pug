@@ -9,6 +9,7 @@ html
         link(rel="stylesheet", href="/public/css/auto-trade.css")
         link(rel="stylesheet", href="https://fonts.cdnfonts.com/css/julius-sans-one")
         link(rel="stylesheet" href='/font-awesome-4.7.0/css/font-awesome.min.css')
+        script(src="/public/js/auto-filter.js")
 
     body(style='background-color: #1F2833')
     include navbar-admin.pug
@@ -22,3 +23,8 @@ html
             a(href = '/adminexport')
                 i.fa.fa-download.fa-3x(style="color:#45A29E;")
                 p Экспорт
+
+    .center
+        include statistics-filter
+    .center
+        include statistic
