@@ -1331,7 +1331,7 @@ router.get("/adverts/:id", (req, res) => {
                 }
             }
             data3 = await collection.updateMany({"ads.ad_id": data1[1].ad_id}, {"$set": {"ads.$.view": data1[1].view + 1}});
-            res.render("advertisment_page", {title: 'Страница объявления', name: data2[0].name, rating: data2[0].rating, data: data1[1], status: status, id: data1[0]})
+            res.render("advertisment_page", {title: 'Страница объявления', name: data2[0].name, rating: data2[0].rating, data: data1[1], status: status, id: req.session._id, seller_id: data1[0]})
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {
@@ -1448,7 +1448,7 @@ router.get("/user/:id", (req, res) => {
                 data2[0].dialogs[i].ad = data1
             }
             console.log(data2[0].dialogs)
-            res.render("user-page", {title: title, name: data2[0].name, rating: data2[0].rating, create_date: data2[0].create_date, reviews: data2[0].reviews, dialogs: data2[0].dialogs, status: req.session.status, status_account: status_account, id: user_id})
+            res.render("user-page", {title: title, name: data2[0].name, rating: data2[0].rating, create_date: data2[0].create_date, reviews: data2[0].reviews, dialogs: data2[0].dialogs, status: req.session.status, status_account: status_account, id: req.session._id})
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {
@@ -1517,10 +1517,17 @@ let ad_info;
 let other_name;
 
 router.get('/dialog/:id', (req, res) => {
-    res.render("my-messages", {title: "Диалог", ad_info: ad_info, messages: messages, id: req.session._id, other_id: other_id, other_name: other_name})
+    console.log("Ша сортировать будем")
+    messages.sort(function(a,b){
+        console.log(new Date(b.timestamp), b.timestamp)
+        return new Date(a.timestamp) - new Date(b.timestamp);
+    });
+    console.log("Отсортированный список ", messages)
+
+    res.render("my-messages", {title: "Диалог", ad_info: ad_info, messages: messages, id: req.session._id, other_id: other_id, other_name: other_name, status: req.session.status, id_dialog: req.params.id})
 })
 
-router.post('/dialog/:id_advert/:id_other', (req, res) => {
+router.post('/dialog/:id_advert/:id_other',(req, res) => {
     advert_id = req.params.id_advert
     advert_id = new ObjectId(advert_id)
     console.log(advert_id)
@@ -1553,9 +1560,9 @@ router.post('/dialog/:id_advert/:id_other', (req, res) => {
                     }
                 }
             }]).project({ _id : 0, dialogs : 1 }).toArray();
-            console.log(data1[0].dialogs[0].dialog_id)
+            console.log(data1[0].dialogs[0])
             // если есть, то я получаю сообщения с двух пользователей, если нет, то массив пустой
-            if (data1[0].dialogs[0].dialog_id) {
+            if (data1[0].dialogs[0]) {
                 messages = data1[0].dialogs[0].messages;
                 query = [];
                 query.push({$eq: [ '$$dialog.dialog_id', data1[0].dialogs[0].dialog_id ]})
@@ -1583,7 +1590,6 @@ router.post('/dialog/:id_advert/:id_other', (req, res) => {
                 messages = []
                 dialog_id = 1
             }
-            // TODO сортировка сообщений
             ad_info = {
                 ad_id: advert_id,
                 brand: req.body.brand,
@@ -1591,7 +1597,9 @@ router.post('/dialog/:id_advert/:id_other', (req, res) => {
                 year: req.body.year
             }
             other_name = req.body.name
-            // res.redirect(`/dialog/${dialog_id}`)
+            console.log(req.body)
+            console.log(req.body.brand)
+            res.send(JSON.stringify({"dialog_id": dialog_id}))
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {
@@ -1653,7 +1661,8 @@ router.post('/dialog/:id', (req, res) => {
                 year: req.body.year
             }
             other_name = req.body.name
-            // res.redirect(`/dialog/${dialog_id}`)
+            //res.redirect(`/dialog/${dialog_id}`)
+            res.send(JSON.stringify({dialog_id: dialog_id}))
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {
@@ -1689,7 +1698,7 @@ router.post('/dialog_message/:id_dialog/:id_advert/:id_other', (req, res) => {
             let hours = today_date.getHours();
             let minutes = today_date.getMinutes();
             let seconds = today_date.getSeconds();
-            let create_date_message = year + "-" + month + "-" + date + "T" + hours + ":" + minutes + ":" + seconds + "Z";
+            let create_date_message = year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds + "Z";
             console.log(create_date_message);
             // если диалога нет
             if (dialog_id == 1) {
@@ -1768,6 +1777,7 @@ router.post('/dialog_message/:id_dialog/:id_advert/:id_other', (req, res) => {
             }
             other_name = req.body.name
             // res.redirect(`/dialog/${dialog_id}`)
+            res.send(JSON.stringify({dialog_id: `${dialog_id}`}))
         } catch (error) {
             console.error('An error has occurred:', error);
         } finally {

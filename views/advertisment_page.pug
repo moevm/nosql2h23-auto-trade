@@ -34,8 +34,7 @@ html
                     img(src=data.photo)
                     p #{data.price} Р
                     if status === "Покупатель"
-                        form(action="/dialog", method="GET")
-                            button(type="submit") Купить
+                        button(type="button", onclick="getDialog();") Купить
                     else if status === "Продавец"
                         .change
                             form(action=`/edit_advert/${data.ad_id}`, method="GET")
@@ -60,7 +59,7 @@ html
                     p Привод: #{data.drive}
                     p Руль: #{data.helm}
             .seller
-                a(href=`/user/${id}`) #{name}
+                a(href=`/user/${seller_id}`) #{name}
                 p #{rating}
 
         if data.status === "Проверка" && status == "Администратор"
@@ -84,7 +83,34 @@ script.
             window.location.href = "/mainadmin";
         }
     }
-    });
+            });
 
+
+        }
     }
+
+    function getDialog() {
+        console.log("fd")
+            $.ajax({
+                url: `/dialog/#{data.ad_id}/#{seller_id}`,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    brand: `#{data.brand}`,
+                    model: `#{data.model}`,
+                    year: `#{data.year}`,
+                    name: `#{name}`,
+                },
+                complete: function(data) {
+                    console.log(data.responseJSON.dialog_id)
+                    $.ajax({
+                        url: `/dialog/${data.responseJSON.dialog_id}`,
+                        type: 'get',
+                        complete: function (){
+                            window.location.href = `/dialog/${data.responseJSON.dialog_id}`
+                        }
+                    })
+                }
+            });
+
     }

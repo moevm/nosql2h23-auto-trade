@@ -19,27 +19,58 @@ html
     else
         include navbar-admin
     block content
-        h1.center(style='color: #66FCF1') Андрей Mercedes AMG-GT 2018
+        h1.center(style='color: #66FCF1') #{other_name} #{ad_info.brand} #{ad_info.model} #{ad_info.year}
         .center
             .messages-box
                 h3.center(style='margin:20px; color: white') История сообщений
                 .messages-div
                     .messages
-                        // for item in reviews
-                        //     .review
-                        //         p #{name}: #{message}
+                        for message in messages
+                            if message.user_id == id
+                                .review(style="background-color:#C5C6C7;")
+                                    p Я: #{message.text}
+                            else
+                                .review
+                                    p #{other_name}: #{message.text}
 
-                        - for (var i = 0; i < 20; ++i)
-                            .message
-                                p Я: Беру прямо сейчас
+
+                        // - for (var i = 0; i < 20; ++i)
+                        //     .message
+                        //         p Я: Беру прямо сейчас
 
                     br
                     .message-send
-                        //.w3-button.w3-hover-aqua kek
-                        //p(style='color:red') kek
-                        .row(style='height: 54px;border-spacing: 0px;')
-                            .column(style='width:80%;')
-                                textarea
-                            .column(style='width:15%;')
-                                .center(style='position: absolute;height:100%; padding: 50px')
-                                    .w3-button.w3-hover-aqua(class="fa fa-send-o" style="font-size:48px; color:black;background-color:#45A29E; border:0;")
+                        form(action=`/dialog_message/#{id_dialog}/#{ad_info.ad_id}/#{other_id}`, method="POST")
+                            .row(style='height: 54px;border-spacing: 0px;')
+                                .column(style='width:80%;')
+                                    textarea(placeholder="Введите сообщение", name="text", id="messageText")
+                                .column(style='width:15%;')
+                                    .center(style='position: absolute;height:100%; padding: 50px')
+                                        button.w3-button.w3-hover-aqua(type="button",onclick=`sendMessage();`, class="fa fa-send-o" style="font-size:48px; color:black;background-color:#45A29E; border:0;")
+script.
+    function sendMessage() {
+        console.log($("#messageText").val())
+        $.ajax({
+            url: `/dialog_message/#{id_dialog}/#{ad_info.ad_id}/#{other_id}`,
+            type: 'post',
+            dataType: 'json',
+            data: {
+                brand: `#{ad_info.brand}`,
+                model: `#{ad_info.model}`,
+                year: `#{ad_info.year}`,
+                name: `#{other_name}`,
+                text: $("#messageText").val()
+            },
+            complete: function (data) {
+                console.log(data.responseJSON.dialog_id)
+                $.ajax({
+                    url: `/dialog/${data.responseJSON.dialog_id}`,
+                    type: 'get',
+                    complete: function () {
+                        window.location.href = `/dialog/${data.responseJSON.dialog_id}`
+                    }
+                })
+            }
+        });
+
+    }

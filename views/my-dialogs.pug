@@ -6,5 +6,31 @@ h1(style='color: #66FCF1;') Мои диалоги
                 //form(action=`/dialog/${item.dialog_id}`, method="GET")
                 //    button.w3-button.w3-hover-aqua.review-btn(type="submit") #{item.name} #{item.ad[0]} #{item.ad[1]} #{item.ad[2]}
                 //p #{item.name} #{item.ad[0]} #{item.ad[1]} #{item.ad[2]}
-                a(href=`/dialog/${item.dialog_id}`) #{item.name} #{item.ad[0]} #{item.ad[1]} #{item.ad[2]}
 
+                //a(href=`/dialog/${item.dialog_id}`) #{item.name} #{item.ad[0]} #{item.ad[1]} #{item.ad[2]}
+                button(onclick=`goDialog("${item.dialog_id}", "${item.ad[0]}", "${item.ad[1]}", "${item.ad[2]}", "${item.name}");`) #{item.name} #{item.ad[0]} #{item.ad[1]} #{item.ad[2]}
+
+script.
+    function goDialog(dialog_id, brand, model, year, name){
+        $.ajax({
+            url: `/dialog/${dialog_id}`,
+            type: 'post',
+            dataType: 'json',
+            data: {
+                brand: brand,
+                model: model,
+                year: year,
+                name: name,
+            },
+            complete: function (data) {
+                console.log(data.responseJSON.dialog_id)
+                $.ajax({
+                    url: `/dialog/${data.responseJSON.dialog_id}`,
+                    type: 'get',
+                    complete: function () {
+                        window.location.href = `/dialog/${data.responseJSON.dialog_id}`
+                    }
+                })
+            }
+        });
+    }
