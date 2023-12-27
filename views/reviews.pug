@@ -1,15 +1,14 @@
 h1(style='color: #66FCF1;') Отзывы
 .reviews-div
-    .reviews
+    - height = ''
+    if status_account == "Мой"
+        - height = 'height: 100%;'
+    .reviews(style=height)
         for item in reviews
             .review
                 p #{item.mark}/5
                 p #{item.name}: #{item.text}
 
-        // - for (var i = 0; i < 10; ++i)
-        //     .review
-        //         p 4/5
-        //         p Андрей: Машина огонь
-
-    form(action=`/user/review/${id}`, method="GET")
-        button.w3-button.w3-hover-aqua.review-btn(type="submit") Оставить отзыв
+    if status_account != "Мой" && status == "Пользователь"
+        form(action=`/user/review/${id}`, method="GET")
+            button.w3-button.w3-hover-aqua.review-btn(type="submit") Оставить отзыв
