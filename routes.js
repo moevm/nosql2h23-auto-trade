@@ -7,7 +7,7 @@ var router = express.Router();
 var url = "mongodb://localhost:27017/";
 var backup_path = "backup.bson"
 var dest = "./public/cars_photos"
-const docker_status = false;
+const docker_status = true;
 if (docker_status) {
     url = "mongodb://mongo:27017/";
     backup_path = "data/db/backup.bson"
