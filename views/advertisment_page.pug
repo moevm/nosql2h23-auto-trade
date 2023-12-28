@@ -18,6 +18,8 @@ html
         include navbar.pug
     else if status === "Администратор"
         include navbar-admin.pug
+    else 
+        include navbar-unlogin
     block content
         .date-watch-info
             p Дата создания: #{data.create_date}

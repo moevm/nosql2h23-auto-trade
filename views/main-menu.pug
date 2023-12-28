@@ -15,8 +15,10 @@ html
     body(style='background-color: #1F2833')
     if status == "Пользователь"
         include navbar.pug
-    else
+    else if status == "Администратор"
         include navbar-admin
+    else
+        include navbar-unlogin
     block content
         .left-panel
             .w3-container
