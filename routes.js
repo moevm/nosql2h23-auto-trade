@@ -6,10 +6,12 @@ var router = express.Router();
 
 var url = "mongodb://localhost:27017/";
 var backup_path = "backup.bson"
-const docker_status = true;
+var dest = "./public/cars_photos"
+const docker_status = false;
 if (docker_status) {
     url = "mongodb://mongo:27017/";
     backup_path = "data/db/backup.bson"
+    dest = "./public/cars_photos"
 }
 let data_filters;
 let data_ads;
@@ -31,7 +33,7 @@ const name_collection = 'users';
 router.use("/public", express.static(path.join(__dirname + '/public')));
 
 const multer = require("multer");
-const upload = multer({ dest: "./public/cars_photos" });
+const upload = multer({ dest: dest });
 
 router.get('/', (req, res, next) => {
     res.render('authorization', {title: 'Авторизация'});
@@ -658,7 +660,7 @@ router.post('/maincreate', upload.single("photo"), (req, res) => {
     let photo;
     try {
         let tempPath = req.file.path
-        let targetPath = `./public/cars_photos/${req.file.originalname}`
+        let targetPath = `${dest}/${req.file.originalname}`
         fs.rename(tempPath, targetPath, (error)=> {console.log(error)})
         photo = req.file.originalname
     }
