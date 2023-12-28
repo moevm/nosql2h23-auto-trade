@@ -1009,59 +1009,6 @@ router.post('/mainfilter', (req, res) => {
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
 
-// router.post('/mainpage', (req, res) => {
-//     if(!req.body) return res.sendStatus(400);
-// // const MongoClient = require("mongodb").MongoClient;
-// // const url = "mongodb://localhost:27017/";
-//     console.log("Main page!")
-// // const name_db = 'autotrade';
-// // const name_collection = 'users';
-//     async function changePage() {
-//         const mongoClient = new MongoClient(url);
-//         try {
-//             console.log("change page");
-//             await mongoClient.connect();
-//             const db = mongoClient.db(name_db);
-//             const collection = db.collection(name_collection);
-//             data2 = await collection.find({}).project({ _id : 0, ads : 1 }).toArray();
-//             data2 = data2.reduce((temp, curr) => {
-//                 if (curr.ads.length > 0) {
-//                     temp = temp.concat(curr.ads);
-//                 }
-//                 return temp;
-//             }, []);
-//
-//             let count = data2.length
-//
-//             let pages = Math.ceil(count / 6)
-//
-//             let index_low = 0
-//             let index_high = 6
-//
-//             if (req.body.left == '' && page - 1 > 0) {
-//                 page -= 1
-//                 index_low = 6 * (page - 1)
-//                 index_high = count }
-//
-//             if (req.body.right == '' && page + 1 <= pages) {
-//                 page += 1
-//                 index_low = 6 * (page - 1)
-//                 index_high = index_low + 6 }
-//             console.log(count, pages, page)
-//             console.log(index_low, index_high)
-//             res.render('main-menu', {title: 'Главная', adds: data2.slice(index_low, index_high), status: req.session.status, filter_data: data, page: page});
-//         } catch (error) {
-//             console.error('An error has occurred:', error);
-//         } finally {
-//             await mongoClient.close();
-//         }
-//     }
-//     changePage();
-// // console.log(req.body);
-// // res.render('main-menu', {title: 'Главная', adds: data});
-// // res.send(`${req.body.login} - ${req.body.password}`);
-// })
-
 router.get("/admin", (req, res) => {
     console.log("Admin!")
     // const name_db = 'autotrade';
