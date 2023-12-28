@@ -655,9 +655,17 @@ router.post('/mainadmin', (req, res) => {
 
 router.post('/maincreate', upload.single("photo"), (req, res) => {
     if(!req.body) return res.sendStatus(400);
-    let tempPath = req.file.path
-    let targetPath = `./public/cars_photos/${req.file.originalname}`
-    fs.rename(tempPath, targetPath, (error)=> {console.log(error)})
+    let photo;
+    try {
+        let tempPath = req.file.path
+        let targetPath = `./public/cars_photos/${req.file.originalname}`
+        fs.rename(tempPath, targetPath, (error)=> {console.log(error)})
+        photo = req.file.originalname
+    }
+    catch (error) {
+        console.log("Check photo!")
+        photo = 'nophoto.jpg'
+    }
     // const MongoClient = require("mongodb").MongoClient;
 //     const url = "mongodb://localhost:27017/";
     console.log("Main create!")
@@ -686,7 +694,7 @@ router.post('/maincreate', upload.single("photo"), (req, res) => {
            console.log(create_date_message);
            const newData = {
                ad_id: new ObjectId(),
-               photo: `/cars_photos/${req.file.originalname}`,
+               photo: `/cars_photos/${photo}`,
                brand: req.body.brand,
                model: req.body.model,
                year: Number(req.body.year),
