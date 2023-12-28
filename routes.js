@@ -1123,7 +1123,6 @@ router.get("/admin", (req, res) => {
 })
 
 router.get("/adminfilter", (req, res) => {
-    console.log("Admin filter page!")
     res.render('admin', {title: 'Администратор', data: data_admin, count: count_admin, filter_data: data_admin_filters});
 })
 
@@ -1131,6 +1130,7 @@ router.post('/adminfilter', (req, res) => {
     // if(!req.body) return res.sendStatus(400);
     // const MongoClient = require("mongodb").MongoClient;
 //     const url = "mongodb://localhost:27017/";
+    console.log('-------------------------------------------------------')
     console.log("Admin filter!")
     // const name_db = 'autotrade';
     // const name_collection = 'users';
@@ -1141,7 +1141,6 @@ router.post('/adminfilter', (req, res) => {
             await mongoClient.connect();
             const db = mongoClient.db(name_db);
             const collection = db.collection(name_collection);
-            // console.log(req.body)
             let query = [];
             const eqSet = (array1, array2) => array1.length === array2.length && array1.every(function(value, index) { return value === array2[index]})
             if (req.body.filter_date1 != "") {
@@ -1218,6 +1217,8 @@ router.post('/adminfilter', (req, res) => {
             console.log(data_admin)
             console.log(count_admin)
             console.log(req.body)
+            console.log('-------------------------------------------------------')
+
             res.redirect('/adminfilter')
             // return res.send(data1)
         } catch (error) {

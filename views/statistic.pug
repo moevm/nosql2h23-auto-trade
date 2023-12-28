@@ -1,3 +1,14 @@
 .statistic
-    - for (var i = 0; i < 20; ++i)
-        p Я: Беру прямо сейчас
+    h1.center Вывод статистики
+    h1 Количество объявлений: #{count}
+    h1 Объявления:
+    for id in data
+        a(href=`/adverts/${id}`) https://127.0.0.1:3000/adverts/#{id}
+        br
+
+
+
+
+
+    // - for (var i = 0; i < 20; ++i)
+    //     p Я: Беру прямо сейчас

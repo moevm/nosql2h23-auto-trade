@@ -1,16 +1,16 @@
 ul.menus-filter(style='color: black;')
     li(style='--delay: 1;', tabindex='0').dropdown-el
         button(type="button").drop
-            span(id='prices', title='Цена') #{filter_data[0]}
+            span(id='statdates', title='Даты объявления') #{filter_data[0]}
             span.arrow
         ul.dropdown
             li
                 a(onclick="filter(this)") Очистить
             li
                 p от
-                input.w3-round-large(type='number', id='price1', min=0)
+                input.w3-round-large.statdate(type='date', id='statdate1', min=0)
                 p до
-                input.w3-round-large(type='number', id='price2', min=0)
+                input.w3-round-large.statdate(type='date', id='statdate2', min=0)
 
     li(style='--delay: 2;', tabindex='0').dropdown-el
         button(type="button").drop
@@ -76,11 +76,14 @@ script.
             let data = filter.getElementsByClassName('name-filter')
             let year1 = document.getElementById('statyear1')
             let year2 = document.getElementById('statyear2')
+            let date1 = document.getElementById('statdate1')
+            let date2 = document.getElementById('statdate2')
             let mileage1 = document.getElementById('statmileage1')
             let mileage2 = document.getElementById('statmileage2')
             let price1 = document.getElementById('statprice1')
             let price2 = document.getElementById('statprice2')
 
+            let dates = document.getElementById('statdates').innerHTML.split(' ')
             let years = document.getElementById('statyears').innerHTML.split(' ')
             let mileages = document.getElementById('statmileages').innerHTML.split(' ')
             let prices = document.getElementById('statprices').innerHTML.split(' ')
@@ -126,16 +129,29 @@ script.
                 }
             }
 
+            console.log('Dates')
+            console.log(date1.value)
+            console.log(date2.value)
+            console.log(dates)
 
-            // console.log(document.getElementById('years').innerHTML.split(' '))
 
-            // console.log(data)
-            // db_dataset['Год'] = year.value
-            // db_dataset['Пробег'] = mileage.value
+            // if (date1.value === '') {
+            //     if (!eqSet(dates, ['Дата добавления'])) {
+            //         if (dates[2] !== 'от')
+            //             date1.value = dates[2]
+            //     }
+            // }
+            // if (date2.value === '') {
+            //     if (!eqSet(dates, ['Дата добавления'])) {
+            //         date2.value = dates[4]
+            //     }
+            // }
+
+
             data = {
-                submit: document.getElementById('submitButton').value,
-
-
+                submit: document.getElementById('statSubmitButton').value,
+                filter_date1: date1.value,
+                filter_date2: date2.value,
                 filter_price1: price1.value,
                 filter_price2: price2.value,
                 filter_mileage1: mileage1.value,
@@ -145,10 +161,8 @@ script.
                 filter_year2: year2.value,
             }
 
-            console.log('keeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeekk')
-            console.log(data)
             $.post('/adminfilter', data, function (status) {
-                console.log(status)
+                // console.log(status)
                 location.href = '/adminfilter'
             });
         });

@@ -481,6 +481,13 @@ li:focus-within .arrow {
     background-color: black;
 }
 
+.statdate{
+    background-color: #45A29E;
+}
+.statdate:hover{
+    background-color: #66FCF1;
+}
+
 html *{
     font-family: "JetBrains";
 }
