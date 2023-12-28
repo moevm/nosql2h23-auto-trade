@@ -1373,9 +1373,10 @@ router.get("/adverts/:id", (req, res) => {
                 if (req.session._id == data1[0]) {
                     status = 'Продавец'
                 }
-                else {
+                else if (req.session._id) {
                     status = 'Покупатель'
                 }
+                else status = 'Незарегистрированный пользователь'
             }
             data3 = await collection.updateMany({"ads.ad_id": data1[1].ad_id}, {"$set": {"ads.$.view": data1[1].view + 1}});
             res.render("advertisment_page", {title: 'Страница объявления', name: data2[0].name, rating: data2[0].rating, data: data1[1], status: status, id: req.session._id, seller_id: data1[0]})
