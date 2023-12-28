@@ -872,10 +872,6 @@ router.post('/mainfilter', (req, res) => {
                 // console.log(req.body)
                 let query = [];
 
-                console.log('keeeeeeeeeeeeeeeeeeeeeeek')
-                console.log(req.body.filter_year1)
-                console.log(req.body.filter_year2)
-                console.log('keeeeeeeeeeeeeeeeeeeeeeek')
                 const eqSet = (array1, array2) => array1.length === array2.length && array1.every(function(value, index) { return value === array2[index]})
                 if (!eqSet(req.body.filter_brand, ["Марка"])) {
                     query.push({$in: ['$$ad.brand', req.body.filter_brand]})
@@ -1111,7 +1107,7 @@ router.get("/admin", (req, res) => {
             count_admin = data_admin.length
             console.log(data_admin)
             console.log(count_admin)
-            console.log(data_admin_filters)
+            // console.log(data_admin_filters)
             res.render('admin', {title: 'Администратор', data: data_admin, count: count_admin, filter_data: data_admin_filters});
         } catch (error) {
             console.error('An error has occurred:', error);
@@ -1214,9 +1210,9 @@ router.post('/adminfilter', (req, res) => {
                 return temp;
             }, []);
             count_admin = data_admin.length
-            console.log(data_admin)
-            console.log(count_admin)
-            console.log(req.body)
+            // console.log(data_admin)
+            // console.log(count_admin)
+            // console.log(req.body)
 
             res.redirect('/adminfilter')
             // return res.send(data1)
