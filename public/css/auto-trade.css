@@ -488,6 +488,11 @@ li:focus-within .arrow {
     background-color: #66FCF1;
 }
 
+button.dial-btn{
+    background-color: #45A29E;
+    width: 100%;
+}
+
 html *{
     font-family: "JetBrains";
 }

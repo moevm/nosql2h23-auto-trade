@@ -8,7 +8,7 @@ h1(style='color: #66FCF1;') Мои диалоги
                 //p #{item.name} #{item.ad[0]} #{item.ad[1]} #{item.ad[2]}
 
                 //a(href=`/dialog/${item.dialog_id}`) #{item.name} #{item.ad[0]} #{item.ad[1]} #{item.ad[2]}
-                button(onclick=`goDialog("${item.dialog_id}", "${item.ad[0]}", "${item.ad[1]}", "${item.ad[2]}", "${item.name}");`) #{item.name} #{item.ad[0]} #{item.ad[1]} #{item.ad[2]}
+                button.w3-button.w3-hover-aqua.dial-btn(onclick=`goDialog("${item.dialog_id}", "${item.ad[0]}", "${item.ad[1]}", "${item.ad[2]}", "${item.name}");`) #{item.name} #{item.ad[0]} #{item.ad[1]} #{item.ad[2]}
 
 script.
     function goDialog(dialog_id, brand, model, year, name){
