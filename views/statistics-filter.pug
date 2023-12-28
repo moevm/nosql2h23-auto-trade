@@ -135,17 +135,17 @@ script.
             console.log(dates)
 
 
-            // if (date1.value === '') {
-            //     if (!eqSet(dates, ['Дата добавления'])) {
-            //         if (dates[2] !== 'от')
-            //             date1.value = dates[2]
-            //     }
-            // }
-            // if (date2.value === '') {
-            //     if (!eqSet(dates, ['Дата добавления'])) {
-            //         date2.value = dates[4]
-            //     }
-            // }
+            if (date1.value === '') {
+                if (!eqSet(dates, ['Дата', 'добавления'])) {
+                    if (dates[3] !== 'от')
+                        date1.value = dates[3]
+                }
+            }
+            if (date2.value === '') {
+                if (!eqSet(dates, ['Дата', 'добавления'])) {
+                    date2.value = dates[5]
+                }
+            }
 
 
             data = {
