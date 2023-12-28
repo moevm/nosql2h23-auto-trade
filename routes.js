@@ -470,13 +470,13 @@ router.post('/mainseller', (req, res) => {
 router.get('/mainadmin', (req, res) => {
     // const MongoClient = require("mongodb").MongoClient;
 //     const url = "mongodb://localhost:27017/";
-    console.log("Main!")
+    console.log("Main admin!")
     // const name_db = 'autotrade';
     // const name_collection = 'users';
     async function mainadminRender() {
         const mongoClient = new MongoClient(url);
         try {
-            console.log("main render");
+            console.log("main admin render");
             await mongoClient.connect();
             const db = mongoClient.db(name_db);
             const collection = db.collection(name_collection);
@@ -969,7 +969,7 @@ router.post('/mainfilter', (req, res) => {
             }
             // console.log(page_filter)
             // console.log(data_ads, data_filters)
-            console.log(req.body)
+            // console.log(req.body)
             let count = data_ads.length
 
             pages_filter = Math.ceil(count / 6)
@@ -1447,7 +1447,7 @@ router.get("/adminvalidation/:id", (req, res) => {
 router.get("/user/:id", (req, res) => {
     user_id = req.params.id
     user_id = new ObjectId(user_id)
-    console.log(user_id)
+    // console.log(user_id)
     async function userPage() {
         const mongoClient = new MongoClient(url);
         try {
@@ -1567,7 +1567,7 @@ let other_name;
 router.get('/dialog/:id', (req, res) => {
     console.log("dialog render")
     messages.sort(function(a,b){
-        console.log(new Date(b.timestamp), b.timestamp)
+        // console.log(new Date(b.timestamp), b.timestamp)
         return new Date(a.timestamp) - new Date(b.timestamp);
     });
     // console.log("Отсортированный список ", messages)
@@ -1645,7 +1645,7 @@ router.post('/dialog/:id_advert/:id_other',(req, res) => {
                 year: req.body.year
             }
             other_name = req.body.name
-            console.log(req.body)
+            // console.log(req.body)
             // console.log(req.body.brand)
             res.send(JSON.stringify({"dialog_id": dialog_id}))
         } catch (error) {
@@ -1660,7 +1660,7 @@ router.post('/dialog/:id_advert/:id_other',(req, res) => {
 router.post('/dialog/:id', (req, res) => {
     dialog_id = req.params.id
     dialog_id = new ObjectId(dialog_id)
-    console.log(dialog_id)
+    // console.log(dialog_id)
     async function dialogData() {
         const mongoClient = new MongoClient(url);
         try {
@@ -1689,8 +1689,8 @@ router.post('/dialog/:id', (req, res) => {
             messages = []
             for (let i in data1) {
                 if (data1[i].dialogs.length > 0) {
-                    console.log(i)
-                    console.log(data1[i].dialogs)
+                    // console.log(i)
+                    // console.log(data1[i].dialogs)
                     if (data1[i]._id != req.session._id) {
                         other_id = data1[i]._id;
                         advert_id = data1[i].dialogs[0].ad_id;
