@@ -3,9 +3,11 @@ services:
   mongo:
     container_name: mongo
     image: mongo:7.0.3
+    build:
+      context: .
+      dockerfile: Dockerfile_mongo
     volumes:
       - vol:/data/db
-      - ./mongo-init/:/docker-entrypoint-initdb.d/:ro
   mongo-express:
     image: mongo-express:1.0.0-20
     ports:
@@ -19,7 +21,7 @@ services:
   node:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile_node
     volumes_from:
       - mongo
     ports:
