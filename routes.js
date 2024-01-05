@@ -859,7 +859,7 @@ router.get('/mainfilter', (req, res) => {
     // const MongoClient = require("mongodb").MongoClient;
 //     const url = "mongodb://localhost:27017/";
     console.log("Main filter page!")
-    res.render('main-menu', {title: 'Главная', adds: data_ads.slice(index_low_filter, index_high_filter), status: req.session.status, filter_data: data_filters, page: page_filter, pages: pages_filter, url: '/mainfilter'});
+    res.render('main-menu', {title: 'Главная', adds: data_ads.slice(index_low_filter, index_high_filter), status: req.session.status, filter_data: data_filters, page: page_filter, pages: pages_filter, url: '/mainfilter', id: req.session._id});
     // console.log(req.body);
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
