@@ -3,7 +3,7 @@ FROM node:21-alpine
 COPY ./ ./app
 
 RUN cd /app && npm install
-RUN mkdir -p "./public/cars_photos"
+RUN mkdir -p "someDir"
 
 EXPOSE 3000
 

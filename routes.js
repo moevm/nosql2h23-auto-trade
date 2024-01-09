@@ -38,7 +38,7 @@ const multer = require("multer");
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         console.log(file)
-        cb(null, './public/cars_photos')
+        cb(null, dest)
     },
 })
 
@@ -751,7 +751,7 @@ router.post('/edit_advert/:id', upload,(req, res) => {
     console.log(`FILE ${req.file}`)
     if (req.file) { // Пользователь хочет обновить фотографию
         let tempPath = req.file.path
-        let targetPath = `./public/cars_photos/${req.file.originalname}`
+        let targetPath = `app/public/cars_photos/${req.file.originalname}`
         fs.rename(tempPath, targetPath, (error)=> {console.log(error)})
     }
 
