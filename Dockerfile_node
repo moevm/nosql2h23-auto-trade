@@ -1,8 +1,9 @@
 FROM node:21-alpine
 
-COPY . /app
+COPY ./ ./app
 
 RUN cd /app && npm install
+RUN mkdir -p "./public/cars_photos"
 
 EXPOSE 3000
 

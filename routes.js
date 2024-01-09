@@ -11,7 +11,7 @@ const docker_status = true;
 if (docker_status) {
     url = "mongodb://mongo:27017/";
     backup_path = "data/db/backup.bson"
-    dest = "./public/cars_photos"
+    dest = "app/public/cars_photos"
 }
 let data_filters;
 let data_ads;
@@ -33,7 +33,16 @@ const name_collection = 'users';
 router.use("/public", express.static(path.join(__dirname + '/public')));
 
 const multer = require("multer");
-const upload = multer({ dest: dest });
+//const upload = multer({ dest: dest });
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        console.log(file)
+        cb(null, './public/cars_photos')
+    },
+})
+
+const upload = multer({storage: storage}).single("photo")
 
 router.get('/', (req, res, next) => {
     res.render('authorization', {title: 'Авторизация'});
@@ -655,7 +664,8 @@ router.post('/mainadmin', (req, res) => {
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
 
-router.post('/maincreate', upload.single("photo"), (req, res) => {
+router.post('/maincreate', upload, (req, res) => {
+    console.log("POST REQUEST")
     if(!req.body) return res.sendStatus(400);
     let photo;
     try {
@@ -735,7 +745,7 @@ router.post('/maincreate', upload.single("photo"), (req, res) => {
 //     res.send(`${req.body.login} - ${req.body.password}`);
 })
 
-router.post('/edit_advert/:id', upload.single("photo"),(req, res) => {
+router.post('/edit_advert/:id', upload,(req, res) => {
     console.log(`Ad ${req.params.id} will be edited, ho-ho-ho e-he-he`)
     // Обработка фотографии
     console.log(`FILE ${req.file}`)
