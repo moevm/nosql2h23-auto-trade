@@ -5,6 +5,9 @@ COPY ./ ./app
 RUN cd /app && npm install
 RUN mkdir -p "someDir"
 
+RUN chmod +x /app/init_photos.sh
+RUN /app/init_photos.sh
+
 EXPOSE 3000
 
 CMD ["node", "/app/app.js"]
