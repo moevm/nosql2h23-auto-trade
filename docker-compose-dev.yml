@@ -10,7 +10,7 @@ services:
       - '27017:27017'
     volumes:
       - vol:/data/db
-      - vol_cars_photos:/app/public/cars_photos
+      - nosql2h23-auto-trade_vol_cars_photos:/app/public/cars_photos
   mongo-express:
     image: mongo-express:1.0.0-20
     ports:
@@ -33,4 +33,5 @@ services:
       - mongo
 volumes:
   vol:
-  vol_cars_photos:
+  nosql2h23-auto-trade_vol_cars_photos:
+    external: true
