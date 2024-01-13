@@ -18,6 +18,10 @@ html
         include navbar.pug
     else
         include navbar-admin
+    //- if ad_info.brand == "undefined" 
+    //-     - ad_info.brand = "Архив"
+    //-     - ad_info.model = ""
+    //-     - ad_info.year = ""
     block content
         h1.center(style='color: #66FCF1') #{other_name} #{ad_info.brand} #{ad_info.model} #{ad_info.year}
         .center
