@@ -16,9 +16,8 @@ jobs:
         shell: sh
       - name: Start-script
         run: |
-          ./start.sh
+          ./start.sh git
           sleep 30
-          docker compose down
       - name: Check containers are alive
         run: |
           echo "::notice:: docker ps --filter status=exited"
