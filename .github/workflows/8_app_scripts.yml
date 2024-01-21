@@ -17,8 +17,7 @@ jobs:
       - name: Start-script
         run: |
           ./start.sh
-      - name: Stop
-        run: docker-compose down
+          docker-compose down
       - name: Check containers are alive
         run: |
           echo "::notice:: docker ps --filter status=exited"
