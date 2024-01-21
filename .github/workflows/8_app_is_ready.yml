@@ -6,7 +6,7 @@ on:
       - "main"
 
 jobs:
-  install:
+  Check_install_start:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -14,12 +14,6 @@ jobs:
       - name: Install-script
         run: ./install.sh
         shell: sh
-
-  start:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
       - name: Start-script
         run: ./start.sh
         shell: sh
