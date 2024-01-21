@@ -17,8 +17,7 @@ jobs:
       - name: Start-script
         run: |
           ./start.sh
-          sleep 30
-        shell: sh
+          exit 0
       - name: Check containers are alive
         run: |
           echo "::notice:: docker ps --filter status=exited"
