@@ -12,5 +12,5 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Install-script
-        run: $GITHUB_ACTION_PATH/install.sh
+        run: ./install.sh
         shell: sh
