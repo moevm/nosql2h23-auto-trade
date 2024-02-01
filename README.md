@@ -43,7 +43,7 @@ chmod +x start.sh && ./start.sh
         {
             name: 'Рудольф',
             mark: 5,
-            text: 'Девушка супер. Машина тоже ничего!',
+            text: 'Машина супер. Спасибо большое!',
             date: '2022-03-29'
         }
     ],
@@ -54,7 +54,7 @@ chmod +x start.sh && ./start.sh
             messages: [
                 {
                     user_id: ObjectId('65638b2bcf00e81ecfa8d832'),
-                    text: 'Обмен на стаю собак интересен?',
+                    text: 'Обмен на Ладу Ларгус интересен?',
                     timestamp: '2022-03-29 12:04:16Z'
                 }
             ]
